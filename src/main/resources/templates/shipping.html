@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${title}" style="display: none;">Broke Shirts</title>
+  <link rel="stylesheet" href="../static/css/styles.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
+</head>
+<body>
+  <div id="header">
+   <div id="header_box_checkout">
+    <img id="header_img" src="images/logo3.png" />
+    <div class="nav">
+      <div class="link txt_white">Shop</div>
+      <div class="divide txt_white">|</div>
+      <div class="link txt_white">Contact</div>
+      <div class="divide txt_white">|</div>
+      <div class="link txt_white">Login</div>
+    </div>
+    <div id="cart">
+      <i class="fas fa-shopping-cart cart"></i>
+      <span class="cart">Your Cart</span>
+    </div>
+    <form>
+      <div id="search_checkout"><i class="fas fa-search"></i><input type="text" name="q" placeholder="Search..." /></div>
+    </form>
+    <div class="cart_total">3</div>
+   </div>
+  </div>
+  <div class="cart_box">
+    <div class="container">
+      <div class="nonactive">Shopping Cart</div>
+      <div class="active">Shipping Details</div>
+      <div class="nonactive">Payment Options</div>
+    </div>
+  </div>
+  <div class="section_full flex-row">
+    <div class="shopping_cart_title_1">Shipping Details</div>
+    <div class="shopping_cart_title_2">Summary</div>
+  </div>
+  <div class="section_full flex-row" style="min-height: 550px;">
+    <form>
+      <input type="text" placeholder="First Name" name="first_name" style="width: 319px; margin-top: 20px;" />
+      <input type="text" placeholder="MI" name="middle_initial" style="width: 30px;" />
+      <input type="text" placeholder="Last Name" name="last_name" style="width: 319px;" /><br />
+      <input type="text" placeholder="Address 1" name="address1" style="width: 682px; margin-top: 40px;" /><br />
+      <input type="text" placeholder="Address 2" name="address2" style="width: 682px; margin-top: 40px;" /><br />
+      <input type="text" placeholder="City" name="city" style="width: 548px; margin-top: 40px;" />
+      <input type="text" placeholder="St." name="state" style="width: 45px;" />
+      <input type="text" placeholder="Zip" name="zip" style="width: 85px;" /><br />
+      <input type="radio" name="shipping" value="0.00" checked /><span style="width: 600px; text-align: left; font-size: 24px; padding-top: 20px; display: inline-block;">Free - with $49 purchase</span><br />
+      <input type="radio" name="shipping" value="20.00" /><span style="width: 600px; text-align: left; font-size: 24px; padding-top: 20px; display: inline-block;">$20.00 - Express Shipping</span>
+    </form>
+    <div class="summary">
+      <div class="spacer">
+        <span class="left"><div class="product_img"></div></span>
+        <span class="right1">Broke Logo - Black (xl)</span>
+        <span class="right2">Quant. 1 - $15.00</span>
+      </div>
+      <div class="spacer">
+        <span class="left"><div class="product_img"></div></span>
+        <span class="right1">Limited - Gold/Black (s)</span>
+        <span class="right2">Quant. 1 - $22.50</span>
+      </div>
+      <div class="spacer">
+        <span class="left"><div class="product_img"></div></span>
+        <span class="right1">Bag Logo - Red (3xl)</span>
+        <span class="right2">Quant. 1 - $18.00</span>
+      </div>
+      <div class="spacer">
+        <div class="divider"></div>
+      </div>
+      <form>
+        <div id="coupon"><input type="text" name="coupon" placeholder="ENTER COUPON CODE" /></div>
+      </form>
+      <div class="spacer">
+        <span class="left">SUBTOTAL</span>
+        <span class="right">$55.50</span>
+      </div>
+      <div class="spacer">
+        <span class="left">SHIPPING</span>
+        <span class="right">$0.00</span>
+      </div>
+      <div class="spacer">
+        <span class="left">TAXES</span>
+        <span class="right">$4.50</span>
+      </div>
+      <div class="spacer">
+        <div class="divider"></div>
+      </div>
+      <div class="spacer">
+        <span class="left"><strong>TOTAL</strong></span>
+        <span class="right"><strong>$60.00</strong></span>
+      </div>
+      <div class="spacer">
+        <span class="left"><div class="button">Next</div></span>
+        <span class="right"><div class="button2">Cart</div></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="nav">
+      <div class="link txt_white">Shop</div>
+      <div class="divide txt_white">|</div>
+      <div class="link txt_white">Contact</div>
+      <div class="divide txt_white">|</div>
+      <div class="link txt_white">Login</div>
+    </div>
+    <div class="footer_menu">
+      <div class="column">
+        <span>CONTACT INFO</span>
+        <p><i class="fas fa-phone-square" style="font-size: 24px;"></i> 505-652-4425</p>
+        <p><i class="fas fa-envelope-square" style="font-size: 24px;"></i> orders@brokeshirts.com</p>
+        <p><i class="fas fa-link" style="text-shadow: none; font-size: 14px; border-right: 1.5px solid #606060; border-bottom: 2px solid #606060; border-radius: 3px; background-color: white; color: #a0a0a0; padding: 3px; margin: 15px 15px 0 6px;"></i>http://BrokeShirts.com</p>
+      </div>
+      <div class="column" align="center">
+      <div style="width: 175px;" align="left">
+        <span>USEFUL LINKS</span><br />
+          <p>&#9675; About the Company</p>
+          <p>&#9675; Contact Us</p>
+          <p>&#9675; Terms & Conditions</p>
+          <p>&#9675; Privacy Policy</p>
+      </div>
+      </div>
+      <div class="column" align="right">
+      <div style="width: 130px;" align="left">
+        <span>FOLLOW US</span>
+        <p><i class="fab fa-twitter-square"></i><i class="fab fa-facebook-square"></i></p>
+        <p><i class="fab fa-instagram"></i><i class="fab fa-youtube-square"></i></p>
+      </div>
+      </div>
+    </div>
+    <div class="copyright">&copy;2019 &nbsp; 4425 Entertainment Company</div>
+  </div>
+</body>
+</html>
