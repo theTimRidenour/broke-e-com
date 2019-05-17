@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
   <meta charset="UTF-8" />
-  <title th:text="${title}" style="display: none;">Broke Shirts</title>
-  <link rel="stylesheet" href="../static/css/styles.css" />
+  <title th:text="${title}" style="display: none;">PAGE TITLE</title>
+  <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
 </head>
 <body>
   <div id="header">
    <div id="header_box">
     <img id="header_img" src="images/logo3.png" />
-    <div class="nav">
+    <div class="nav flex-row">
       <div class="link txt_white">Shop</div>
       <div class="divide txt_white">|</div>
       <div class="link txt_white">Contact</div>
@@ -21,20 +21,13 @@
       <i class="fas fa-shopping-cart cart"></i>
       <span class="cart">Your Cart</span>
     </div>
-    <div id="title" class="txt_white" th:text="${title}">Broke Shirts</div>
+    <div id="title" class="txt_white" th:text="${title}">SITE NAME</div>
     <form>
-      <div id="search_area"><i class="fas fa-search"></i><input type="text" name="q" placeholder="Search..." /></div>
+      <div id="search_area" class="flex-row"><i class="fas fa-search"></i><input type="text" name="q" placeholder="Search..." /></div>
       <input id="search_button" type="submit" value="Submit" />
     </form>
     <hr class="txt_white" />
    </div>
-  </div>
-
-  <div id="search_sel">
-    <div class="search_sel">
-      <i class="fas fa-times-circle" style="margin-right: 4px;"></i>
-      <span>T-SHIRTS</span>
-    </div>
   </div>
 
   <div class="section_full">
@@ -42,22 +35,14 @@
     <span class="title2">The latest and greatest products from Broke Shirts.</span>
   </div>
   <div class="section_full">
-    <div class="product">
+
+    <p th:unless="${featured} and ${featured.size()}"><strong>No Featured Products</strong></p>
+
+    <div class="product" th:each="product_title : ${featured}">
       <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
+      <div class="product_des"><span th:text="${product_title}">TITLE</span><strong>$17.00</strong></div>
     </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
+
   </div>
 
   <div class="section_full">
@@ -129,14 +114,14 @@
   </div>
 
   <div id="footer">
-    <div class="nav">
+    <div class="nav flex-row">
       <div class="link txt_white">Shop</div>
       <div class="divide txt_white">|</div>
       <div class="link txt_white">Contact</div>
       <div class="divide txt_white">|</div>
       <div class="link txt_white">Login</div>
     </div>
-    <div class="footer_menu">
+    <div class="footer_menu flex-row">
       <div class="column">
         <span>CONTACT INFO</span>
         <p><i class="fas fa-phone-square" style="font-size: 24px;"></i> 505-652-4425</p>
@@ -148,7 +133,7 @@
         <span>USEFUL LINKS</span><br />
           <p>&#9675; About the Company</p>
           <p>&#9675; Contact Us</p>
-          <p>&#9675; Terms & Conditions</p>
+          <p>&#9675; Terms &amp; Conditions</p>
           <p>&#9675; Privacy Policy</p>
       </div>
       </div>
@@ -160,7 +145,7 @@
       </div>
       </div>
     </div>
-    <div class="copyright">&copy;2019 &nbsp; 4425 Entertainment Company</div>
+    <div class="copyright txt_white">&copy;2019 &nbsp; 4425 Entertainment Company</div>
   </div>
 </body>
 </html>
