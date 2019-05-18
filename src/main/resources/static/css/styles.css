@@ -5,8 +5,8 @@
     FOOTER      - 106
     HEADER      - 160
     NAVIGATION  - 208
-    SEARCH BAR  - 221
-    SEARCH TERM - 264    */
+    SEARCH BAR  - 224
+    SEARCH TERM - 267    */
 
 @import url('https://fonts.googleapis.com/css?family=Lato:300');
 
@@ -209,7 +209,10 @@
 
 .divide {}
 
-.link {}
+.link a {
+    color: #ffffff;
+    text-decoration: none;
+}
 
 .nav {
   font-size: 16px;
@@ -261,7 +264,7 @@
   width: 158px;
 }
 
-/********** SERACH TERMS **********/
+/********** SEARCH TERMS **********/
 
 #search_sel {
   border-bottom: 1px solid #cccccc;
