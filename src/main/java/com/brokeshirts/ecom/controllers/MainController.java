@@ -1,6 +1,8 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.models.Product;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,16 +10,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 
+import com.brokeshirts.ecom.models.Product;
+import com.brokeshirts.ecom.models.ProductData;
+
 @Controller
 public class MainController {
-
-    static ArrayList<String> featured_products = new ArrayList<>();
 
     @RequestMapping(value= "")
     public String index(Model model) {
 
         model.addAttribute("title", "Broke Shirts");
-        model.addAttribute("featured", featured_products);
+        model.addAttribute("featured", ProductData.getAll());
 
         return "index";
 
@@ -33,9 +36,9 @@ public class MainController {
     }
 
     @RequestMapping(value="admin/add_product", method = RequestMethod.POST)
-    public String processAddProductForm(@RequestParam String productName) {
+    public String processAddProductForm(@ModelAttribute Product newProduct) {
 
-        featured_products.add(productName);
+        ProductData.add(newProduct);
 
         return "redirect:..";
 

@@ -13,9 +13,9 @@
 
     <p th:unless="${featured} and ${featured.size()}"><strong>No Featured Products</strong></p>
 
-    <div class="product" th:each="product_title : ${featured}">
+    <div class="product" th:each="product : ${featured}">
       <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product_title}">TITLE</span><strong>$17.00</strong></div>
+      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.description}">$17.00</strong></div>
     </div>
 
   </div>
