@@ -75,4 +75,12 @@ public class Addresses {
     public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
 }

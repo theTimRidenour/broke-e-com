@@ -22,6 +22,18 @@ public class ProductsData {
         return oneProduct;
     }
 
+    public static ArrayList<Products> getByType(int typeId) {
+        ArrayList<Products> typeProducts = new ArrayList<>();
+
+        for (Products candidateProduct : products) {
+            if (candidateProduct.getTypeId() == typeId) {
+                typeProducts.add(candidateProduct);
+            }
+        }
+
+        return typeProducts;
+    }
+
     public static void add(Products newProduct) {
         products.add(newProduct);
     }

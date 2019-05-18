@@ -5,15 +5,13 @@ public class Products {
     private int productId;
     private String name;
     private int typeId;
-    private int categoryId;
 
     private static int nextId = 1;
 
-    public Products(String name, int typeId, int categoryId) {
+    public Products(String name, int typeId) {
         this();
         this.name = name;
         this.typeId = typeId;
-        this.categoryId = categoryId;
     }
 
     public Products() {
@@ -43,14 +41,6 @@ public class Products {
 
     public void setTypeId(int typeId) {
         this.typeId = typeId;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
     }
 
 }

@@ -8,16 +8,18 @@ public class Inventory {
     private int sizeId;
     private int colorId;
     private int quantity;
+    private int price;
 
     private static int nextId = 1;
 
-    public Inventory(int productId, String sku, int sizeId, int colorId, int quantity) {
+    public Inventory(int price, int productId, String sku, int sizeId, int colorId, int quantity) {
         this();
         this.productId = productId;
         this.sku = sku;
         this.sizeId = sizeId;
         this.colorId = colorId;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public Inventory() {
@@ -72,5 +74,9 @@ public class Inventory {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public int getPrice() { return price; }
+
+    public void setPrice(int price) { this.price = price; }
 
 }

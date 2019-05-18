@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+    <div th:replace="fragments :: header"></div>
+
+    <a href="data/init">Init Data</a><br />
+
+    <h1>Addresses:</h1><br />
+    <p th:unless="${addresses} and ${addresses.size()}"><strong>No Addresses</strong></p>
+
+    <div th:each="address : ${addresses}">
+        <p th:text="'Address id: ' + ${address.addressId}"></p>
+        <p th:text="'Address one: ' + ${address.addressOne}"></p>
+        <p th:text="'Address two: ' + ${address.addressTwo}"></p>
+        <p th:text="'City: ' + ${address.city}"></p>
+        <p th:text="'State: ' + ${address.stateCode}"></p>
+        <p th:text="'Zip code: ' + ${address.zipCode}"></p>
+        <p th:text="'Customer id: ' + ${address.customerId}"></p><br />
+    </div>
+
+    <br />
+    <h1>Categories:</h1>
+    <p th:unless="${categories} and ${categories.size()}"><strong>No Categories</strong></p>
+    <div th:each="category : ${categories}">
+        <p th:text="'Category id: ' + ${category.categoryId}"></p>
+        <p th:text="'Name: ' + ${category.name}"></p><br />
+    </div>
+
+    <br />
+    <h1>Colors:</h1>
+    <p th:unless="${colors} and ${colors.size()}"><strong>No Colors</strong></p>
+    <div th:each="color : ${colors}">
+        <p th:text="'Color id: ' + ${color.colorId}"></p>
+        <p th:text="'Name: ' + ${color.name}"></p>
+        <p th:text="'HEX: ' + ${color.hex}"></p>
+        <p th:text="'URL: ' + ${color.url}"></p><br />
+    </div>
+
+    <br />
+    <h1>Customers:</h1>
+    <p th:unless="${customers} and ${customers.size()}"><strong>No Customers</strong></p>
+    <div th:each="customer : ${customers}">
+        <p th:text="'Customer id: ' + ${customer.customerId}"></p>
+        <p th:text="'Google id: ' + ${customer.googleId}"></p>
+        <p th:text="'E-Mail: ' + ${customer.email}"></p>
+        <p th:text="'Name: ' + ${customer.firstName} + ' ' + ${customer.lastName}"></p>
+        <p th:text="'Phone: (' + ${customer.phoneArea} + ')' + ${customer.phonePrefix} + '-' + ${customer.phoneLine}"></p><br />
+    </div>
+
+    <br />
+    <h1>Inventory:</h1>
+    <p th:unless="${inventory} and ${inventory.size()}"><strong>No Inventory</strong></p>
+    <div th:each="item : ${inventory}">
+        <p th:text="'Item id: ' + ${item.itemId}"></p>
+        <p th:text="'Product id: ' + ${item.productId}"></p>
+        <p th:text="'SKU: ' + ${item.sku}"></p>
+        <p th:text="'Price: ' + ${item.price}"></p>
+        <p th:text="'Size id: ' + ${item.sizeId}"></p>
+        <p th:text="'Color id: ' + ${item.colorId}"></p>
+        <p th:text="'Quantity: ' + ${item.quantity}"></p><br />
+    </div>
+
+    <br />
+    <h1>Products:</h1>
+    <p th:unless="${products} and ${products.size()}"><strong>No Products</strong></p>
+    <div th:each="product : ${products}">
+        <p th:text="'Product id: ' + ${product.productId}"></p>
+        <p th:text="'Name: ' + ${product.name}"></p>
+        <p th:text="'Type id: ' + ${product.typeId}"></p><br />
+    </div>
+
+    <br />
+    <h1>Sizes:</h1>
+    <p th:unless="${sizes} and ${sizes.size()}"><strong>No Sizes</strong></p>
+    <div th:each="oneSize : ${sizes}">
+        <p th:text="'Size id: ' + ${oneSize.sizeId}"></p>
+        <p th:text="'Name: ' + ${oneSize.longName} + ' (' + ${oneSize.shortName} + ')'"></p><br />
+    </div>
+
+    <br />
+    <h1>Types:</h1>
+    <p th:unless="${types} and ${types.size()}"><strong>No Types</strong></p>
+    <div th:each="type : ${types}">
+        <p th:text="'Type id: ' + ${type.typeId}"></p>
+        <p th:text="'Name: ' + ${type.name}"></p>
+        <p th:text="'Category id: ' + ${type.categoryId}"></p><br />
+    </div>
+
+
+</body>
+</html>

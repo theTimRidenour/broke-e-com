@@ -15,33 +15,25 @@
 
     <div class="product" th:each="product : ${featured}">
       <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.description}">$17.00</strong></div>
+      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
     </div>
 
   </div>
-
   <div class="section_full">
     <span class="title1">Shirts</span>
-    <span class="title2">T-Shirt | Long Sleeve | Woman's | Child</span>
+    <span class="title2">T-Shirts | Long Sleeve | Women's | Child | Infant</span>
   </div>
   <div class="section_full">
-    <div class="product">
+
+    <p th:unless="${shirts} and ${shirts.size()}"><strong>No Shirts</strong></p>
+
+    <div class="product" th:each="product : ${shirts}">
       <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
+      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
     </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
-    <div class="product">
-      <div class="product_img"></div>
-      <div class="product_des">Title<br /><strong>$15 - $17</strong></div>
-    </div>
+
   </div>
+
 
   <div class="section_full">
     <span class="title1">Pants</span>
