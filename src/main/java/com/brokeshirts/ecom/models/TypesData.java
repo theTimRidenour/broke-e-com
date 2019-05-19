@@ -22,6 +22,18 @@ public class TypesData {
         return oneType;
     }
 
+    public static ArrayList<Types> getByCategory(int categoryId) {
+        ArrayList<Types> categoryTypes = new ArrayList<>();
+
+        for (Types type : types) {
+            if (type.getCategoryId() == categoryId) {
+                categoryTypes.add(type);
+            }
+        }
+
+        return categoryTypes;
+    }
+
     public static void add(Types newType) {
         types.add(newType);
     }

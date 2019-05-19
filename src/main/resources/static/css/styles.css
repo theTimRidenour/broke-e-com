@@ -231,6 +231,18 @@
   width: 234px;
 }
 
+/************** MENU **************/
+
+.title2 {
+    display: inline-block;
+}
+
+.title2 a {
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
 /*********** NAVIGATION ***********/
 
 .divide {}

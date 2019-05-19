@@ -22,7 +22,9 @@
 
   <div class="section_full">
     <span class="title1">Shirts</span>
-    <span class="title2">T-Shirts | Long Sleeve | Women's | Child | Infant</span>
+    <span class="title2" th:each="shirtMenuItem : ${shirtMenu}">
+      <a th:href="'search?q=' + ${shirtMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${shirtMenuItem.name} + '&nbsp;&nbsp;'"></a>
+    </span>
   </div>
   <div class="section_full">
 
@@ -37,7 +39,9 @@
 
   <div class="section_full">
     <span class="title1">Pants</span>
-    <span class="title2">Slacks | Sweatpants | Shorts</span>
+    <span class="title2" th:each="pantsMenuItem : ${pantsMenu}">
+      <a th:href="'search?q=' + ${pantsMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${pantsMenuItem.name} + '&nbsp;&nbsp;'"></a>
+    </span>
   </div>
   <div class="section_full">
 
@@ -52,7 +56,9 @@
 
   <div class="section_full">
     <span class="title1">Accessories</span>
-    <span class="title2">Mugs | Notepads | Mouse Pads</span>
+    <span class="title2" th:each="accessoryMenuItem : ${accessoriesMenu}">
+      <a th:href="'search?q=' + ${accessoryMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${accessoryMenuItem.name} + '&nbsp;&nbsp;'"></a>
+    </span>
   </div>
   <div class="section_full">
 

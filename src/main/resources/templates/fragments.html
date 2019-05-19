@@ -27,7 +27,7 @@
         <hr class="txt_white" />
         <div id="menu">
             <span th:each="menuItem : ${menuItems}">
-                <a th:href="'search?q=' + ${menuItem.name}" th:text="${menuItem.name}"></a>
+                <a th:href="'store/' + ${menuItem.name}" th:text="${menuItem.name}"></a>
             </span>
         </div>
     </div>
