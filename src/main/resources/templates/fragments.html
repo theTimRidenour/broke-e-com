@@ -7,7 +7,7 @@
 
 <div id="header" th:fragment="header">
     <div id="header_box">
-        <img id="header_img" src="../images/logo3.png" />
+        <img id="header_img" src="/images/logo3.png" />
         <div class="nav flex-row">
             <div class="link txt_white"><a th:href="@{/}">Shop</a></div>
             <div class="divide txt_white">|</div>
@@ -24,10 +24,9 @@
             <div id="search_area" class="flex-row"><i class="fas fa-search"></i><input type="text" name="q" placeholder="Search..." /></div>
             <input id="search_button" type="submit" value="Submit" />
         </form>
-        <hr class="txt_white" />
         <div id="menu">
             <span th:each="menuItem : ${menuItems}">
-                <a th:href="'store/' + ${menuItem.name}" th:text="${menuItem.name}"></a>
+                <a th:href="'/store/' + ${menuItem.name}" th:text="${menuItem.name}"></a>
             </span>
         </div>
     </div>

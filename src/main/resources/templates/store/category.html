@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full" th:each="type : ${types}">
+    <span class="title1" th:text="${type.name}">Category Name</span>
+    <div class="product" th:each="product : ${products}">
+        <div class="product_img" th:if="${product.typeId == type.typeId}"></div>
+        <div class="product_des" th:if="${product.typeId == type.typeId}"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
+    </div>
+
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>
