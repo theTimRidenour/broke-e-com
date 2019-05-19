@@ -121,6 +121,12 @@
   width: 100%;
 }
 
+#footer a {
+    display: inline-block;
+    color: #ffffff;
+    text-decoration: none;
+}
+
 #footer .nav {
   margin: 0 auto;
   padding-top: 28px;

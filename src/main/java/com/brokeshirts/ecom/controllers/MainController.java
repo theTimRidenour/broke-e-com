@@ -36,7 +36,9 @@ public class MainController {
         ArrayList<Products> shirts = new ArrayList<>();
         ArrayList<Products> fourShirts = new ArrayList<>();
         ArrayList<Products> pants = new ArrayList<>();
+        ArrayList<Products> fourPants = new ArrayList<>();
         ArrayList<Products> accessories = new ArrayList<>();
+        ArrayList<Products> fourAccessories = new ArrayList<>();
 
         int featuredSize = ProductsData.getAll().size();
         int counter = 0;
@@ -77,12 +79,50 @@ public class MainController {
             counter++;
         }
 
+        for (Products productType : ProductsData.getByType(6)) {
+            pants.add(productType);
+        }
+        for (Products productType : ProductsData.getByType(7)) {
+            pants.add(productType);
+        }
+        for (Products productType : ProductsData.getByType(8)) {
+            pants.add(productType);
+        }
+
+        counter = 0;
+
+        for ( Products pantsCandidate : pants) {
+
+            if (counter < 4 ) {
+                fourPants.add(pantsCandidate);
+            }
+
+            counter++;
+        }
+
+        for (Products productType : ProductsData.getByType(11)) {
+            accessories.add(productType);
+        }
+        for (Products productType : ProductsData.getByType(12)) {
+            accessories.add(productType);
+        }
+
+        counter = 0;
+
+        for ( Products accessoriesCandidate : accessories) {
+
+            if ( counter < 4 ) {
+                fourAccessories.add(accessoriesCandidate);
+            }
+
+            counter++;
+        }
 
         model.addAttribute("title", "Broke Shirts");
         model.addAttribute("featured", featured);
         model.addAttribute("shirts", fourShirts);
-        model.addAttribute("pants", pants);
-        model.addAttribute("accessories", accessories);
+        model.addAttribute("pants", fourPants);
+        model.addAttribute("accessories", fourAccessories);
 
         return "index";
 
@@ -104,6 +144,13 @@ public class MainController {
 
         return "redirect:..";
 
+    }
+
+    @RequestMapping(value="terms")
+    public String showTermsAndConditions(Model model) {
+        model.addAttribute("title", "Terms and Conditions");
+
+        return "terms";
     }
 
     @RequestMapping(value="data")
