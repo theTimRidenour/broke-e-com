@@ -3,10 +3,10 @@
     BODY        -  32
     CART        -  76
     FOOTER      - 106
-    HEADER      - 160
-    NAVIGATION  - 208
-    SEARCH BAR  - 224
-    SEARCH TERM - 267    */
+    HEADER      - 166
+    NAVIGATION  - 234
+    SEARCH BAR  - 250
+    SEARCH TERM - 293    */
 
 @import url('https://fonts.googleapis.com/css?family=Lato:300');
 
@@ -197,6 +197,26 @@
   padding: 12px 0 0 25px;
   position: absolute;
   width: 64px;
+}
+
+#menu {
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    left: 0;
+    margin: 0 auto;
+    min-width: 1024px;
+    position: absolute;
+    top: 355px;
+    width: 100%;
+}
+
+#menu a {
+    color: #ffffff;
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 #title {

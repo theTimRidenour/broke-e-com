@@ -123,6 +123,7 @@ public class MainController {
         model.addAttribute("shirts", fourShirts);
         model.addAttribute("pants", fourPants);
         model.addAttribute("accessories", fourAccessories);
+        model.addAttribute("menuItems", CategoriesData.getAll());
 
         return "index";
 
@@ -132,6 +133,8 @@ public class MainController {
     public String displayAddProductForm(Model model) {
 
         model.addAttribute("title","Add Product");
+        model.addAttribute("menuItems", CategoriesData.getAll());
+
 
         return "admin/add_product";
 
@@ -148,7 +151,10 @@ public class MainController {
 
     @RequestMapping(value="terms")
     public String showTermsAndConditions(Model model) {
+
         model.addAttribute("title", "Terms and Conditions");
+        model.addAttribute("menuItems", CategoriesData.getAll());
+
 
         return "terms";
     }
@@ -157,6 +163,7 @@ public class MainController {
     public String showData(Model model) {
 
         model.addAttribute("title", "Data Log");
+        model.addAttribute("menuItems", CategoriesData.getAll());
         model.addAttribute("addresses", AddressesData.getAll());
         model.addAttribute("categories", CategoriesData.getAll());
         model.addAttribute("colors", ColorsData.getAll());
