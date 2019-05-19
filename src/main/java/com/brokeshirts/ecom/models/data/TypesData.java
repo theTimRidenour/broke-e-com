@@ -1,4 +1,6 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.data;
+
+import com.brokeshirts.ecom.models.Types;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,19 @@ public class TypesData {
         }
 
         return oneType;
+    }
+
+    public static Types getByName(String typeName) {
+        Types oneType = null;
+
+        for (Types candidateType : types) {
+            if (candidateType.getName().equals(typeName)) {
+                oneType = candidateType;
+            }
+        }
+
+        return oneType;
+
     }
 
     public static ArrayList<Types> getByCategory(int categoryId) {

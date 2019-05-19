@@ -1,4 +1,6 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.data;
+
+import com.brokeshirts.ecom.models.Customers;
 
 import java.util.ArrayList;
 

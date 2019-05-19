@@ -1,4 +1,6 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.data;
+
+import com.brokeshirts.ecom.models.Categories;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,19 @@ public class CategoriesData {
         }
 
         return oneCategory;
+    }
+
+    public static Categories getByName(String catName) {
+        Categories oneCategory = null;
+
+        for (Categories candidateCategory : categories) {
+            if (candidateCategory.getName().equals(catName)) {
+                oneCategory = candidateCategory;
+            }
+        }
+
+        return oneCategory;
+
     }
 
     public static void add(Categories newCategory) {
