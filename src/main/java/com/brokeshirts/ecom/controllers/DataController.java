@@ -1,6 +1,7 @@
 package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.models.*;
+import com.brokeshirts.ecom.models.data.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

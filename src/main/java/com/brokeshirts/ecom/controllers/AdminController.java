@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.brokeshirts.ecom.models.CategoriesData;
+import com.brokeshirts.ecom.models.data.CategoriesData;
 import com.brokeshirts.ecom.models.Products;
-import com.brokeshirts.ecom.models.ProductsData;
+import com.brokeshirts.ecom.models.data.ProductsData;
 
 @Controller
 @RequestMapping(value="admin")

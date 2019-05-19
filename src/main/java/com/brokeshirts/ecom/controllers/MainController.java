@@ -6,9 +6,9 @@ import org.springframework.ui.Model;
 
 import com.brokeshirts.ecom.models.Products;
 import com.brokeshirts.ecom.models.Types;
-import com.brokeshirts.ecom.models.CategoriesData;
-import com.brokeshirts.ecom.models.ProductsData;
-import com.brokeshirts.ecom.models.TypesData;
+import com.brokeshirts.ecom.models.data.CategoriesData;
+import com.brokeshirts.ecom.models.data.ProductsData;
+import com.brokeshirts.ecom.models.data.TypesData;
 
 import java.util.ArrayList;
 
