@@ -104,7 +104,6 @@ public class DataController {
 
         Categories categoryOne = new Categories();
         categoryOne.setName("shirts");
-        System.out.println("categoryOne : " + categoryOne.getId() + ", " + categoryOne.getName());
         categoriesDao.save(categoryOne);
 
         Types typeOne = new Types();
