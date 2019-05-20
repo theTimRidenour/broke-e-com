@@ -1,18 +1,31 @@
 package com.brokeshirts.ecom.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class Cart {
 
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @NotNull
     private int customerId;
-    private int[] itemIds;
 
-    public Cart(int customerId, int[] itemIds) {
+    @NotNull
+    private int itemId;
+
+    public Cart(int customerId, int itemId) {
         this.customerId = customerId;
-        this.itemIds = itemIds;
+        this.itemId = itemId;
     }
 
-    public Cart() {
+    public Cart() {}
 
-    }
+    public int getId() { return id; }
 
     public int getCustomerId() {
         return customerId;
@@ -22,12 +35,11 @@ public class Cart {
         this.customerId = customerId;
     }
 
-    public int[] getItemIds() {
-        return itemIds;
+    public int getItemId() {
+        return itemId;
     }
 
-    public void setItemIds(int[] itemIds) {
-        this.itemIds = itemIds;
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
-
 }

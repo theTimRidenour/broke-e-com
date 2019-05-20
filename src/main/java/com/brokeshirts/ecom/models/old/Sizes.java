@@ -1,31 +1,31 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-@Entity
 public class Sizes {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @NotNull
+    private int sizeId;
     private String longName;
-
-    @NotNull
     private String shortName;
 
+    private static int nextId = 1;
+
     public Sizes(String longName, String shortName) {
+        this();
         this.longName = longName;
         this.shortName = shortName;
     }
 
-    public Sizes() {}
+    public Sizes() {
+        this.sizeId = nextId;
+        nextId++;
+    }
 
-    public int getId() { return id; }
+    public int getSizeId() {
+        return sizeId;
+    }
+
+    public void setSizeId(int sizeId) {
+        this.sizeId = sizeId;
+    }
 
     public String getLongName() {
         return longName;

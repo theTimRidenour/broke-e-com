@@ -1,31 +1,31 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-@Entity
 public class Types {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @NotNull
+    private int typeId;
     private String name;
-
-    @NotNull
     private int categoryId;
 
+    private static int nextId = 1;
+
     public Types(String name, int categoryId) {
+        this();
         this.name = name;
         this.categoryId = categoryId;
     }
 
-    public Types() {}
+    public Types() {
+        this.typeId = nextId;
+        nextId++;
+    }
 
-    public int getId() { return id; }
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
 
     public String getName() {
         return name;

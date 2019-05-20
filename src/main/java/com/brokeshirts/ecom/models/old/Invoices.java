@@ -1,4 +1,4 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
 import java.util.Date;
 

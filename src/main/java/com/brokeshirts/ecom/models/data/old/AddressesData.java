@@ -1,6 +1,6 @@
-package com.brokeshirts.ecom.models.data;
+package com.brokeshirts.ecom.models.data.old;
 
-import com.brokeshirts.ecom.models.Addresses;
+import com.brokeshirts.ecom.models.old.Addresses;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class AddressesData {
         Addresses oneAddress = null;
 
         for (Addresses candidateAddress : addresses) {
-            if (candidateAddress.getAddressId() == id) {
+            if (candidateAddress.getId() == id) {
                 oneAddress = candidateAddress;
             }
         }

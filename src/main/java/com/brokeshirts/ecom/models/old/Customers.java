@@ -1,38 +1,22 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
-@Entity
 public class Customers {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
+    private int customerId;
     private String googleId;
-
-    @NotNull
     private String email;
-
-    @NotNull
     private String firstName;
-
-    @NotNull
     private String lastName;
-
-    @NotNull
     private int phoneArea;
-
-    @NotNull
     private int phonePrefix;
-
-    @NotNull
     private int phoneLine;
 
+    private static int nextId = 1;
+
     public Customers(String email, String firstName, String lastName, int phoneArea, int phonePrefix, int phoneLine) {
+        this();
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,11 +25,22 @@ public class Customers {
         this.phoneLine = phoneLine;
     }
 
-    public Customers() {}
+    public Customers() {
+        customerId = nextId;
+        nextId++;
+    }
 
-    public int getId() { return id; }
+    public int getCustomerId() {
+        return customerId;
+    }
 
-    public String getGoogleId() { return googleId; }
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
 
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
@@ -98,5 +93,5 @@ public class Customers {
     public void setPhoneLine(int phoneLine) {
         this.phoneLine = phoneLine;
     }
-    
+
 }

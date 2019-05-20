@@ -1,16 +1,16 @@
 package com.brokeshirts.ecom.controllers;
 
-import com.brokeshirts.ecom.models.data.ProductsData;
+import com.brokeshirts.ecom.models.data.old.ProductsData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.brokeshirts.ecom.models.Types;
-import com.brokeshirts.ecom.models.Products;
-import com.brokeshirts.ecom.models.data.CategoriesData;
-import com.brokeshirts.ecom.models.data.TypesData;
+import com.brokeshirts.ecom.models.old.Types;
+import com.brokeshirts.ecom.models.old.Products;
+import com.brokeshirts.ecom.models.data.old.CategoriesData;
+import com.brokeshirts.ecom.models.data.old.TypesData;
 
 import java.util.ArrayList;
 

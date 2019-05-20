@@ -1,52 +1,47 @@
 package com.brokeshirts.ecom.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class Colors {
 
-    private int colorId;
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String hex;
+
     private String url;
 
-    private static int nextId = 1;
-
     public Colors(String name, String hex) {
-        this();
         this.name = name;
         this.hex = hex;
     }
 
-    public Colors() {
-        colorId = nextId;
-        nextId++;
-    }
+    public Colors() {}
 
-    public int getColorId() {
-        return colorId;
-    }
+    public int getId() { return id; }
 
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
-    }
-
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getHex() {
-        return hex;
-    }
+    public String getHex() { return hex; }
 
     public void setHex(String hex) {
         this.hex = hex;
     }
 
-    public String getUrl() {
-        return url;
-    }
+    public String getUrl() { return url; }
 
     public void setUrl(String url) {
         this.url = url;

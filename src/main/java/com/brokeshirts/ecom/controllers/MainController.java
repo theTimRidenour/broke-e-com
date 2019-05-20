@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
-import com.brokeshirts.ecom.models.Products;
-import com.brokeshirts.ecom.models.Types;
-import com.brokeshirts.ecom.models.data.CategoriesData;
-import com.brokeshirts.ecom.models.data.ProductsData;
-import com.brokeshirts.ecom.models.data.TypesData;
+import com.brokeshirts.ecom.models.old.Products;
+import com.brokeshirts.ecom.models.old.Types;
+import com.brokeshirts.ecom.models.data.old.CategoriesData;
+import com.brokeshirts.ecom.models.data.old.ProductsData;
+import com.brokeshirts.ecom.models.data.old.TypesData;
 
 import java.util.ArrayList;
 
@@ -96,12 +96,8 @@ public class MainController {
 
         model.addAttribute("title", "Broke Shirts");
         model.addAttribute("featured", featured);
-        model.addAttribute("shirts", shirtsToDisplay);
-        model.addAttribute("shirtMenu", shirtTypes);
-        model.addAttribute("pants", pantsToDisplay);
-        model.addAttribute("pantsMenu", pantsTypes);
-        model.addAttribute("accessories", accessoriesToDisplay);
-        model.addAttribute("accessoriesMenu", accessoryTypes);
+        model.addAttribute("types", TypesData.getAll());
+        model.addAttribute("products", ProductsData.getAll());
         model.addAttribute("menuItems", CategoriesData.getAll());
 
         return "index";

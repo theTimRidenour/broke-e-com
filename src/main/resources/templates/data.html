@@ -11,7 +11,7 @@
     <p th:unless="${addresses} and ${addresses.size()}"><strong>No Addresses</strong></p>
 
     <div th:each="address : ${addresses}">
-        <p th:text="'Address id: ' + ${address.addressId}"></p>
+        <p th:text="'Address id: ' + ${address.id}"></p>
         <p th:text="'Address one: ' + ${address.addressOne}"></p>
         <p th:text="'Address two: ' + ${address.addressTwo}"></p>
         <p th:text="'City: ' + ${address.city}"></p>

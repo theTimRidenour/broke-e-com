@@ -1,37 +1,32 @@
 package com.brokeshirts.ecom.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class Categories {
 
-    private int categoryId;
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @NotNull
     private String name;
 
-    private static int nextId = 1;
-
     public Categories(String name) {
-        this();
         this.name = name;
     }
 
-    public Categories() {
-        categoryId = nextId;
-        nextId++;
-    }
+    public Categories() {}
 
-    public String getName() {
-        return name;
-    }
+    public int getId() { return id; }
+
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
 
 }

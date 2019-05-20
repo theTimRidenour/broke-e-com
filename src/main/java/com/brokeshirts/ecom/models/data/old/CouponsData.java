@@ -1,6 +1,6 @@
-package com.brokeshirts.ecom.models.data;
+package com.brokeshirts.ecom.models.data.old;
 
-import com.brokeshirts.ecom.models.Coupons;
+import com.brokeshirts.ecom.models.old.Coupons;
 
 import java.util.ArrayList;
 

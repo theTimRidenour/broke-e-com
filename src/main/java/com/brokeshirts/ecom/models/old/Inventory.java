@@ -1,54 +1,38 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-@Entity
 public class Inventory {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @NotNull
-    private String sku;
-
-    @NotNull
+    private int itemId;
     private int productId;
-
-    @NotNull
+    private String sku;
     private int sizeId;
-
-    @NotNull
     private int colorId;
-
-    @NotNull
-    private double price;
-
-    @NotNull
     private int quantity;
+    private int price;
 
-    public Inventory(String sku, int productId, int sizeId, int colorId, double price, int quantity) {
-        this.sku = sku;
+    private static int nextId = 1;
+
+    public Inventory(int price, int productId, String sku, int sizeId, int colorId, int quantity) {
+        this();
         this.productId = productId;
+        this.sku = sku;
         this.sizeId = sizeId;
         this.colorId = colorId;
-        this.price = price;
         this.quantity = quantity;
+        this.price = price;
     }
 
-    public Inventory() {}
-
-    public int getId() { return id; }
-
-    public String getSku() {
-        return sku;
+    public Inventory() {
+        this.itemId = nextId;
+        nextId++;
     }
 
-    public void setSku(String sku) {
-        this.sku = sku;
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public int getProductId() {
@@ -57,6 +41,14 @@ public class Inventory {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public int getSizeId() {
@@ -75,14 +67,6 @@ public class Inventory {
         this.colorId = colorId;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -90,5 +74,9 @@ public class Inventory {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public int getPrice() { return price; }
+
+    public void setPrice(int price) { this.price = price; }
 
 }

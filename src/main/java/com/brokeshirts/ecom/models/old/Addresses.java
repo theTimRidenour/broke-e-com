@@ -1,46 +1,39 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-@Entity
 public class Addresses {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @NotNull
+    private int addressId;
     private String addressOne;
-
     private String addressTwo;
-
-    @NotNull
     private String city;
-
-    @NotNull
-    private String state;
-
-    @NotNull
+    private String stateCode;
     private int zipCode;
-
-    @NotNull
     private int customerId;
 
-    public Addresses(String addressOne, String city, String state, int zipCode, int customerId) {
+    private static int nextId = 1;
+
+    public Addresses(String addressOne, String addressTwo, String city, String stateCode, int zipCode, int customerId) {
+
+        this();
         this.addressOne = addressOne;
+        this.addressTwo = addressTwo;
         this.city = city;
-        this.state = state;
+        this.stateCode = stateCode;
         this.zipCode = zipCode;
         this.customerId = customerId;
     }
 
-    public Addresses() {}
+    public Addresses() {
+        this.addressId = nextId;
+        nextId++;
+    }
 
-    public int getId() {
-        return id;
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
     }
 
     public String getAddressOne() {
@@ -67,12 +60,12 @@ public class Addresses {
         this.city = city;
     }
 
-    public String getState() {
-        return state;
+    public String getStateCode() {
+        return stateCode;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 
     public int getZipCode() {
@@ -90,5 +83,4 @@ public class Addresses {
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
-
 }

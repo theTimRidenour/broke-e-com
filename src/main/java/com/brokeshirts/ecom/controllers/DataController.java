@@ -1,7 +1,13 @@
 package com.brokeshirts.ecom.controllers;
 
-import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
+import com.brokeshirts.ecom.models.data.old.*;
+import com.brokeshirts.ecom.models.old.*;
+import com.brokeshirts.ecom.models.old.Addresses;
+import com.brokeshirts.ecom.models.old.Categories;
+import com.brokeshirts.ecom.models.old.Colors;
+import com.brokeshirts.ecom.models.old.Customers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value="data")
 public class DataController {
 
+    @Autowired
+    private AddressesDao addressesDao;
+
     @RequestMapping(value="")
     public String showData(Model model) {
 
         model.addAttribute("title", "Data Log");
         model.addAttribute("menuItems", CategoriesData.getAll());
-        model.addAttribute("addresses", AddressesData.getAll());
+        model.addAttribute("addresses", addressesDao.findAll());
         model.addAttribute("categories", CategoriesData.getAll());
         model.addAttribute("colors", ColorsData.getAll());
         model.addAttribute("customers", CustomersData.getAll());
@@ -23,6 +32,7 @@ public class DataController {
         model.addAttribute("products", ProductsData.getAll());
         model.addAttribute("sizes", SizesData.getAll());
         model.addAttribute("types", TypesData.getAll());
+
 
         return "data";
     }
@@ -121,7 +131,8 @@ public class DataController {
         address.setStateCode("IL");
         address.setZipCode(62221);
         address.setCustomerId(1);
-        AddressesData.add(address);
+        addressesDao.save(address);
+        // AddressesData.add(address);
 
         Sizes sizeOne = new Sizes();
         sizeOne.setLongName("one size fits all");

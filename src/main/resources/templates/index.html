@@ -20,55 +20,19 @@
 
   </div>
 
-  <div class="section_full">
-    <span class="title1">Shirts</span>
-    <span class="title2" th:each="shirtMenuItem : ${shirtMenu}">
-      <a th:href="'/store/shirts/' + ${shirtMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${shirtMenuItem.name} + '&nbsp;&nbsp;'"></a>
-    </span>
-  </div>
-  <div class="section_full">
-
-    <p th:unless="${shirts} and ${shirts.size()}"><strong>No Shirts</strong></p>
-
-    <div class="product" th:each="product : ${shirts}">
-      <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
-    </div>
-
-  </div>
-
-  <div class="section_full">
-    <span class="title1">Pants</span>
-    <span class="title2" th:each="pantsMenuItem : ${pantsMenu}">
-      <a th:href="'/store/pants/' + ${pantsMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${pantsMenuItem.name} + '&nbsp;&nbsp;'"></a>
-    </span>
-  </div>
-  <div class="section_full">
-
-    <p th:unless="${pants} and ${pants.size()}"><strong>No Pants</strong></p>
-
-    <div class="product" th:each="product : ${pants}">
-      <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
-    </div>
-
-  </div>
-
-  <div class="section_full">
-    <span class="title1">Accessories</span>
-    <span class="title2" th:each="accessoryMenuItem : ${accessoriesMenu}">
-      <a th:href="'/store/accessories/' + ${accessoryMenuItem.name}" th:text="'&nbsp;&nbsp;' + ${accessoryMenuItem.name} + '&nbsp;&nbsp;'"></a>
-    </span>
-  </div>
-  <div class="section_full">
-
-    <p th:unless="${accessories} and ${accessories.size()}"><strong>No Accessories</strong></p>
-
-    <div class="product" th:each="product : ${accessories}">
-      <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
-    </div>
-
+  <div th:each="category : ${menuItems}">
+      <div class="section_full">
+        <span class="title1" th:text="${category.name}">category</span>
+          <span class="title2" th:each="type : ${types}" th:if="${type.categoryId == category.categoryId}">
+             <a th:href="'/store/' + ${category.name} + '/' + ${type.name}" th:text="'&nbsp;&nbsp;' + ${type.name} + '&nbsp;&nbsp;'"></a>
+          </span><br />
+          <div th:each="product : ${products}" style="display: inline-block;">
+              <div class="product" th:each="type : ${types}" th:if="${product.typeId == type.typeId and type.categoryId == category.categoryId and product.productId == 4}">
+                 <div class="product_img"></div>
+                 <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
+               </div>
+          </div>
+      </div>
   </div>
 
   <div th:replace="fragments :: footer"></div>

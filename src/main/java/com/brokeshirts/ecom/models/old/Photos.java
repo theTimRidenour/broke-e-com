@@ -1,35 +1,33 @@
-package com.brokeshirts.ecom.models;
+package com.brokeshirts.ecom.models.old;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-@Entity
 public class Photos {
 
-    @Id
-    @GeneratedValue
-    private int id;
-
-    @NotNull
+    private int photoId;
     private int productId;
-
-    @NotNull
     private int colorId;
-
-    @NotNull
     private String url;
 
+    private static int nextId = 1;
+
     public Photos(int productId, int colorId, String url) {
+        this();
         this.productId = productId;
         this.colorId = colorId;
         this.url = url;
     }
 
-    public Photos() {}
+    public Photos() {
+        this.photoId = nextId;
+        nextId++;
+    }
 
-    public int getId() { return id; }
+    public int getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(int photoId) {
+        this.photoId = photoId;
+    }
 
     public int getProductId() {
         return productId;
