@@ -15,11 +15,11 @@ public class AddressesData {
     public static Addresses getById(int id) {
         Addresses oneAddress = null;
 
-        for (Addresses candidateAddress : addresses) {
-            if (candidateAddress.getId() == id) {
-                oneAddress = candidateAddress;
-            }
-        }
+        //for (Addresses candidateAddress : addresses) {
+        //    if (candidateAddress.getId() == id) {
+        //        oneAddress = candidateAddress;
+        //    }
+        //}
 
         return oneAddress;
     }

@@ -131,7 +131,7 @@ public class DataController {
         address.setStateCode("IL");
         address.setZipCode(62221);
         address.setCustomerId(1);
-        addressesDao.save(address);
+
         // AddressesData.add(address);
 
         Sizes sizeOne = new Sizes();
