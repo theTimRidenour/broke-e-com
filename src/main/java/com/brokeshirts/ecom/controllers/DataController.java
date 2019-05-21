@@ -16,14 +16,32 @@ public class DataController {
 
     @Autowired
     private AddressesDao addressesDao;
+
+    @Autowired
     private CartDao cartDao;
+
+    @Autowired
     private CategoriesDao categoriesDao;
+
+    @Autowired
     private ColorsDao colorsDao;
+
+    @Autowired
     private CustomersDao customersDao;
+
+    @Autowired
     private InventoryDao inventoryDao;
+
+    @Autowired
     private PhotosDao photosDao;
+
+    @Autowired
     private ProductsDao productsDao;
+
+    @Autowired
     private SizesDao sizesDao;
+
+    @Autowired
     private TypesDao typesDao;
 
     @RequestMapping(value="")

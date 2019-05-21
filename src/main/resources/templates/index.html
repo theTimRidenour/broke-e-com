@@ -23,11 +23,11 @@
   <div th:each="category : ${menuItems}">
       <div class="section_full">
         <span class="title1" th:text="${category.name}">category</span>
-          <span class="title2" th:each="type : ${types}" th:if="${type.categoryId == category.categoryId}">
+          <span class="title2" th:each="type : ${types}" th:if="${type.categoryId == category.id}">
              <a th:href="'/store/' + ${category.name} + '/' + ${type.name}" th:text="'&nbsp;&nbsp;' + ${type.name} + '&nbsp;&nbsp;'"></a>
           </span><br />
           <div th:each="product : ${products}" style="display: inline-block;">
-              <div class="product" th:each="type : ${types}" th:if="${product.typeId == type.typeId and type.categoryId == category.categoryId and product.productId == 4}">
+              <div class="product" th:each="type : ${types}" th:if="${product.typeId == type.id and type.categoryId == category.id}">
                  <div class="product_img"></div>
                  <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
                </div>

@@ -1,16 +1,19 @@
 package com.brokeshirts.ecom.controllers;
 
-import com.brokeshirts.ecom.models.data.old.ProductsData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.brokeshirts.ecom.models.old.Types;
-import com.brokeshirts.ecom.models.old.Products;
-import com.brokeshirts.ecom.models.data.old.CategoriesData;
-import com.brokeshirts.ecom.models.data.old.TypesData;
+import com.brokeshirts.ecom.models.Types;
+import com.brokeshirts.ecom.models.Products;
+import com.brokeshirts.ecom.models.Categories;
+
+import com.brokeshirts.ecom.models.data.CategoriesDao;
+import com.brokeshirts.ecom.models.data.ProductsDao;
+import com.brokeshirts.ecom.models.data.TypesDao;
 
 import java.util.ArrayList;
 
@@ -18,23 +21,53 @@ import java.util.ArrayList;
 @RequestMapping(value="store")
 public class StoreController {
 
+    @Autowired
+    CategoriesDao categoriesDao;
+
+    @Autowired
+    TypesDao typesDao;
+
+    @Autowired
+    ProductsDao productsDao;
+
     @RequestMapping(value="{categoryName}", method = RequestMethod.GET)
     public String category(@PathVariable String categoryName, Model model) {
 
-        ArrayList<Types> categoryTypes = TypesData.getByCategory(CategoriesData.getByName(categoryName).getCategoryId());
+        Categories oneCategory = null;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            if (cat.getName().equals(categoryName)) {
+                oneCategory = cat;
+            }
+        }
+
+        ArrayList<Types> categoryTypes = new ArrayList<>();
+
+        for (Types type : typesDao.findAll()) {
+            if (type.getCategoryId() == oneCategory.getId()) {
+                categoryTypes.add(type);
+            }
+        }
+
         ArrayList<Products> allProducts = new ArrayList<>();
 
+        int limit = 0;
         for (Types type : categoryTypes) {
-            for (Products productType : ProductsData.getByType(type.getTypeId())) {
-                allProducts.add(productType);
+            limit = 4;
+            for (Products product : productsDao.findAll()) {
+                if (limit > 0) {
+                    if (product.getTypeId() == type.getId()) {
+                        allProducts.add(product);
+                        limit--;
+                    }
+                }
             }
         }
 
         model.addAttribute("title", categoryName);
         model.addAttribute("types", categoryTypes);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", CategoriesData.getAll());
-
+        model.addAttribute("menuItems", categoriesDao.findAll());
 
         return "store/category";
     }
@@ -42,26 +75,26 @@ public class StoreController {
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
     public String type(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
 
-        System.out.println("categoryName : " + categoryName);
-        System.out.println("typeName : " + typeName);
+        Types oneType = null;
 
-        Types oneType = TypesData.getByName(typeName);
-
-        System.out.println("oneType : " + oneType);
+        for (Types type : typesDao.findAll()) {
+            if (type.getName().equals(typeName)) {
+                oneType = type;
+            }
+        }
 
         ArrayList<Products> allProducts = new ArrayList<>();
 
-        for (Products productType : ProductsData.getByType(oneType.getTypeId())) {
-            allProducts.add(productType);
+        for (Products product : productsDao.findAll()) {
+            if (product.getTypeId() == oneType.getId()) {
+                allProducts.add(product);
+            }
         }
-
-        System.out.println("allProducts : " + allProducts);
-
 
         model.addAttribute("title", categoryName + " : " + typeName);
         model.addAttribute("type", oneType);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", CategoriesData.getAll());
+        model.addAttribute("menuItems", categoriesDao.findAll());
 
 
         return "store/type";
