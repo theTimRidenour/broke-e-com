@@ -16,6 +16,8 @@ public class Categories {
     @NotNull
     private String name;
 
+    private int sortId;
+
     public Categories(String name) {
         this.name = name;
     }
@@ -29,5 +31,9 @@ public class Categories {
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getSortId() { return sortId; }
+
+    public void setSortId(int sortId) { this.sortId = sortId; }
 
 }

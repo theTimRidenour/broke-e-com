@@ -1,5 +1,6 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
+
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value="admin")
@@ -49,8 +52,26 @@ public class AdminController {
     @RequestMapping(value="")
     public String adminIndex(Model model) {
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title","ADMIN");
-        model.addAttribute("menuItems", categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
         return "admin/index";
 
@@ -59,10 +80,28 @@ public class AdminController {
     @RequestMapping(value="{menuOption}")
     public String showAdminForm(Model model, @PathVariable String menuOption) {
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         if (menuOption.equals("addresses")) {
             model.addAttribute("addresses", addressesDao.findAll());
         } else if (menuOption.equals("categories")) {
-            model.addAttribute("categories", categoriesDao.findAll());
+            model.addAttribute("categories", sortedCat);
         } else if (menuOption.equals("colors")) {
             model.addAttribute("colors", colorsDao.findAll());
         } else if (menuOption.equals("customers")) {
@@ -80,9 +119,87 @@ public class AdminController {
         }
 
         model.addAttribute("title", "ADMIN");
-        model.addAttribute("menuItems",categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
         return "admin/" + menuOption;
+    }
+
+    @RequestMapping(value="{menuOption}/moveup/{sortId}")
+    public String moveUp(Model model, @PathVariable String menuOption, @PathVariable int sortId) {
+
+        if (menuOption.equals("categories")) {
+            for (Categories cat : categoriesDao.findAll()) {
+                if (cat.getSortId() == sortId) {
+                    cat.setSortId(sortId - 1);
+                    categoriesDao.save(cat);
+                } else if (cat.getSortId() == sortId - 1) {
+                    cat.setSortId(sortId);
+                    categoriesDao.save(cat);
+                }
+            }
+        }
+
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortMenuId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortMenuId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortMenuId) {
+                    sortedCat.add(cat);
+                    sortMenuId++;
+                }
+            }
+        }
+
+        model.addAttribute("title", "ADMIN");
+        model.addAttribute("menuItems", sortedCat);
+
+        return "redirect:/admin/" + menuOption;
+    }
+
+    @RequestMapping(value="{menuOption}/movedown/{sortId}")
+    public String moveDown(Model model, @PathVariable String menuOption, @PathVariable int sortId) {
+
+        if (menuOption.equals("categories")) {
+            for (Categories cat : categoriesDao.findAll()) {
+                if (cat.getSortId() == sortId) {
+                    cat.setSortId(sortId + 1);
+                    categoriesDao.save(cat);
+                } else if (cat.getSortId() == sortId + 1) {
+                    cat.setSortId(sortId);
+                    categoriesDao.save(cat);
+                }
+            }
+        }
+
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortMenuId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortMenuId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortMenuId) {
+                    sortedCat.add(cat);
+                    sortMenuId++;
+                }
+            }
+        }
+
+        model.addAttribute("title", "ADMIN");
+        model.addAttribute("menuItems", sortedCat);
+
+        return "redirect:/admin/" + menuOption;
     }
 
 }

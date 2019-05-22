@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 
 import com.brokeshirts.ecom.models.data.*;
 import com.brokeshirts.ecom.models.*;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 @Controller
@@ -83,11 +83,29 @@ public class MainController {
             }
         }
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title", "Broke Shirts");
         model.addAttribute("featured", featured);
         model.addAttribute("types", typesDao.findAll());
         model.addAttribute("products", indexProducts);
-        model.addAttribute("menuItems", categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
         return "index";
 
@@ -96,8 +114,26 @@ public class MainController {
     @RequestMapping(value="terms")
     public String showTermsAndConditions(Model model) {
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title", "Terms and Conditions");
-        model.addAttribute("menuItems", categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
 
         return "terms";

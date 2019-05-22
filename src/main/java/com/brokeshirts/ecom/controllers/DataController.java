@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 @Controller
 @RequestMapping(value="data")
@@ -104,8 +103,26 @@ public class DataController {
             }
         }
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title", "Data Log");
-        model.addAttribute("menuItems", categories);
+        model.addAttribute("menuItems", sortedCat);
         model.addAttribute("addresses", addresses);
         model.addAttribute("colors", colors);
         model.addAttribute("customers", customers);
@@ -123,6 +140,18 @@ public class DataController {
         Categories categoryOne = new Categories();
         categoryOne.setName("shirts");
         categoriesDao.save(categoryOne);
+
+        ArrayList<Categories> catList = new ArrayList<>();
+
+        for (Categories catAll : categoriesDao.findAll()) {
+            catList.add(catAll);
+        }
+
+        for (Categories cat : catList) {
+            if (cat.getId() == catList.size()) {
+                cat.setSortId(2);
+            }
+        }
 
         Types typeOne = new Types();
         typeOne.setCategoryId(1);
@@ -153,6 +182,18 @@ public class DataController {
         categoryTwo.setName("pants");
         categoriesDao.save(categoryTwo);
 
+        ArrayList<Categories> catList2 = new ArrayList<>();
+
+        for (Categories catAll : categoriesDao.findAll()) {
+            catList2.add(catAll);
+        }
+
+        for (Categories cat : catList2) {
+            if (cat.getId() == catList2.size()) {
+                cat.setSortId(1);
+            }
+        }
+
         Types typeSix = new Types();
         typeSix.setCategoryId(2);
         typeSix.setName("slacks");
@@ -172,6 +213,18 @@ public class DataController {
         categoryThree.setName("hats");
         categoriesDao.save(categoryThree);
 
+        ArrayList<Categories> catList3 = new ArrayList<>();
+
+        for (Categories catAll : categoriesDao.findAll()) {
+            catList3.add(catAll);
+        }
+
+        for (Categories cat : catList3) {
+            if (cat.getId() == catList3.size()) {
+                cat.setSortId(3);
+            }
+        }
+
         Types typeNine = new Types();
         typeNine.setCategoryId(3);
         typeNine.setName("6-panel");
@@ -185,6 +238,18 @@ public class DataController {
         Categories categoryFour = new Categories();
         categoryFour.setName("accessories");
         categoriesDao.save(categoryFour);
+
+        ArrayList<Categories> catList4 = new ArrayList<>();
+
+        for (Categories catAll : categoriesDao.findAll()) {
+            catList4.add(catAll);
+        }
+
+        for (Categories cat : catList4) {
+            if (cat.getId() == catList4.size()) {
+                cat.setSortId(4);
+            }
+        }
 
         Types typeEleven = new Types();
         typeEleven.setCategoryId(4);

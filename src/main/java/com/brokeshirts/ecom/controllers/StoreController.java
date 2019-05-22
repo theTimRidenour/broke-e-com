@@ -64,10 +64,28 @@ public class StoreController {
             }
         }
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title", categoryName);
         model.addAttribute("types", categoryTypes);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
         return "store/category";
     }
@@ -91,10 +109,28 @@ public class StoreController {
             }
         }
 
+        ArrayList<Categories> unsortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCat = new ArrayList<>();
+
+        int sortId = 1;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            unsortedCat.add(cat);
+        }
+
+        while (sortId <= unsortedCat.size()) {
+            for (Categories cat : unsortedCat) {
+                if (cat.getSortId() == sortId) {
+                    sortedCat.add(cat);
+                    sortId++;
+                }
+            }
+        }
+
         model.addAttribute("title", categoryName + " : " + typeName);
         model.addAttribute("type", oneType);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", categoriesDao.findAll());
+        model.addAttribute("menuItems", sortedCat);
 
 
         return "store/type";
