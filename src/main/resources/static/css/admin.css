@@ -1,0 +1,117 @@
+* {
+    text-decoration: none;
+}
+
+#admin_menu {
+    margin: 0;
+    padding: 10px 0 0;
+    display: inline-block;
+    width: 175px;
+}
+
+.admin_menu_button {
+    height: 34px;
+    font-size: 20px;
+    padding-top: 7px;
+    border-top: 1px solid #606060;
+    border-bottom: 1px solid #606060;
+}
+
+a .admin_menu_button:hover {
+  background-color: #e8f4f8;
+  border-right: 2px solid #e8f4f8;
+  border-left: 2px solid #e8f4f8;
+}
+
+#admin_container {
+    text-align: left;
+    margin: 0;
+    padding: 60px 0 0;
+    display: inline-block;
+    width: 840px;
+    min-height: 400px;
+}
+
+.active {
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+    border: 2px solid #72bcd4;
+}
+
+#footer {
+  margin-top: 0;
+}
+
+.section_full {
+  margin: 0 auto;
+}
+
+.admin_text_box {
+    position: absolute;
+    display: block;
+    width: 600px;
+    height: 40px;
+    margin: 10px 0 0 20px;
+    padding: 0;
+    top: 400px;
+}
+
+.admin_text_box input {
+    width: 590px;
+    height: 35px;
+    font-size: 26px;
+    text-align: right;
+    border: 0;
+    border-bottom: 2px solid #606060;
+}
+
+.admin_submit_button {
+    display: block;
+    position: absolute;
+    top: 402px;
+    width: 200px;
+    height: 40px;
+    margin: 15px 0 0 620px;
+    padding: 0;
+}
+
+.admin_submit_button input {
+    width: 190px;
+    height: 30px;
+    font-size: 22px;
+    border: 2px solid #72bcd4;
+    border-radius: 15px;
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+}
+
+.admin_submit_button input:hover {
+    border: 2px solid #add8e6;
+}
+
+.listItem {
+    height: 30px;
+    border-bottom: 1px solid #606060;
+    margin: 0 30px;
+}
+
+.moveUp {
+    position: absolute;
+    height: 15px;
+    font-size: 10px;
+    margin: 3px 5px;
+}
+
+.moveDown {
+    position: absolute;
+    height: 15px;
+    font-size: 10px;
+    margin: 15px 5px;
+}
+
+.oneItem {
+    position: absolute;
+    height: 30px;
+    margin-left: 25px;
+    font-size: 24px;
+}

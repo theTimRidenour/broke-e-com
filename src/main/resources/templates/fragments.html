@@ -2,6 +2,8 @@
     <meta charset="UTF-8" />
     <title th:text="${title}" style="display: none;">Page Title</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link th:if="${title == 'CHECKOUT'}" rel="stylesheet" th:href="@{/css/checkout.css}" />
+    <link th:if="${title == 'ADMIN'}" rel="stylesheet" th:href="@{/css/admin.css}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
 </head>
 
