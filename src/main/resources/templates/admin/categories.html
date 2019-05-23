@@ -29,11 +29,23 @@
 
         <div th:each="item, iStat : ${categories}">
             <div class="listItem" th:style="${iStat.odd}? 'background-color: #e1e0e0;'">
-                <div class="moveUp" th:if="${item.sortId == 0}"></div>
-                <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.id}">/\</a></div>
+                <div class="moveUp" th:if="${item.sortId == 1}"></div>
+                <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.SortId}">/\</a></div>
                 <div class="moveDown" th:if="${item.sortId == categories.size()}"></div>
-                <div class="moveDown" th:unless="${item.sortId == categories.size()}">\/</div>
-                <div class="oneItem" th:text="${item.name}">ITEM</div>
+                <div class="moveDown" th:unless="${item.sortId == categories.size()}"><a th:href="'categories/movedown/' + ${item.SortId}">\/</a></div>
+                <div class="oneItem"><span th:text="${item.name}"></span><a th:href="${'categories/archive/' + item.id}">ARCHIVE</a></div>
+                <div class="hideItem">
+                    <div th:if="${item.hidden == 'no'}">
+                        <form th:action="${'categories/hidden/' + item.id + '/yes'}" method="post">
+                            <input type="submit" value="&#9744; HIDE" />
+                        </form>
+                    </div>
+                    <div th:if="${item.hidden == 'yes'}">
+                        <form th:action="${'categories/hidden/' + item.id + '/no'}" method="post">
+                            <input type="submit" value="&#9745; UNHIDE" />
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
