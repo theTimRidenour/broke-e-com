@@ -37,12 +37,12 @@
                 <div class="hideItem">
                     <div th:if="${item.hidden == 'no'}">
                         <form th:action="${'categories/hidden/' + item.id + '/yes'}" method="post">
-                            <input type="submit" value="&#9744; HIDE" />
+                            <input type="submit" value="&#9745;" />
                         </form>
                     </div>
                     <div th:if="${item.hidden == 'yes'}">
                         <form th:action="${'categories/hidden/' + item.id + '/no'}" method="post">
-                            <input type="submit" value="&#9745; UNHIDE" />
+                            <input type="submit" value="&#9744;" />
                         </form>
                     </div>
                 </div>
