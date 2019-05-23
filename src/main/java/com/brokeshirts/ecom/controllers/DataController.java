@@ -115,7 +115,9 @@ public class DataController {
         while (sortId <= unsortedCat.size()) {
             for (Categories cat : unsortedCat) {
                 if (cat.getSortId() == sortId) {
-                    sortedCat.add(cat);
+                    if (cat.getHidden().equals("no")) {
+                        sortedCat.add(cat);
+                    }
                     sortId++;
                 }
             }
@@ -139,6 +141,8 @@ public class DataController {
 
         Categories categoryOne = new Categories();
         categoryOne.setName("shirts");
+        categoryOne.setArchive("no");
+        categoryOne.setHidden("no");
         categoriesDao.save(categoryOne);
 
         ArrayList<Categories> catList = new ArrayList<>();
@@ -180,6 +184,8 @@ public class DataController {
 
         Categories categoryTwo = new Categories();
         categoryTwo.setName("pants");
+        categoryTwo.setArchive("no");
+        categoryTwo.setHidden("no");
         categoriesDao.save(categoryTwo);
 
         ArrayList<Categories> catList2 = new ArrayList<>();
@@ -211,6 +217,8 @@ public class DataController {
 
         Categories categoryThree = new Categories();
         categoryThree.setName("hats");
+        categoryThree.setArchive("no");
+        categoryThree.setHidden("no");
         categoriesDao.save(categoryThree);
 
         ArrayList<Categories> catList3 = new ArrayList<>();
@@ -237,6 +245,8 @@ public class DataController {
 
         Categories categoryFour = new Categories();
         categoryFour.setName("accessories");
+        categoryFour.setArchive("no");
+        categoryFour.setHidden("no");
         categoriesDao.save(categoryFour);
 
         ArrayList<Categories> catList4 = new ArrayList<>();
@@ -472,6 +482,5 @@ public class DataController {
 
         return "redirect:../data";
     }
-
 
 }

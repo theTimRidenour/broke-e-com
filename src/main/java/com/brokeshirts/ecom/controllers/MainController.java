@@ -95,7 +95,9 @@ public class MainController {
         while (sortId <= unsortedCat.size()) {
             for (Categories cat : unsortedCat) {
                 if (cat.getSortId() == sortId) {
-                    sortedCat.add(cat);
+                    if (cat.getHidden().equals("no")) {
+                        sortedCat.add(cat);
+                    }
                     sortId++;
                 }
             }
@@ -126,7 +128,9 @@ public class MainController {
         while (sortId <= unsortedCat.size()) {
             for (Categories cat : unsortedCat) {
                 if (cat.getSortId() == sortId) {
-                    sortedCat.add(cat);
+                    if (cat.getHidden().equals("no")) {
+                        sortedCat.add(cat);
+                    }
                     sortId++;
                 }
             }

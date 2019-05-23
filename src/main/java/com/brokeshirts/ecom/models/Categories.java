@@ -18,6 +18,10 @@ public class Categories {
 
     private int sortId;
 
+    private String hidden;
+
+    private String archive;
+
     public Categories(String name) {
         this.name = name;
     }
@@ -35,5 +39,21 @@ public class Categories {
     public int getSortId() { return sortId; }
 
     public void setSortId(int sortId) { this.sortId = sortId; }
+
+    public String getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(String hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getArchive() {
+        return archive;
+    }
+
+    public void setArchive(String archive) {
+        this.archive = archive;
+    }
 
 }

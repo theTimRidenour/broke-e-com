@@ -99,19 +99,38 @@ a .admin_menu_button:hover {
     position: absolute;
     height: 15px;
     font-size: 10px;
-    margin: 3px 5px;
+    margin: 3px 92px;
 }
 
 .moveDown {
     position: absolute;
     height: 15px;
     font-size: 10px;
-    margin: 15px 5px;
+    margin: 15px 92px;
 }
 
 .oneItem {
     position: absolute;
     height: 30px;
-    margin-left: 25px;
+    margin-left: 107px;
     font-size: 24px;
+}
+
+.oneItem span {
+    display: inline-block;
+}
+
+.oneItem a {
+    display: inline-block;
+    color: #900c3f;
+    padding-left: 10px;
+    font-size: 9px;
+}
+
+.hideItem form input {
+    padding: 3px;
+    margin-top: 1px;
+    width: 80px;
+    text-align: left;
+    border-radius: 5px;
 }

@@ -54,6 +54,7 @@ public class AdminController {
 
         ArrayList<Categories> unsortedCat = new ArrayList<>();
         ArrayList<Categories> sortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCatMain = new ArrayList<>();
 
         int sortId = 1;
 
@@ -64,7 +65,9 @@ public class AdminController {
         while (sortId <= unsortedCat.size()) {
             for (Categories cat : unsortedCat) {
                 if (cat.getSortId() == sortId) {
-                    sortedCat.add(cat);
+                    if (cat.getHidden().equals("no")) {
+                        sortedCat.add(cat);
+                    }
                     sortId++;
                 }
             }
@@ -82,6 +85,7 @@ public class AdminController {
 
         ArrayList<Categories> unsortedCat = new ArrayList<>();
         ArrayList<Categories> sortedCat = new ArrayList<>();
+        ArrayList<Categories> sortedCatMain = new ArrayList<>();
 
         int sortId = 1;
 
@@ -92,7 +96,12 @@ public class AdminController {
         while (sortId <= unsortedCat.size()) {
             for (Categories cat : unsortedCat) {
                 if (cat.getSortId() == sortId) {
-                    sortedCat.add(cat);
+                    if (cat.getArchive().equals("no")) {
+                        sortedCatMain.add(cat);
+                    }
+                    if (cat.getHidden().equals("no")) {
+                        sortedCat.add(cat);
+                    }
                     sortId++;
                 }
             }
@@ -101,7 +110,7 @@ public class AdminController {
         if (menuOption.equals("addresses")) {
             model.addAttribute("addresses", addressesDao.findAll());
         } else if (menuOption.equals("categories")) {
-            model.addAttribute("categories", sortedCat);
+            model.addAttribute("categories", sortedCatMain);
         } else if (menuOption.equals("colors")) {
             model.addAttribute("colors", colorsDao.findAll());
         } else if (menuOption.equals("customers")) {
@@ -139,28 +148,18 @@ public class AdminController {
             }
         }
 
-        ArrayList<Categories> unsortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCat = new ArrayList<>();
+        return "redirect:/admin/" + menuOption;
+    }
 
-        int sortMenuId = 1;
+    @RequestMapping(value="{menuOption}/hidden/{id}/{choice}")
+    public String changeHiddenStatus(Model model, @PathVariable String menuOption, @PathVariable int id, @PathVariable String choice) {
 
-        for (Categories cat : categoriesDao.findAll()) {
-            unsortedCat.add(cat);
-        }
-
-        while (sortMenuId <= unsortedCat.size()) {
-            for (Categories cat : unsortedCat) {
-                if (cat.getSortId() == sortMenuId) {
-                    sortedCat.add(cat);
-                    sortMenuId++;
-                }
-            }
-        }
-
-        model.addAttribute("title", "ADMIN");
-        model.addAttribute("menuItems", sortedCat);
+        Categories hiddenCat = categoriesDao.findOne(id);
+        hiddenCat.setHidden(choice);
+        categoriesDao.save(hiddenCat);
 
         return "redirect:/admin/" + menuOption;
+
     }
 
     @RequestMapping(value="{menuOption}/movedown/{sortId}")
@@ -177,27 +176,6 @@ public class AdminController {
                 }
             }
         }
-
-        ArrayList<Categories> unsortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCat = new ArrayList<>();
-
-        int sortMenuId = 1;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            unsortedCat.add(cat);
-        }
-
-        while (sortMenuId <= unsortedCat.size()) {
-            for (Categories cat : unsortedCat) {
-                if (cat.getSortId() == sortMenuId) {
-                    sortedCat.add(cat);
-                    sortMenuId++;
-                }
-            }
-        }
-
-        model.addAttribute("title", "ADMIN");
-        model.addAttribute("menuItems", sortedCat);
 
         return "redirect:/admin/" + menuOption;
     }
