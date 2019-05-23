@@ -28,11 +28,12 @@
         </form>
 
         <div th:each="item, iStat : ${categories}">
-            <div class="listItem" th:style="${iStat.odd}? 'background-color: #e1e0e0;'">
+            <div class="listItem" style="background-color: #f0f0f0;">
                 <div class="moveUp" th:if="${item.sortId == 1}"></div>
-                <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.SortId}">/\</a></div>
+                <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.SortId}">&#8911;</a></div>
+                <div class="moveDiv">&minus;</div>
                 <div class="moveDown" th:if="${item.sortId == categories.size()}"></div>
-                <div class="moveDown" th:unless="${item.sortId == categories.size()}"><a th:href="'categories/movedown/' + ${item.SortId}">\/</a></div>
+                <div class="moveDown" th:unless="${item.sortId == categories.size()}"><a th:href="'categories/movedown/' + ${item.SortId}">&#8910;</a></div>
                 <div class="oneItem"><span th:text="${item.name}"></span><a th:href="${'categories/archive/' + item.id}">ARCHIVE</a></div>
                 <div class="hideItem">
                     <div th:if="${item.hidden == 'no'}">
@@ -46,8 +47,30 @@
                         </form>
                     </div>
                 </div>
+                <div class="subcategoryForm">
+                    <form method="post">
+                        <div class="subcategory_text_box">
+                            <input type="text" required="required" name="typeName" placeholder="subcategory" />
+                        </div>
+                        <div class="subcategory_submit_button">
+                            <input type="submit" value="+" />
+                       </div>
+                    </form>
+                </div>
+            </div>
+            <div class="subItem">
+                <div th:each="subCat : ${types}" th:style="${subCat.categoryId != item.id}? 'display: none;'">
+                    <div th:if="${subCat.categoryId == item.id}">
+                        <div th:unless="${subCat.sortId == 1}">&#8827;</div>
+                        <div>&#8864;</div>
+                        <div th:text="${subCat.name}"></div>
+                        <div style="font-size: 8px;">A</div>
+                        <div th:unless="${subCat.sortId == categoryTypeCount[item.id]}">&#8826;</div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div id="archive"><a th:href="'archive'">CHECK ARCHIVE</a></div>
     </div>
 </div>
 

@@ -56,6 +56,17 @@ a .admin_menu_button:hover {
     top: 400px;
 }
 
+.subcategory_text_box, .subcategoryForm {
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.subcategory_text_box {
+    margin: -25px 0 0 610px;
+}
+
 .admin_text_box input {
     width: 590px;
     height: 35px;
@@ -65,6 +76,18 @@ a .admin_menu_button:hover {
     border-bottom: 2px solid #606060;
 }
 
+.subcategory_text_box input {
+    width: 130px;
+    height: 24px;
+    font-size: 16px;
+    background-color: #f3ffff;
+    text-align: right;
+    border: 2px solid #72bcd4;
+    border-radius: 28px 0 0 28px;
+    padding-right: 10px;
+    margin: 0;
+}
+
 .admin_submit_button {
     display: block;
     position: absolute;
@@ -72,6 +95,13 @@ a .admin_menu_button:hover {
     width: 200px;
     height: 40px;
     margin: 15px 0 0 620px;
+    padding: 0;
+}
+
+.subcategory_submit_button {
+    display: block;
+    position: absolute;
+    margin: -25px 0 0 748px;
     padding: 0;
 }
 
@@ -85,14 +115,40 @@ a .admin_menu_button:hover {
     color: #ffffff;
 }
 
-.admin_submit_button input:hover {
+.subcategory_submit_button input {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    border: 2px solid #72bcd4;
+    border-radius: 0 50% 50% 0;
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+}
+
+.admin_submit_button input:hover, .subcategory_submit_button input:hover {
     border: 2px solid #add8e6;
 }
 
 .listItem {
     height: 30px;
     border-bottom: 1px solid #606060;
+    border-top: 1px solid #606060;
     margin: 0 30px;
+}
+
+.subItem {
+    height: 20px;
+    margin-left: 80px;
+    padding-left: 5px;
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: baseline;
+}
+
+.subItem div {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
 }
 
 .moveUp {
@@ -100,6 +156,7 @@ a .admin_menu_button:hover {
     height: 15px;
     font-size: 10px;
     margin: 3px 36px;
+    z-index: 3;
 }
 
 .moveDown {
@@ -107,6 +164,14 @@ a .admin_menu_button:hover {
     height: 15px;
     font-size: 10px;
     margin: 15px 36px;
+    z-index: 3;
+}
+
+.moveDiv {
+    position: absolute;
+    font-size: 11px;
+    margin: 8px 36px;
+    z-index: 2;
 }
 
 .oneItem {
@@ -132,4 +197,10 @@ a .admin_menu_button:hover {
     border: 0;
     background: none;
     font-size: 20px;
+}
+
+#archive {
+    margin: 10px 0 0 685px;
+    width: 126px;
+    font-weight: bold;
 }

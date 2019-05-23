@@ -160,26 +160,46 @@ public class DataController {
         Types typeOne = new Types();
         typeOne.setCategoryId(1);
         typeOne.setName("unisex");
+        typeOne.setHidden("no");
+        typeOne.setArchive("no");
+        typeOne.setCatArchive("no");
+        typeOne.setSortId(1);
         typesDao.save(typeOne);
 
         Types typeTwo = new Types();
         typeTwo.setCategoryId(1);
         typeTwo.setName("mens");
+        typeTwo.setHidden("no");
+        typeTwo.setArchive("no");
+        typeTwo.setCatArchive("no");
+        typeTwo.setSortId(2);
         typesDao.save(typeTwo);
 
         Types typeThree = new Types();
         typeThree.setCategoryId(1);
         typeThree.setName("womens");
+        typeThree.setHidden("no");
+        typeThree.setArchive("no");
+        typeThree.setCatArchive("no");
+        typeThree.setSortId(3);
         typesDao.save(typeThree);
 
         Types typeFour = new Types();
         typeFour.setCategoryId(1);
         typeFour.setName("childs");
+        typeFour.setHidden("no");
+        typeFour.setArchive("no");
+        typeFour.setCatArchive("no");
+        typeFour.setSortId(4);
         typesDao.save(typeFour);
 
         Types typeFive = new Types();
         typeFive.setCategoryId(1);
         typeFive.setName("infant");
+        typeFive.setHidden("no");
+        typeFive.setArchive("no");
+        typeFive.setCatArchive("no");
+        typeFive.setSortId(5);
         typesDao.save(typeFive);
 
         Categories categoryTwo = new Categories();
@@ -203,16 +223,28 @@ public class DataController {
         Types typeSix = new Types();
         typeSix.setCategoryId(2);
         typeSix.setName("slacks");
+        typeSix.setHidden("no");
+        typeSix.setArchive("no");
+        typeSix.setCatArchive("no");
+        typeSix.setSortId(1);
         typesDao.save(typeSix);
 
         Types typeSeven = new Types();
         typeSeven.setCategoryId(2);
         typeSeven.setName("sweatpants");
+        typeSeven.setHidden("no");
+        typeSeven.setArchive("no");
+        typeSeven.setCatArchive("no");
+        typeSeven.setSortId(2);
         typesDao.save(typeSeven);
 
         Types typeEight = new Types();
         typeEight.setCategoryId(2);
         typeEight.setName("shorts");
+        typeEight.setHidden("no");
+        typeEight.setArchive("no");
+        typeEight.setCatArchive("no");
+        typeEight.setSortId(3);
         typesDao.save(typeEight);
 
         Categories categoryThree = new Categories();
@@ -236,11 +268,19 @@ public class DataController {
         Types typeNine = new Types();
         typeNine.setCategoryId(3);
         typeNine.setName("6-panel");
+        typeNine.setHidden("no");
+        typeNine.setArchive("no");
+        typeNine.setCatArchive("no");
+        typeNine.setSortId(1);
         typesDao.save(typeNine);
 
         Types typeTen = new Types();
         typeTen.setCategoryId(3);
         typeTen.setName("trucker");
+        typeTen.setHidden("no");
+        typeTen.setArchive("no");
+        typeTen.setCatArchive("no");
+        typeTen.setSortId(2);
         typesDao.save(typeTen);
 
         Categories categoryFour = new Categories();
@@ -264,11 +304,19 @@ public class DataController {
         Types typeEleven = new Types();
         typeEleven.setCategoryId(4);
         typeEleven.setName("mugs");
+        typeEleven.setHidden("no");
+        typeEleven.setArchive("no");
+        typeEleven.setCatArchive("no");
+        typeEleven.setSortId(1);
         typesDao.save(typeEleven);
 
         Types typeTwelve = new Types();
         typeTwelve.setCategoryId(4);
         typeTwelve.setName("mouse pads");
+        typeTwelve.setHidden("no");
+        typeTwelve.setArchive("no");
+        typeTwelve.setCatArchive("no");
+        typeTwelve.setSortId(2);
         typesDao.save(typeTwelve);
 
         Customers customer = new Customers();

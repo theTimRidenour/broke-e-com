@@ -13,6 +13,7 @@ import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping(value="admin")
@@ -110,7 +111,23 @@ public class AdminController {
         if (menuOption.equals("addresses")) {
             model.addAttribute("addresses", addressesDao.findAll());
         } else if (menuOption.equals("categories")) {
+
+            HashMap<Integer, Integer> categoryTypeCount = new HashMap<>();
+            int count = 0;
+
+            for (Categories cat : categoriesDao.findAll()) {
+                count = 0;
+                for (Types type : typesDao.findAll()) {
+                    if (type.getCategoryId() == cat.getId()) {
+                        count++;
+                    }
+                }
+                categoryTypeCount.put(cat.getId(), count);
+            }
+
             model.addAttribute("categories", sortedCatMain);
+            model.addAttribute("types", typesDao.findAll());
+            model.addAttribute("categoryTypeCount", categoryTypeCount);
         } else if (menuOption.equals("colors")) {
             model.addAttribute("colors", colorsDao.findAll());
         } else if (menuOption.equals("customers")) {
@@ -123,8 +140,6 @@ public class AdminController {
             model.addAttribute("products", productsDao.findAll());
         } else if (menuOption.equals("sizes")) {
             model.addAttribute("sizes", sizesDao.findAll());
-        } else if (menuOption.equals("types")) {
-            model.addAttribute("types", typesDao.findAll());
         }
 
         model.addAttribute("title", "ADMIN");
