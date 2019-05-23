@@ -50,6 +50,9 @@ public class AdminController {
     private TypesDao typesDao;
 
 
+  // DISPLAY FORMS
+
+    // ORDERS
     @RequestMapping(value="")
     public String adminIndex(Model model) {
 
@@ -81,6 +84,7 @@ public class AdminController {
 
     }
 
+    // OTHER ADMIN CATEGORY FORMS
     @RequestMapping(value="{menuOption}")
     public String showAdminForm(Model model, @PathVariable String menuOption) {
 
@@ -114,6 +118,7 @@ public class AdminController {
 
             HashMap<Integer, Integer> categoryTypeCount = new HashMap<>();
             int count = 0;
+            int maxTypeCnt = 0;
 
             for (Categories cat : categoriesDao.findAll()) {
                 count = 0;
@@ -123,10 +128,37 @@ public class AdminController {
                     }
                 }
                 categoryTypeCount.put(cat.getId(), count);
+                if (maxTypeCnt < count) {
+                    maxTypeCnt = count;
+                }
+            }
+
+            ArrayList<Types> unsortedTypes = new ArrayList<>();
+            ArrayList<Types> sortedTypes = new ArrayList<>();
+            ArrayList<Types> sortedTypesMain = new ArrayList<>();
+
+            sortId = 1;
+
+            for (Types type : typesDao.findAll()) {
+                unsortedTypes.add(type);
+            }
+
+            while (sortId <= maxTypeCnt) {
+                for (Types type : unsortedTypes) {
+                    if (type.getSortId() == sortId) {
+                        if (type.getArchive().equals("no")) {
+                            sortedTypesMain.add(type);
+                        }
+                        if (type.getHidden().equals("no")) {
+                            sortedTypes.add(type);
+                        }
+                    }
+                }
+                sortId++;
             }
 
             model.addAttribute("categories", sortedCatMain);
-            model.addAttribute("types", typesDao.findAll());
+            model.addAttribute("types", sortedTypesMain);
             model.addAttribute("categoryTypeCount", categoryTypeCount);
         } else if (menuOption.equals("colors")) {
             model.addAttribute("colors", colorsDao.findAll());
@@ -148,6 +180,10 @@ public class AdminController {
         return "admin/" + menuOption;
     }
 
+
+  // SORTING FORMS
+
+    // MOVE CATEGORY UP LIST
     @RequestMapping(value="{menuOption}/moveup/{sortId}")
     public String moveUp(Model model, @PathVariable String menuOption, @PathVariable int sortId) {
 
@@ -166,19 +202,9 @@ public class AdminController {
         return "redirect:/admin/" + menuOption;
     }
 
-    @RequestMapping(value="{menuOption}/hidden/{id}/{choice}")
-    public String changeHiddenStatus(Model model, @PathVariable String menuOption, @PathVariable int id, @PathVariable String choice) {
-
-        Categories hiddenCat = categoriesDao.findOne(id);
-        hiddenCat.setHidden(choice);
-        categoriesDao.save(hiddenCat);
-
-        return "redirect:/admin/" + menuOption;
-
-    }
-
+    //MOVE CATEGORY DOWN LIST
     @RequestMapping(value="{menuOption}/movedown/{sortId}")
-    public String moveDown(Model model, @PathVariable String menuOption, @PathVariable int sortId) {
+    public String moveDown(@PathVariable String menuOption, @PathVariable int sortId) {
 
         if (menuOption.equals("categories")) {
             for (Categories cat : categoriesDao.findAll()) {
@@ -193,6 +219,73 @@ public class AdminController {
         }
 
         return "redirect:/admin/" + menuOption;
+    }
+
+    //MOVE SUBCATEGORY UP LIST
+    @RequestMapping(value="{menuOption}/{typeOption}/{sortId}/moveup")
+    public String moveSubcategoryUp(@PathVariable String menuOption, @PathVariable int typeOption, @PathVariable int sortId){
+
+        for (Types type : typesDao.findAll()) {
+            if (type.getCategoryId() == typeOption) {
+                if (type.getSortId() == sortId) {
+                    type.setSortId(sortId - 1);
+                    typesDao.save(type);
+                } else if (type.getSortId() == sortId - 1) {
+                    type.setSortId(sortId);
+                    typesDao.save(type);
+                }
+            }
+        }
+
+        return "redirect:/admin/" + menuOption;
+
+    }
+
+    //MOVE SUBCATEGORY DOWN LIST
+    @RequestMapping(value="{menuOption}/{typeOption}/{sortId}/movedown")
+    public String moveSubcategoryDown(@PathVariable String menuOption, @PathVariable int typeOption, @PathVariable int sortId){
+
+        for (Types type : typesDao.findAll()) {
+            if (type.getCategoryId() == typeOption) {
+                if (type.getSortId() == sortId) {
+                    type.setSortId(sortId + 1);
+                    typesDao.save(type);
+                } else if (type.getSortId() == sortId + 1) {
+                    type.setSortId(sortId);
+                    typesDao.save(type);
+                }
+            }
+        }
+
+        return "redirect:/admin/" + menuOption;
+
+    }
+
+
+  // HIDING AND ARCHIVING
+
+    // HIDE CATEGORY FROM CUSTOMERS
+    @RequestMapping(value="{menuOption}/hidden/{id}/{choice}")
+    public String changeHiddenStatus(@PathVariable String menuOption, @PathVariable int id, @PathVariable String choice) {
+
+        Categories hiddenCat = categoriesDao.findOne(id);
+        hiddenCat.setHidden(choice);
+        categoriesDao.save(hiddenCat);
+
+        return "redirect:/admin/" + menuOption;
+
+    }
+
+    // HIDE SUBCATEGORY FROM CUSTOMERS
+    @RequestMapping(value="{menuOption}/{typeId}/hidden/{choice}")
+    public String changeSubcategoryHiddenStatus(@PathVariable String menuOption, @PathVariable int typeId, @PathVariable String choice) {
+
+        Types hiddenType = typesDao.findOne(typeId);
+        hiddenType.setHidden(choice);
+        typesDao.save(hiddenType);
+
+        return "redirect:/admin/" + menuOption;
+
     }
 
 }
