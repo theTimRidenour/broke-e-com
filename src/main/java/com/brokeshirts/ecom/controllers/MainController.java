@@ -45,6 +45,9 @@ public class MainController {
     @Autowired
     private TypesDao typesDao;
 
+// DISPLAY FORMS
+
+    // DISPLAY LANDING PAGE (INDEX)
     @RequestMapping(value= "")
     public String index(Model model) {
 
@@ -91,11 +94,11 @@ public class MainController {
         model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
 
         return "index";
-
     }
 
+    // DISPLAY TERMS AND CONDITIONS
     @RequestMapping(value="terms")
-    public String showTermsAndConditions(Model model) {
+    public String showTerms(Model model) {
 
         model.addAttribute("title", "Terms and Conditions");
         model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));

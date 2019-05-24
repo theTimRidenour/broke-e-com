@@ -31,8 +31,11 @@ public class StoreController {
     @Autowired
     ProductsDao productsDao;
 
+// DISPLAY FORMS
+
+    // DISPLAY PRODUCTS IN SINGLE CATEGORY
     @RequestMapping(value="{categoryName}", method = RequestMethod.GET)
-    public String category(@PathVariable String categoryName, Model model) {
+    public String showCat(@PathVariable String categoryName, Model model) {
 
         Categories oneCategory = null;
 
@@ -73,8 +76,9 @@ public class StoreController {
         return "store/category";
     }
 
+    // DISPLAY PRODUCTS IN SINGLE SUBCATEGORY
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
-    public String type(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
+    public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
 
         Types oneType = null;
 

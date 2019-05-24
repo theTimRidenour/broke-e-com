@@ -47,6 +47,9 @@ public class DataController {
     @Autowired
     private TypesDao typesDao;
 
+// ADD/REMOVE DATA
+
+    // ADD CATEGORY
     @RequestMapping(value="add/category", method = RequestMethod.POST)
     public String addCategory(@RequestParam("categoryName") String categoryName) {
 
@@ -84,8 +87,9 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+    // ADD SUBCATEGORY
     @RequestMapping(value="add/subcategory", method = RequestMethod.POST)
-    public String addSubcategory(@RequestParam("typeName") String typeName, @RequestParam("categoryId") int categoryId) {
+    public String addType(@RequestParam("typeName") String typeName, @RequestParam("categoryId") int categoryId) {
 
         if (typeName.isEmpty() || categoryId == 0) {
             return "redirect:/admin/categories";
@@ -125,6 +129,9 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+// TEMP DATA FORMS
+
+    // SHOW ALL DATABASE DATA
     @RequestMapping(value="")
     public String showData(Model model) {
 
@@ -186,7 +193,7 @@ public class DataController {
         }
 
         model.addAttribute("title", "Data Log");
-        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("addresses", addresses);
         model.addAttribute("colors", colors);
         model.addAttribute("customers", customers);
@@ -198,6 +205,7 @@ public class DataController {
         return "data";
     }
 
+    // INSERT DEMO DATA
     @RequestMapping(value="init")
     public String addInitData() {
 
