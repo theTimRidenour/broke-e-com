@@ -71,7 +71,7 @@ public class StoreController {
         model.addAttribute("title", categoryName);
         model.addAttribute("types", categoryTypes);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
 
         return "store/category";
     }
@@ -99,7 +99,7 @@ public class StoreController {
         model.addAttribute("title", categoryName + " : " + typeName);
         model.addAttribute("type", oneType);
         model.addAttribute("products", allProducts);
-        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
 
         return "store/type";
     }

@@ -16,7 +16,7 @@ public class Menus {
     // SORT ORDER OF CATEGORIES FOR CUSTOMERS
     public static ArrayList<Categories> sortCat(CategoriesDao categoriesDao) {
 
-        ArrayList<Categories> unsortedCat = sortedCatAdmin(categoriesDao);
+        ArrayList<Categories> unsortedCat = sortCatAdmin(categoriesDao);
         ArrayList<Categories> sortedCat = new ArrayList<>();
 
         for (Categories cat : unsortedCat) {
@@ -29,7 +29,7 @@ public class Menus {
     }
 
     // SORTING ORDER OF CATEGORIES FOR ADMIN
-    public static ArrayList<Categories> sortedCatAdmin(CategoriesDao categoriesDao) {
+    public static ArrayList<Categories> sortCatAdmin(CategoriesDao categoriesDao) {
 
         ArrayList<Categories> unsortedCat = new ArrayList<>();
         ArrayList<Categories> sortedCat = new ArrayList<>();

@@ -89,9 +89,9 @@ public class MainController {
 
         model.addAttribute("title", "Broke Shirts");
         model.addAttribute("featured", featured);
-        model.addAttribute("types", Menus.sortedTypes(categoriesDao, typesDao));
+        model.addAttribute("types", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("products", indexProducts);
-        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
 
         return "index";
     }
@@ -101,7 +101,7 @@ public class MainController {
     public String showTerms(Model model) {
 
         model.addAttribute("title", "Terms and Conditions");
-        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
 
         return "terms";
     }
