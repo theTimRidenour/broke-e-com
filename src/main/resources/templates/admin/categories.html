@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div th:text="${subCat.name}"></div>
-                        <div style="font-size: 8px;">A</div>
+                        <div style="font-size: 8px;"><a th:href="${'categories/' + subCat.id + '/archive/' + item.id}">A</a></div>
                         <div th:unless="${subCat.sortId == categoryTypeCount[item.id]}"><a th:href="'categories/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
                     </div>
                 </div>

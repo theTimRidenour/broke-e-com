@@ -118,7 +118,9 @@ public class Menus {
             count = 0;
             for (Types type : typesDao.findAll()) {
                 if (type.getCategoryId() == cat.getId()) {
-                    count++;
+                    if (type.getSortId() != 0) {
+                        count++;
+                    }
                 }
             }
             categoryTypeCount.put(cat.getId(), count);

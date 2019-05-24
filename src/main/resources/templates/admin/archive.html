@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full">
+    <div id="admin_menu">
+        <a th:href="@{/admin}"><div class="admin_menu_button">Orders</div></a>
+        <a th:href="@{/admin/inventory}"><div class="admin_menu_button">Inventory</div></a>
+        <a th:href="@{/admin/returns}"><div class="admin_menu_button">Returns</div></a>
+        <a th:href="@{/admin/coupons}"><div class="admin_menu_button">Coupons</div></a>
+        <a th:href="@{/admin/products}"><div class="admin_menu_button">Products</div></a>
+        <a th:href="@{/admin/customers}"><div class="admin_menu_button">Customers</div></a>
+        <a th:href="@{/admin/colors}"><div class="admin_menu_button">Colors</div></a>
+        <a th:href="@{/admin/sizes}"><div class="admin_menu_button">Sizes</div></a>
+        <a th:href="@{/admin/categories}"><div class="admin_menu_button">Categories</div></a>
+    </div>
+    <div id="admin_container">
+        <div><h1 style="margin-left: 30px;">Categories:</h1></div>
+        <div th:each="item : ${categories}">
+            <div class="listItem" th:if="${item.archive == 'yes'}" style="background-color: #f7f6f6;">
+                <a th:href="${'/data/delete/cat/' + item.id}"><i class="fas fa-trash" style="position: absolute; margin: 10px 6px 0; color: red;"></i></a>
+                <div class="oneItem" style="margin-left: 25px;"><span th:text="${item.name}"></span><a th:href="${'categories/reactivate/cat/' + item.id}">REACTIVATE</a></div>
+            </div>
+            <div class="subItem" th:if="${item.archive == 'yes'}">
+                <div>Contains :</div>
+                <div th:each="subCat : ${types}">
+                    <div th:if="${subCat.categoryId == item.id}">
+                        <div th:text="${item.name + ': ' + subCat.name} + ', '"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div><h1 style="margin-left: 30px;">Sub-categories:</h1></div>
+        <div th:each="item : ${types}">
+            <div class="listItem" th:if="${item.archive == 'yes'}" style="background-color: #f7f6f6;">
+                <div th:each="cat : ${categories}" th:if="${item.categoryId == cat.id}">
+                    <a th:href="${'/data/delete/type/' + item.id}"><i class="fas fa-trash" style="position: absolute; margin: 10px 6px 0; color: red;"></i></a>
+                    <div class="oneItem" style="margin-left: 25px;"><span th:text="${cat.name + ': ' + item.name}"></span><a th:href="${'categories/reactivate/type/' + item.id}">REACTIVATE</a></div>
+                </div>
+            </div>
+            <div class="subItem" th:if="${item.archive == 'yes'}">
+                <div>Contains :</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>
