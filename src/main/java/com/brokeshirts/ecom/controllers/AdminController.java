@@ -1,5 +1,6 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.functions.Menus;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,110 +57,24 @@ public class AdminController {
     @RequestMapping(value="")
     public String adminIndex(Model model) {
 
-        ArrayList<Categories> unsortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCatMain = new ArrayList<>();
-
-        int sortId = 1;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            unsortedCat.add(cat);
-        }
-
-        while (sortId <= unsortedCat.size()) {
-            for (Categories cat : unsortedCat) {
-                if (cat.getSortId() == sortId) {
-                    if (cat.getHidden().equals("no")) {
-                        sortedCat.add(cat);
-                    }
-                    sortId++;
-                }
-            }
-        }
-
         model.addAttribute("title","ADMIN");
-        model.addAttribute("menuItems", sortedCat);
+        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
 
         return "admin/index";
-
     }
 
     // OTHER ADMIN CATEGORY FORMS
     @RequestMapping(value="{menuOption}")
     public String showAdminForm(Model model, @PathVariable String menuOption) {
 
-        ArrayList<Categories> unsortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCatMain = new ArrayList<>();
-
-        int sortId = 1;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            unsortedCat.add(cat);
-        }
-
-        while (sortId <= unsortedCat.size()) {
-            for (Categories cat : unsortedCat) {
-                if (cat.getSortId() == sortId) {
-                    if (cat.getArchive().equals("no")) {
-                        sortedCatMain.add(cat);
-                    }
-                    if (cat.getHidden().equals("no")) {
-                        sortedCat.add(cat);
-                    }
-                    sortId++;
-                }
-            }
-        }
-
         if (menuOption.equals("addresses")) {
             model.addAttribute("addresses", addressesDao.findAll());
         } else if (menuOption.equals("categories")) {
 
-            HashMap<Integer, Integer> categoryTypeCount = new HashMap<>();
-            int count = 0;
-            int maxTypeCnt = 0;
+            model.addAttribute("categories", Menus.sortedCat(categoriesDao));
+            model.addAttribute("types", Menus.sortedTypes(categoriesDao, typesDao));
+            model.addAttribute("categoryTypeCount", Menus.catTypeCnt(categoriesDao, typesDao));
 
-            for (Categories cat : categoriesDao.findAll()) {
-                count = 0;
-                for (Types type : typesDao.findAll()) {
-                    if (type.getCategoryId() == cat.getId()) {
-                        count++;
-                    }
-                }
-                categoryTypeCount.put(cat.getId(), count);
-                if (maxTypeCnt < count) {
-                    maxTypeCnt = count;
-                }
-            }
-
-            ArrayList<Types> unsortedTypes = new ArrayList<>();
-            ArrayList<Types> sortedTypes = new ArrayList<>();
-            ArrayList<Types> sortedTypesMain = new ArrayList<>();
-
-            sortId = 1;
-
-            for (Types type : typesDao.findAll()) {
-                unsortedTypes.add(type);
-            }
-
-            while (sortId <= maxTypeCnt) {
-                for (Types type : unsortedTypes) {
-                    if (type.getSortId() == sortId) {
-                        if (type.getArchive().equals("no")) {
-                            sortedTypesMain.add(type);
-                        }
-                        if (type.getHidden().equals("no")) {
-                            sortedTypes.add(type);
-                        }
-                    }
-                }
-                sortId++;
-            }
-
-            model.addAttribute("categories", sortedCatMain);
-            model.addAttribute("types", sortedTypesMain);
-            model.addAttribute("categoryTypeCount", categoryTypeCount);
         } else if (menuOption.equals("colors")) {
             model.addAttribute("colors", colorsDao.findAll());
         } else if (menuOption.equals("customers")) {
@@ -175,7 +90,7 @@ public class AdminController {
         }
 
         model.addAttribute("title", "ADMIN");
-        model.addAttribute("menuItems", sortedCat);
+        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
 
         return "admin/" + menuOption;
     }
@@ -283,6 +198,36 @@ public class AdminController {
         Types hiddenType = typesDao.findOne(typeId);
         hiddenType.setHidden(choice);
         typesDao.save(hiddenType);
+
+        return "redirect:/admin/" + menuOption;
+
+    }
+
+    //ARCHIVE CATEGORY
+    @RequestMapping(value="{menuOption}/archive/{categoryId}")
+    public String archiveCat(@PathVariable String menuOption, @PathVariable int categoryId) {
+
+        if (menuOption.equals("categories")) {
+
+            Categories updateCat = categoriesDao.findOne(categoryId);
+
+            for (Categories sortCat : categoriesDao.findAll()) {
+                if (sortCat.getSortId() > updateCat.getSortId()) {
+                    sortCat.setSortId(sortCat.getSortId() - 1);
+                }
+            }
+
+            updateCat.setSortId(0);
+            updateCat.setArchive("yes");
+            categoriesDao.save(updateCat);
+
+            for (Types findTypes : typesDao.findAll()) {
+                if (findTypes.getCategoryId() == categoryId) {
+                    findTypes.setCatArchive("yes");
+                    typesDao.save(findTypes);
+                }
+            }
+        }
 
         return "redirect:/admin/" + menuOption;
 

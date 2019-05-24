@@ -18,7 +18,7 @@
         <div class="admin_menu_button active">Categories</div>
     </div>
     <div id="admin_container">
-        <form method="post">
+        <form method="post" th:action="@{/data/add/category}">
             <div class="admin_text_box">
                 <input type="text" required="required" name="categoryName" placeholder="new category" />
             </div>
@@ -48,9 +48,10 @@
                     </div>
                 </div>
                 <div class="subcategoryForm">
-                    <form method="post">
+                    <form method="post" th:action="@{/data/add/subcategory}">
                         <div class="subcategory_text_box">
                             <input type="text" required="required" name="typeName" placeholder="subcategory" />
+                            <input type="hidden" name="categoryId" th:value="${item.id}" />
                         </div>
                         <div class="subcategory_submit_button">
                             <input type="submit" value="+" />

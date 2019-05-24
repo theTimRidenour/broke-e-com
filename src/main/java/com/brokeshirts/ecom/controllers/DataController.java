@@ -1,11 +1,15 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.models.data.*;
 import com.brokeshirts.ecom.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 
@@ -42,6 +46,84 @@ public class DataController {
 
     @Autowired
     private TypesDao typesDao;
+
+    @RequestMapping(value="add/category", method = RequestMethod.POST)
+    public String addCategory(@RequestParam("categoryName") String categoryName) {
+
+        if (categoryName.isEmpty()) {
+            return "redirect:/admin/categories";
+        }
+
+        Categories cat = new Categories();
+        cat.setName(categoryName);
+        cat.setHidden("no");
+        cat.setArchive("no");
+        categoriesDao.save(cat);
+
+        Categories newCat = new Categories();
+
+        for (Categories findCat : categoriesDao.findAll()) {
+            if (findCat.getName().equals(categoryName)) {
+                newCat = findCat;
+            }
+        }
+
+        int sortId = 0;
+
+        for (Categories catSortMax : categoriesDao.findAll()) {
+            if (sortId < catSortMax.getSortId()) {
+                sortId = catSortMax.getSortId();
+            }
+        }
+
+        sortId++;
+
+        newCat.setSortId(sortId);
+        categoriesDao.save(newCat);
+
+        return "redirect:/admin/categories";
+    }
+
+    @RequestMapping(value="add/subcategory", method = RequestMethod.POST)
+    public String addSubcategory(@RequestParam("typeName") String typeName, @RequestParam("categoryId") int categoryId) {
+
+        if (typeName.isEmpty() || categoryId == 0) {
+            return "redirect:/admin/categories";
+        }
+
+        Types type = new Types();
+        type.setName(typeName);
+        type.setHidden("no");
+        type.setArchive("no");
+        type.setCatArchive("no");
+        type.setCategoryId(categoryId);
+        typesDao.save(type);
+
+        Types newType = new Types();
+
+        for (Types findType : typesDao.findAll()) {
+            if (findType.getName().equals(typeName)) {
+                newType = findType;
+            }
+        }
+
+        int sortId = 0;
+
+        for (Types typeSortMax : typesDao.findAll()) {
+            if (typeSortMax.getCategoryId() == categoryId) {
+                if (sortId < typeSortMax.getSortId()) {
+                    sortId = typeSortMax.getSortId();
+                }
+            }
+        }
+
+        sortId++;
+
+        newType.setSortId(sortId);
+        typesDao.save(newType);
+
+        return "redirect:/admin/categories";
+    }
 
     @RequestMapping(value="")
     public String showData(Model model) {
@@ -103,28 +185,8 @@ public class DataController {
             }
         }
 
-        ArrayList<Categories> unsortedCat = new ArrayList<>();
-        ArrayList<Categories> sortedCat = new ArrayList<>();
-
-        int sortId = 1;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            unsortedCat.add(cat);
-        }
-
-        while (sortId <= unsortedCat.size()) {
-            for (Categories cat : unsortedCat) {
-                if (cat.getSortId() == sortId) {
-                    if (cat.getHidden().equals("no")) {
-                        sortedCat.add(cat);
-                    }
-                    sortId++;
-                }
-            }
-        }
-
         model.addAttribute("title", "Data Log");
-        model.addAttribute("menuItems", sortedCat);
+        model.addAttribute("menuItems", Menus.sortedCat(categoriesDao));
         model.addAttribute("addresses", addresses);
         model.addAttribute("colors", colors);
         model.addAttribute("customers", customers);
