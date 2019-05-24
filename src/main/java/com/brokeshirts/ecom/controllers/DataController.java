@@ -129,6 +129,34 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+    // DELETE CATEGORY AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/cat/{id}")
+    public String delCat(@PathVariable int id) {
+
+        Categories removeCat = categoriesDao.findOne(id);
+
+        for (Types type: typesDao.findAll()) {
+            if (type.getCategoryId() == removeCat.getId()) {
+                typesDao.delete(type);
+            }
+        }
+
+        categoriesDao.delete(removeCat);
+
+        return "redirect:/admin/archive";
+    }
+
+    // DELETE SUBCATEGORY AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/type/{id}")
+    public String delType(@PathVariable int id) {
+
+        Types removeType = typesDao.findOne(id);
+
+        typesDao.delete(removeType);
+
+        return "redirect:/admin/archive";
+    }
+
 // TEMP DATA FORMS
 
     // SHOW ALL DATABASE DATA
