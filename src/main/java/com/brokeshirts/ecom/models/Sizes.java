@@ -18,6 +18,10 @@ public class Sizes {
     @NotNull
     private String shortName;
 
+    private String archive;
+
+    private int sortId;
+
     public Sizes(String longName, String shortName) {
         this.longName = longName;
         this.shortName = shortName;
@@ -43,4 +47,15 @@ public class Sizes {
         this.shortName = shortName;
     }
 
+    public String getArchive() { return archive; }
+
+    public void setArchive( String archive ) { this.archive = archive; }
+
+    public int getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(int sortId) {
+        this.sortId = sortId;
+    }
 }

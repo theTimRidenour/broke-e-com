@@ -82,6 +82,17 @@ public class AdminController {
         return "admin/archive";
     }
 
+    // SIZES
+    @RequestMapping(value="sizes")
+    public String adminSizes(Model model) {
+
+        model.addAttribute("title", "ADMIN");
+        model.addAttribute("menuItems", Menus.sortCat((categoriesDao)));
+        model.addAttribute("sizes", Menus.sortSizes(sizesDao));
+
+        return "admin/sizes";
+    }
+
   // SORTING FORMS
 
     // MOVE CATEGORY UP LIST

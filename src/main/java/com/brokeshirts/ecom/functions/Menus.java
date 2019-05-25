@@ -1,8 +1,10 @@
 package com.brokeshirts.ecom.functions;
 
 import com.brokeshirts.ecom.models.Categories;
+import com.brokeshirts.ecom.models.Sizes;
 import com.brokeshirts.ecom.models.data.CategoriesDao;
 import com.brokeshirts.ecom.models.Types;
+import com.brokeshirts.ecom.models.data.SizesDao;
 import com.brokeshirts.ecom.models.data.TypesDao;
 
 import java.util.ArrayList;
@@ -103,6 +105,31 @@ public class Menus {
         }
 
         return sortedTypes;
+    }
+
+    // SORT ORDER OF SIZES
+    public static ArrayList<Sizes> sortSizes(SizesDao sizesDao) {
+
+        ArrayList<Sizes> sortedSizes = new ArrayList<>();
+        int sortId = 1;
+        int maxSortId = 0;
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (maxSortId < size.getSortId()) {
+                maxSortId = size.getSortId();
+            }
+        }
+
+        while (sortId <= maxSortId) {
+            for (Sizes size : sizesDao.findAll()) {
+                if (size.getSortId() == sortId) {
+                    sortedSizes.add(size);
+                }
+            }
+            sortId++;
+        }
+
+        return sortedSizes;
     }
 
 // EXTRA ADMIN DATA

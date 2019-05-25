@@ -129,6 +129,33 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+    // ADD SIZE
+    @RequestMapping(value="add/size", method = RequestMethod.POST)
+    public String addSize(@RequestParam String longName, @RequestParam String shortName) {
+        Sizes newSize = new Sizes();
+        int maxSortId = 0;
+
+        newSize.setLongName(longName);
+        newSize.setShortName(shortName);
+        newSize.setArchive("no");
+        sizesDao.save(newSize);
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (maxSortId < size.getSortId()) {
+                maxSortId = size.getSortId();
+            }
+        }
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (size.getLongName().equals(longName) && size.getShortName().equals(shortName)) {
+                size.setSortId(maxSortId + 1);
+                sizesDao.save(size);
+            }
+        }
+
+        return "redirect:/admin/sizes";
+    }
+
     // DELETE CATEGORY AND ALL ASSOCIATED FILES
     @RequestMapping(value="delete/cat/{id}")
     public String delCat(@PathVariable int id) {
@@ -153,6 +180,17 @@ public class DataController {
         Types removeType = typesDao.findOne(id);
 
         typesDao.delete(removeType);
+
+        return "redirect:/admin/archive";
+    }
+
+    // DELETE SIZE AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/size/{id}")
+    public String delSize(@PathVariable int id) {
+
+        Sizes removeSize = sizesDao.findOne(id);
+
+        sizesDao.delete(removeSize);
 
         return "redirect:/admin/archive";
     }
