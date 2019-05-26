@@ -1,6 +1,5 @@
 package com.brokeshirts.ecom.controllers;
 
-import com.brokeshirts.ecom.functions.Menus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
+import com.brokeshirts.ecom.functions.*;
 
 @Controller
 @RequestMapping(value="admin")
@@ -45,7 +45,7 @@ public class AdminController {
     private TypesDao typesDao;
 
 
-  // DISPLAY FORMS
+//// DISPLAY FORMS
 
     // ORDERS
     @RequestMapping(value="")
@@ -101,124 +101,41 @@ public class AdminController {
         return "admin/sizes";
     }
 
-  // SORTING FORMS
 
-    // MOVE CATEGORY UP LIST
-    @RequestMapping(value="categories/moveup/{sortId}")
-    public String moveCatUp(@PathVariable int sortId) {
+//// SORTING FORMS
 
-        for (Categories cat : categoriesDao.findAll()) {
-            if (cat.getSortId() == sortId) {
-                cat.setSortId(sortId - 1);
-                categoriesDao.save(cat);
-            } else if (cat.getSortId() == sortId - 1) {
-                cat.setSortId(sortId);
-                categoriesDao.save(cat);
-            }
-        }
+    // MOVE CATEGORY UP OR DOWN LIST
+    @RequestMapping(value="categories/move{direction}/{sortId}")
+    public String moveCat(@PathVariable String direction, @PathVariable int sortId) {
 
+        Admin.moveCat(sortId, direction, categoriesDao);
         return "redirect:/admin/categories";
     }
 
-    //MOVE CATEGORY DOWN LIST
-    @RequestMapping(value="categories/movedown/{sortId}")
-    public String moveCatDown(@PathVariable int sortId) {
+    // MOVE SUBCATEGORY(TYPE) UP OR DOWN LIST
+    @RequestMapping(value="categories/{categoryId}/{sortId}/move{direction}")
+    public String moveType(@PathVariable int categoryId, @PathVariable int sortId,@PathVariable String direction){
 
-        for (Categories cat : categoriesDao.findAll()) {
-            if (cat.getSortId() == sortId) {
-                cat.setSortId(sortId + 1);
-                categoriesDao.save(cat);
-            } else if (cat.getSortId() == sortId + 1) {
-                cat.setSortId(sortId);
-                categoriesDao.save(cat);
-            }
-        }
-
+        Admin.moveType(sortId, direction, typesDao, categoryId);
         return "redirect:/admin/categories";
     }
 
-    //MOVE SUBCATEGORY(TYPE) UP LIST
-    @RequestMapping(value="categories/{categoryId}/{sortId}/moveup")
-    public String moveTypeUp(@PathVariable int categoryId, @PathVariable int sortId){
+    // MOVE SIZE UP OR DOWN LIST
+    @RequestMapping(value="sizes/move{direction}/{sortId}")
+    public String moveSize(@PathVariable String direction, @PathVariable int sortId) {
 
-        for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == categoryId) {
-                if (type.getSortId() == sortId) {
-                    type.setSortId(sortId - 1);
-                    typesDao.save(type);
-                } else if (type.getSortId() == sortId - 1) {
-                    type.setSortId(sortId);
-                    typesDao.save(type);
-                }
-            }
-        }
-
-        return "redirect:/admin/categories";
-    }
-
-    //MOVE SUBCATEGORY(TYPE) DOWN LIST
-    @RequestMapping(value="categories/{categoryId}/{sortId}/movedown")
-    public String moveTypeDown(@PathVariable int categoryId, @PathVariable int sortId){
-
-        for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == categoryId) {
-                if (type.getSortId() == sortId) {
-                    type.setSortId(sortId + 1);
-                    typesDao.save(type);
-                } else if (type.getSortId() == sortId + 1) {
-                    type.setSortId(sortId);
-                    typesDao.save(type);
-                }
-            }
-        }
-
-        return "redirect:/admin/categories";
-    }
-
-    // MOVE SIZE UP LIST
-    @RequestMapping(value="sizes/moveup/{sortId}")
-    public String moveSizeUp(@PathVariable int sortId) {
-
-        for (Sizes size : sizesDao.findAll()) {
-            if (size.getSortId() == sortId) {
-                size.setSortId(sortId - 1);
-                sizesDao.save(size);
-            } else if (size.getSortId() == sortId - 1) {
-                size.setSortId(sortId);
-                sizesDao.save(size);
-            }
-        }
-
+        Admin.moveSize(sortId, direction, sizesDao);
         return "redirect:/admin/sizes";
     }
 
-    // MOVE SIZE DOWN LIST
-    @RequestMapping(value="sizes/movedown/{sortId}")
-    public String moveSizeDown(@PathVariable int sortId) {
 
-        for (Sizes size : sizesDao.findAll()) {
-            if (size.getSortId() == sortId) {
-                size.setSortId(sortId + 1);
-                sizesDao.save(size);
-            } else if (size.getSortId() == sortId + 1) {
-                size.setSortId(sortId);
-                sizesDao.save(size);
-            }
-        }
-
-        return "redirect:/admin/sizes";
-    }
-
-  // HIDING FROM CUSTOMERS AND ARCHIVING
+//// (UN)HIDE FROM CUSTOMERS AND ARCHIVING
 
     // HIDE CATEGORY FROM CUSTOMERS
     @RequestMapping(value="categories/hidden/{id}/{choice}")
     public String changeCatHiddenStatus(@PathVariable int id, @PathVariable String choice) {
 
-        Categories hiddenCat = categoriesDao.findOne(id);
-        hiddenCat.setHidden(choice);
-        categoriesDao.save(hiddenCat);
-
+        Admin.hideCat(id, choice, categoriesDao);
         return "redirect:/admin/categories";
     }
 
@@ -226,10 +143,7 @@ public class AdminController {
     @RequestMapping(value="categories/{typeId}/hidden/{choice}")
     public String changeTypeHiddenStatus(@PathVariable int typeId, @PathVariable String choice) {
 
-        Types hiddenType = typesDao.findOne(typeId);
-        hiddenType.setHidden(choice);
-        typesDao.save(hiddenType);
-
+        Admin.hideType(typeId, choice, typesDao);
         return "redirect:/admin/categories";
     }
 
@@ -237,10 +151,7 @@ public class AdminController {
     @RequestMapping(value="sizes/hidden/{id}/{choice}")
     public String changeSizeHiddenStatus(@PathVariable int id, @PathVariable String choice) {
 
-        Sizes hiddenSize = sizesDao.findOne(id);
-        hiddenSize.setHidden(choice);
-        sizesDao.save(hiddenSize);
-
+        Admin.hideSize(id, choice, sizesDao);
         return "redirect:/admin/sizes";
     }
 
@@ -248,26 +159,7 @@ public class AdminController {
     @RequestMapping(value="categories/archive/{categoryId}")
     public String archiveCat(@PathVariable int categoryId) {
 
-        Categories updateCat = categoriesDao.findOne(categoryId);
-
-        for (Categories sortCat : categoriesDao.findAll()) {
-            if (sortCat.getSortId() > updateCat.getSortId()) {
-                sortCat.setSortId(sortCat.getSortId() - 1);
-                categoriesDao.save(sortCat);
-            }
-        }
-
-        updateCat.setSortId(0);
-        updateCat.setArchive("yes");
-        categoriesDao.save(updateCat);
-
-        for (Types findTypes : typesDao.findAll()) {
-            if (findTypes.getCategoryId() == categoryId) {
-                findTypes.setCatArchive("yes");
-                typesDao.save(findTypes);
-            }
-        }
-
+        Admin.archiveCat(categoryId, categoriesDao, typesDao);
         return "redirect:/admin/categories";
     }
 
@@ -275,21 +167,7 @@ public class AdminController {
     @RequestMapping(value="categories/{typeId}/archive/{categoryId}")
     public String archiveType(@PathVariable int typeId, @PathVariable int categoryId) {
 
-        Types updateType = typesDao.findOne(typeId);
-
-        for (Types sortType : typesDao.findAll()) {
-            if (sortType.getCategoryId() == categoryId) {
-                if (sortType.getSortId() > updateType.getSortId()) {
-                    sortType.setSortId(sortType.getSortId() - 1);
-                    typesDao.save(sortType);
-                }
-            }
-        }
-
-        updateType.setSortId(0);
-        updateType.setArchive("yes");
-        typesDao.save(updateType);
-
+        Admin.archiveType(typeId, categoryId, typesDao);
         return "redirect:/admin/categories";
     }
 
@@ -297,70 +175,23 @@ public class AdminController {
     @RequestMapping(value="sizes/archive/{id}")
     public String archiveSize(@PathVariable int id) {
 
-        Sizes updateSize = sizesDao.findOne(id);
-
-        for (Sizes sortSize : sizesDao.findAll()) {
-            if (sortSize.getSortId() > updateSize.getSortId()) {
-                sortSize.setSortId(sortSize.getSortId() - 1);
-                sizesDao.save(sortSize);
-            }
-        }
-
-        updateSize.setSortId(0);
-        updateSize.setArchive("yes");
-        sizesDao.save(updateSize);
-
+        Admin.archiveSize(id, sizesDao);
         return "redirect:/admin/sizes";
     }
 
-    // REACTIVATE ARCHIVED CATEGORY
+    // REACTIVATE CATEGORY
     @RequestMapping(value="categories/reactivate/cat/{id}")
     public String reactivateCat(@PathVariable int id) {
 
-        Categories reactivate = categoriesDao.findOne(id);
-        int maxSortId = 0;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            if (maxSortId < cat.getSortId()) {
-                maxSortId = cat.getSortId();
-            }
-        }
-
-        reactivate.setArchive("no");
-        reactivate.setHidden("yes");
-        reactivate.setSortId(maxSortId + 1);
-        categoriesDao.save(reactivate);
-
-        for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == reactivate.getId()) {
-                type.setCatArchive("no");
-                typesDao.save(type);
-            }
-        }
-
+        Admin.reactivateCat(id, categoriesDao, typesDao);
         return "redirect:/admin/archive";
     }
 
-    // REACTIVATE ARCHIVED SUBCATEGORY
+    // REACTIVATE SUB-CATEGORY
     @RequestMapping(value="categories/reactivate/type/{id}")
     public String reactivateType(@PathVariable int id) {
 
-        Types reactivate = typesDao.findOne(id);
-        int maxSortId = 0;
-
-        for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == reactivate.getCategoryId()) {
-                if (maxSortId < type.getSortId()) {
-                    maxSortId = type.getSortId();
-                }
-            }
-        }
-
-        reactivate.setArchive("no");
-        reactivate.setHidden("yes");
-        reactivate.setSortId(maxSortId + 1);
-        typesDao.save(reactivate);
-
+        Admin.reactivateType(id, typesDao);
         return "redirect:/admin/archive";
     }
 
@@ -368,20 +199,7 @@ public class AdminController {
     @RequestMapping(value="sizes/reactivate/{id}")
     public String reactivateSize(@PathVariable int id) {
 
-        Sizes reactivate = sizesDao.findOne(id);
-        int maxSortId = 0;
-
-        for (Sizes size : sizesDao.findAll()) {
-            if (maxSortId < size.getSortId()) {
-                maxSortId = size.getSortId();
-            }
-        }
-
-        reactivate.setArchive("no");
-        reactivate.setHidden("yes");
-        reactivate.setSortId(maxSortId + 1);
-        sizesDao.save(reactivate);
-
+        Admin.reactivateSize(id, sizesDao);
         return "redirect:/admin/archive";
     }
 }
