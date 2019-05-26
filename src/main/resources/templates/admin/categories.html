@@ -6,17 +6,7 @@
 <div th:replace="fragments :: header"></div>
 
 <div class="section_full">
-    <div id="admin_menu">
-        <a th:href="@{/admin}"><div class="admin_menu_button">Orders</div></a>
-        <a th:href="@{/admin/inventory}"><div class="admin_menu_button">Inventory</div></a>
-        <a th:href="@{/admin/returns}"><div class="admin_menu_button">Returns</div></a>
-        <a th:href="@{/admin/coupons}"><div class="admin_menu_button">Coupons</div></a>
-        <a th:href="@{/admin/products}"><div class="admin_menu_button">Products</div></a>
-        <a th:href="@{/admin/customers}"><div class="admin_menu_button">Customers</div></a>
-        <a th:href="@{/admin/colors}"><div class="admin_menu_button">Colors</div></a>
-        <a th:href="@{/admin/sizes}"><div class="admin_menu_button">Sizes</div></a>
-        <div class="admin_menu_button active">Categories</div>
-    </div>
+    <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <form method="post" th:action="@{/data/add/category}">
             <div class="admin_text_box">
@@ -28,7 +18,7 @@
         </form>
 
         <div th:each="item, iStat : ${categories}">
-            <div class="listItem" style="background-color: #f0f0f0;">
+            <div class="listItem" style="background-color: #effcff;">
                 <div class="moveUp" th:if="${item.sortId == 1}"></div>
                 <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.SortId}">&#8911;</a></div>
                 <div class="moveDiv">&minus;</div>

@@ -68,12 +68,21 @@ a .admin_menu_button:hover {
 }
 
 .admin_text_box input {
+    position: absolute;
     width: 590px;
     height: 35px;
     font-size: 26px;
     text-align: right;
     border: 0;
     border-bottom: 2px solid #606060;
+}
+
+.admin_text_box div {
+    position: absolute;
+    height: 35px;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 10px 0 0 15px;
 }
 
 .subcategory_text_box input {

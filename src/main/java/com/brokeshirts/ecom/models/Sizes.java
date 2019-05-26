@@ -20,6 +20,8 @@ public class Sizes {
 
     private String archive;
 
+    private String hidden;
+
     private int sortId;
 
     public Sizes(String longName, String shortName) {
@@ -51,11 +53,13 @@ public class Sizes {
 
     public void setArchive( String archive ) { this.archive = archive; }
 
-    public int getSortId() {
-        return sortId;
-    }
+    public int getSortId() { return sortId; }
 
     public void setSortId(int sortId) {
         this.sortId = sortId;
     }
+
+    public String getHidden() { return hidden; }
+
+    public void setHidden(String hidden) { this.hidden = hidden; }
 }

@@ -28,6 +28,7 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+    //LIST FILES THAT HAVE BEEN UPLOADED
     @RequestMapping(value="", method = RequestMethod.GET)
     public String listUploadedFiles(Model model) throws IOException {
 
@@ -36,6 +37,7 @@ public class FileUploadController {
         return "uploadForm";
     }
 
+    //DISPLAY UPLOADED FILE
     @RequestMapping(value="/files/{filename:.+}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
@@ -44,6 +46,7 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    // SAVE FILE FROM USER TO SERVER
     @RequestMapping(value="", method = RequestMethod.POST)
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
@@ -53,6 +56,7 @@ public class FileUploadController {
         return "redirect:/upload";
     }
 
+    // CREATE ERROR IF FILE NOT FOUND
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();

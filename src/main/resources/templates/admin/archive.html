@@ -6,17 +6,7 @@
 <div th:replace="fragments :: header"></div>
 
 <div class="section_full">
-    <div id="admin_menu">
-        <a th:href="@{/admin}"><div class="admin_menu_button">Orders</div></a>
-        <a th:href="@{/admin/inventory}"><div class="admin_menu_button">Inventory</div></a>
-        <a th:href="@{/admin/returns}"><div class="admin_menu_button">Returns</div></a>
-        <a th:href="@{/admin/coupons}"><div class="admin_menu_button">Coupons</div></a>
-        <a th:href="@{/admin/products}"><div class="admin_menu_button">Products</div></a>
-        <a th:href="@{/admin/customers}"><div class="admin_menu_button">Customers</div></a>
-        <a th:href="@{/admin/colors}"><div class="admin_menu_button">Colors</div></a>
-        <a th:href="@{/admin/sizes}"><div class="admin_menu_button">Sizes</div></a>
-        <a th:href="@{/admin/categories}"><div class="admin_menu_button">Categories</div></a>
-    </div>
+    <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <div><h1 style="margin-left: 30px;">Categories:</h1></div>
         <div th:each="item : ${categories}">
@@ -46,6 +36,17 @@
 
             </div>
         </div>
+        <div><h1 style="margin-left: 30px;">Sizes:</h1></div>
+        <div th:each="size : ${sizes}">
+            <div class="listItem" th:if="${size.archive == 'yes'}" style="background-color: #f7f6f6;">
+                <a th:href="${'/data/delete/size/' + size.id}"><i class="fas fa-trash" style="position: absolute; margin: 10px 6px 0; color: red;"></i></a>
+                <div class="oneItem" style="margin-left: 25px;"><span th:text="${size.longName + ' (' + size.shortName + ')'}"></span><a th:href="${'sizes/reactivate/' + size.id}">REACTIVATE</a></div>
+            </div>
+            <div class="subItem" th:if="${size.archive == 'yes'}">
+                <div>Contains :</div>
+            </div>
+        </div>
+
     </div>
 </div>
 

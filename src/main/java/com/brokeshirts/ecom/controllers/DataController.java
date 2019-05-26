@@ -138,6 +138,7 @@ public class DataController {
         newSize.setLongName(longName);
         newSize.setShortName(shortName);
         newSize.setArchive("no");
+        newSize.setHidden("no");
         sizesDao.save(newSize);
 
         for (Sizes size : sizesDao.findAll()) {

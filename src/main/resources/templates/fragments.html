@@ -68,3 +68,24 @@
     </div>
     <div class="copyright txt_white">&copy;2019 &nbsp; 4425 Entertainment Company</div>
 </div>
+
+<div id="admin_menu" th:fragment="admin_menu">
+    <a th:href="@{'/admin'}" th:unless="${adminMenu == 'orders'}"><div class="admin_menu_button">Orders</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'orders'}">Orders</div>
+    <a th:href="@{'/admin/inventory'}" th:unless="${adminMenu == 'inventory'}"><div class="admin_menu_button">Inventory</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'inventory'}">Inventory</div>
+    <a th:href="@{'/admin/returns'}" th:unless="${adminMenu == 'returns'}"><div class="admin_menu_button">Returns</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'returns'}">Returns</div>
+    <a th:href="@{'/admin/coupons'}" th:unless="${adminMenu == 'coupons'}"><div class="admin_menu_button">Coupons</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'coupons'}">Coupons</div>
+    <a th:href="@{'/admin/products'}" th:unless="${adminMenu == 'products'}"><div class="admin_menu_button">Products</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'products'}">Products</div>
+    <a th:href="@{'/admin/customers'}" th:unless="${adminMenu == 'customers'}"><div class="admin_menu_button">Customers</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'customers'}">Customers</div>
+    <a th:href="@{'/admin/colors'}" th:unless="${adminMenu == 'colors'}"><div class="admin_menu_button">Colors</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'colors'}">Colors</div>
+    <a th:href="@{'/admin/sizes'}" th:unless="${adminMenu == 'sizes'}"><div class="admin_menu_button">Sizes</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'sizes'}">Sizes</div>
+    <a th:href="@{'/admin/categories'}" th:unless="${adminMenu == 'categories'}"><div class="admin_menu_button">Categories</div></a>
+    <div class="admin_menu_button active" th:if="${adminMenu == 'categories'}">Categories</div>
+</div>

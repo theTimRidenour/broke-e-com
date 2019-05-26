@@ -53,6 +53,7 @@ public class AdminController {
 
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("title","ADMIN");
+        model.addAttribute("adminMenu", "orders");
 
         return "admin/index";
     }
@@ -66,6 +67,7 @@ public class AdminController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("title", "ADMIN");
         model.addAttribute("types", Menus.sortTypesAdmin(categoriesDao, typesDao));
+        model.addAttribute("adminMenu", "categories");
 
         return "admin/categories";
     }
@@ -78,6 +80,7 @@ public class AdminController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("categories", categoriesDao.findAll());
         model.addAttribute("types", typesDao.findAll());
+        model.addAttribute("sizes", sizesDao.findAll());
 
         return "admin/archive";
     }
@@ -89,6 +92,7 @@ public class AdminController {
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat((categoriesDao)));
         model.addAttribute("sizes", Menus.sortSizes(sizesDao));
+        model.addAttribute("adminMenu", "sizes");
 
         return "admin/sizes";
     }
@@ -167,6 +171,40 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
+    // MOVE SIZE UP LIST
+    @RequestMapping(value="sizes/moveup/{sortId}")
+    public String moveSizeUp(@PathVariable int sortId) {
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (size.getSortId() == sortId) {
+                size.setSortId(sortId - 1);
+                sizesDao.save(size);
+            } else if (size.getSortId() == sortId - 1) {
+                size.setSortId(sortId);
+                sizesDao.save(size);
+            }
+        }
+
+        return "redirect:/admin/sizes";
+    }
+
+    // MOVE SIZE DOWN LIST
+    @RequestMapping(value="sizes/movedown/{sortId}")
+    public String moveSizeDown(@PathVariable int sortId) {
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (size.getSortId() == sortId) {
+                size.setSortId(sortId + 1);
+                sizesDao.save(size);
+            } else if (size.getSortId() == sortId + 1) {
+                size.setSortId(sortId);
+                sizesDao.save(size);
+            }
+        }
+
+        return "redirect:/admin/sizes";
+    }
+
   // HIDING FROM CUSTOMERS AND ARCHIVING
 
     // HIDE CATEGORY FROM CUSTOMERS
@@ -191,7 +229,18 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    //ARCHIVE CATEGORY
+    // HIDE SIZE FROM CUSTOMERS
+    @RequestMapping(value="sizes/hidden/{id}/{choice}")
+    public String changeSizeHiddenStatus(@PathVariable int id, @PathVariable String choice) {
+
+        Sizes hiddenSize = sizesDao.findOne(id);
+        hiddenSize.setHidden(choice);
+        sizesDao.save(hiddenSize);
+
+        return "redirect:/admin/sizes";
+    }
+
+    // ARCHIVE CATEGORY
     @RequestMapping(value="categories/archive/{categoryId}")
     public String archiveCat(@PathVariable int categoryId) {
 
@@ -200,6 +249,7 @@ public class AdminController {
         for (Categories sortCat : categoriesDao.findAll()) {
             if (sortCat.getSortId() > updateCat.getSortId()) {
                 sortCat.setSortId(sortCat.getSortId() - 1);
+                categoriesDao.save(sortCat);
             }
         }
 
@@ -217,7 +267,7 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    //ARCHIVE SUBCATEGORY
+    // ARCHIVE SUBCATEGORY
     @RequestMapping(value="categories/{typeId}/archive/{categoryId}")
     public String archiveType(@PathVariable int typeId, @PathVariable int categoryId) {
 
@@ -227,6 +277,7 @@ public class AdminController {
             if (sortType.getCategoryId() == categoryId) {
                 if (sortType.getSortId() > updateType.getSortId()) {
                     sortType.setSortId(sortType.getSortId() - 1);
+                    typesDao.save(sortType);
                 }
             }
         }
@@ -238,7 +289,27 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    //REACTIVATE ARCHIVED CATEGORY
+    // ARCHIVE SIZE
+    @RequestMapping(value="sizes/archive/{id}")
+    public String archiveSize(@PathVariable int id) {
+
+        Sizes updateSize = sizesDao.findOne(id);
+
+        for (Sizes sortSize : sizesDao.findAll()) {
+            if (sortSize.getSortId() > updateSize.getSortId()) {
+                sortSize.setSortId(sortSize.getSortId() - 1);
+                sizesDao.save(sortSize);
+            }
+        }
+
+        updateSize.setSortId(0);
+        updateSize.setArchive("yes");
+        sizesDao.save(updateSize);
+
+        return "redirect:/admin/sizes";
+    }
+
+    // REACTIVATE ARCHIVED CATEGORY
     @RequestMapping(value="categories/reactivate/cat/{id}")
     public String reactivateCat(@PathVariable int id) {
 
@@ -266,7 +337,7 @@ public class AdminController {
         return "redirect:/admin/archive";
     }
 
-    //REACTIVATE ARCHIVED SUBCATEGORY
+    // REACTIVATE ARCHIVED SUBCATEGORY
     @RequestMapping(value="categories/reactivate/type/{id}")
     public String reactivateType(@PathVariable int id) {
 
@@ -285,6 +356,27 @@ public class AdminController {
         reactivate.setHidden("yes");
         reactivate.setSortId(maxSortId + 1);
         typesDao.save(reactivate);
+
+        return "redirect:/admin/archive";
+    }
+
+    // REACTIVATE SIZE
+    @RequestMapping(value="sizes/reactivate/{id}")
+    public String reactivateSize(@PathVariable int id) {
+
+        Sizes reactivate = sizesDao.findOne(id);
+        int maxSortId = 0;
+
+        for (Sizes size : sizesDao.findAll()) {
+            if (maxSortId < size.getSortId()) {
+                maxSortId = size.getSortId();
+            }
+        }
+
+        reactivate.setArchive("no");
+        reactivate.setHidden("yes");
+        reactivate.setSortId(maxSortId + 1);
+        sizesDao.save(reactivate);
 
         return "redirect:/admin/archive";
     }

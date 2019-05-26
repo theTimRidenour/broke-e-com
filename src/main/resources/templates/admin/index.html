@@ -6,17 +6,7 @@
 <div th:replace="fragments :: header"></div>
 
 <div class="section_full">
-    <div id="admin_menu">
-        <div class="admin_menu_button active">Orders</div>
-        <a href="admin/inventory"><div class="admin_menu_button">Inventory</div></a>
-        <a href="admin/returns"><div class="admin_menu_button">Returns</div></a>
-        <a href="admin/coupons"><div class="admin_menu_button">Coupons</div></a>
-        <a href="admin/products"><div class="admin_menu_button">Products</div></a>
-        <a href="admin/customers"><div class="admin_menu_button">Customers</div></a>
-        <a href="admin/colors"><div class="admin_menu_button">Colors</div></a>
-        <a href="admin/sizes"><div class="admin_menu_button">Sizes</div></a>
-        <a href="admin/categories"><div class="admin_menu_button">Categories</div></a>
-    </div>
+    <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
     </div>
 </div>
