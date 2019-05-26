@@ -92,6 +92,7 @@ public class MainController {
         model.addAttribute("types", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("products", indexProducts);
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "index";
     }
@@ -102,6 +103,7 @@ public class MainController {
 
         model.addAttribute("title", "Terms and Conditions");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "terms";
     }

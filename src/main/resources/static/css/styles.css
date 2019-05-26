@@ -209,11 +209,15 @@
     margin: 0 auto;
     min-width: 1024px;
     position: absolute;
-    top: 355px;
+    top: 345px;
     width: 100%;
 }
 
-#menu a {
+// .subMenu {
+//     top: 370px;
+//     }
+
+#menu a, .subMenu a {
     color: #ffffff;
     display: inline-block;
     text-decoration: none;

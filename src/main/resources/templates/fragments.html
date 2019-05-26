@@ -5,6 +5,20 @@
     <link th:if="${title == 'CHECKOUT'}" rel="stylesheet" th:href="@{/css/checkout.css}" />
     <link th:if="${title == 'ADMIN'}" rel="stylesheet" th:href="@{/css/admin.css}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
+    <style style="display: none;" th:each="menuItem : ${menuItems}" th:text="${'
+    .subMenuClass' + menuItem.id + ' {
+         display: none;
+    }
+
+    .menuClass' + menuItem.id + ':hover .subMenuClass' + menuItem.id + ' {
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 5px 0;
+        margin-left: -5px;
+    }'}">
+    </style>
 </head>
 
 <div id="header" th:fragment="header">
@@ -27,8 +41,13 @@
             <input id="search_button" type="submit" value="Submit" />
         </form>
         <div id="menu">
-            <span th:each="menuItem : ${menuItems}">
+            <span th:each="menuItem : ${menuItems}" th:class="${'menuClass' + menuItem.id}">
                 <a th:href="'/store/' + ${menuItem.name}" th:text="${menuItem.name}"></a>
+                <div class="subMenu">
+                    <span th:class="${'subMenuClass' + menuItem.id}">
+                        <a th:each="subMenuItem : ${subMenuItems}" th:href="${subMenuItem.categoryId == menuItem.id}? ${'/store/' + menuItem.name + '/' + subMenuItem.name}" th:text="${subMenuItem.categoryId == menuItem.id}? ${subMenuItem.name + '&nbsp;&nbsp;&nbsp;&nbsp;'}" th:unless="${subMenuItem.categoryId != menuItem.id}? 'display: none;'"></a>
+                    </span>
+                </div>
             </span>
         </div>
     </div>

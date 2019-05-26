@@ -54,6 +54,7 @@ public class AdminController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("title","ADMIN");
         model.addAttribute("adminMenu", "orders");
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "admin/index";
     }
@@ -65,6 +66,7 @@ public class AdminController {
         model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
         model.addAttribute("categoryTypeCount", Menus.catTypeCnt(categoriesDao, typesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("title", "ADMIN");
         model.addAttribute("types", Menus.sortTypesAdmin(categoriesDao, typesDao));
         model.addAttribute("adminMenu", "categories");
@@ -81,6 +83,7 @@ public class AdminController {
         model.addAttribute("categories", categoriesDao.findAll());
         model.addAttribute("types", typesDao.findAll());
         model.addAttribute("sizes", sizesDao.findAll());
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "admin/archive";
     }
@@ -93,6 +96,7 @@ public class AdminController {
         model.addAttribute("menuItems", Menus.sortCat((categoriesDao)));
         model.addAttribute("sizes", Menus.sortSizes(sizesDao));
         model.addAttribute("adminMenu", "sizes");
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "admin/sizes";
     }

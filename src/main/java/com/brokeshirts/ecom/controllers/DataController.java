@@ -268,6 +268,7 @@ public class DataController {
         model.addAttribute("products", products);
         model.addAttribute("sizes", sizes);
         model.addAttribute("types", types);
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "data";
     }
