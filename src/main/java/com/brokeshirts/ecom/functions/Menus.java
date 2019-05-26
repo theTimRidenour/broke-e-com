@@ -1,11 +1,7 @@
 package com.brokeshirts.ecom.functions;
 
-import com.brokeshirts.ecom.models.Categories;
-import com.brokeshirts.ecom.models.Sizes;
-import com.brokeshirts.ecom.models.data.CategoriesDao;
-import com.brokeshirts.ecom.models.Types;
-import com.brokeshirts.ecom.models.data.SizesDao;
-import com.brokeshirts.ecom.models.data.TypesDao;
+import com.brokeshirts.ecom.models.*;
+import com.brokeshirts.ecom.models.data.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +9,7 @@ import java.util.Map;
 
 public class Menus {
 
-// SORTING ORDER OF DATA
+//// SORTING ORDER OF DATA
 
     // SORT ORDER OF CATEGORIES FOR CUSTOMERS
     public static ArrayList<Categories> sortCat(CategoriesDao categoriesDao) {
@@ -132,7 +128,7 @@ public class Menus {
         return sortedSizes;
     }
 
-// EXTRA ADMIN DATA
+//// EXTRA ADMIN DATA
 
     // SUBCATEGORY TYPE COUNTS FOR ADMIN FORMS
     public static HashMap<Integer, Integer> catTypeCnt(CategoriesDao categoriesDao, TypesDao typesDao) {
