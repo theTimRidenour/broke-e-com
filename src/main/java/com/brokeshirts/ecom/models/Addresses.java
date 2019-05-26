@@ -29,6 +29,8 @@ public class Addresses {
     @NotNull
     private int customerId;
 
+    private String archive;
+
     public Addresses(String addressOne, String city, String state, int zipCode, int customerId) {
         this.addressOne = addressOne;
         this.city = city;
@@ -91,4 +93,7 @@ public class Addresses {
         this.customerId = customerId;
     }
 
+    public String getArchive() { return archive; }
+
+    public void setArchive(String archive) { this.archive = archive; }
 }

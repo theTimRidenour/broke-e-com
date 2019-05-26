@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Colors {
+public class Styles {
 
     @Id
     @GeneratedValue
@@ -16,39 +16,49 @@ public class Colors {
     private String name;
 
     @NotNull
-    private String hex;
+    private int categoryId;
 
-    private String url;
+    private int sortId;
 
     private String hidden;
 
     private String archive;
 
-    public Colors(String name, String hex) {
+    private String archiveCat;
+
+    public Styles(String name, int categoryId) {
         this.name = name;
-        this.hex = hex;
+        this.categoryId = categoryId;
     }
 
-    public Colors() {}
+    public Styles() {}
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getHex() { return hex; }
-
-    public void setHex(String hex) {
-        this.hex = hex;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public String getUrl() { return url; }
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public int getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(int sortId) {
+        this.sortId = sortId;
     }
 
     public String getHidden() {
@@ -65,5 +75,13 @@ public class Colors {
 
     public void setArchive(String archive) {
         this.archive = archive;
+    }
+
+    public String getArchiveCat() {
+        return archiveCat;
+    }
+
+    public void setArchiveCat(String archiveCat) {
+        this.archiveCat = archiveCat;
     }
 }

@@ -30,6 +30,16 @@ public class Inventory {
     @NotNull
     private int quantity;
 
+    private String hidden;
+
+    private String archive;
+
+    private String archiveSize;
+
+    private String archiveColor;
+
+    private String archiveProduct;
+
     public Inventory(String sku, int productId, int sizeId, int colorId, double price, int quantity) {
         this.sku = sku;
         this.productId = productId;
@@ -91,4 +101,43 @@ public class Inventory {
         this.quantity = quantity;
     }
 
+    public String getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(String hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getArchive() {
+        return archive;
+    }
+
+    public void setArchive(String archive) {
+        this.archive = archive;
+    }
+
+    public String getArchiveSize() {
+        return archiveSize;
+    }
+
+    public void setArchiveSize(String archiveSize) {
+        this.archiveSize = archiveSize;
+    }
+
+    public String getArchiveColor() {
+        return archiveColor;
+    }
+
+    public void setArchiveColor(String archiveColor) {
+        this.archiveColor = archiveColor;
+    }
+
+    public String getArchiveProduct() {
+        return archiveProduct;
+    }
+
+    public void setArchiveProduct(String archiveProduct) {
+        this.archiveProduct = archiveProduct;
+    }
 }
