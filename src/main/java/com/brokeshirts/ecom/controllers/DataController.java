@@ -47,7 +47,10 @@ public class DataController {
     @Autowired
     private TypesDao typesDao;
 
-// ADD/REMOVE DATA
+    @Autowired
+    private StylesDao stylesDao;
+
+//// ADD/REMOVE DATA
 
     // ADD CATEGORY
     @RequestMapping(value="add/category", method = RequestMethod.POST)
@@ -129,6 +132,48 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+    // ADD STYLE
+    @RequestMapping(value="add/style", method = RequestMethod.POST)
+    public String addStyle(@RequestParam("styleName") String styleName, @RequestParam("categoryId") int categoryId) {
+
+        if (styleName.isEmpty() || categoryId == 0) {
+            return "redirect:/admin/categories";
+        }
+
+        Styles style = new Styles();
+        style.setName(styleName);
+        style.setHidden("yes");
+        style.setArchive("no");
+        style.setArchiveCat("no");
+        style.setCategoryId(categoryId);
+        stylesDao.save(style);
+
+        Styles newStyle = new Styles();
+
+        for (Styles findStyle : stylesDao.findAll()) {
+            if (findStyle.getName().equals(styleName)) {
+                newStyle = findStyle;
+            }
+        }
+
+        int sortId = 0;
+
+        for (Styles styleSortMax : stylesDao.findAll()) {
+            if (styleSortMax.getCategoryId() == categoryId) {
+                if (sortId < styleSortMax.getSortId()) {
+                    sortId = styleSortMax.getSortId();
+                }
+            }
+        }
+
+        sortId++;
+
+        newStyle.setSortId(sortId);
+        stylesDao.save(newStyle);
+
+        return "redirect:/admin/categories";
+    }
+
     // ADD SIZE
     @RequestMapping(value="add/size", method = RequestMethod.POST)
     public String addSize(@RequestParam String longName, @RequestParam String shortName) {
@@ -185,6 +230,17 @@ public class DataController {
         return "redirect:/admin/archive";
     }
 
+    // DELETE STYLE AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/style/{id}")
+    public String delStyle(@PathVariable int id) {
+
+        Styles removeStyle = stylesDao.findOne(id);
+
+        stylesDao.delete(removeStyle);
+
+        return "redirect:/admin/archive";
+    }
+
     // DELETE SIZE AND ALL ASSOCIATED FILES
     @RequestMapping(value="delete/size/{id}")
     public String delSize(@PathVariable int id) {
@@ -196,7 +252,7 @@ public class DataController {
         return "redirect:/admin/archive";
     }
 
-// TEMP DATA FORMS
+//// TEMP DATA FORMS
 
     // SHOW ALL DATABASE DATA
     @RequestMapping(value="")

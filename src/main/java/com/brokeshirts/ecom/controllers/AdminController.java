@@ -44,6 +44,9 @@ public class AdminController {
     @Autowired
     private TypesDao typesDao;
 
+    @Autowired
+    private StylesDao stylesDao;
+
 
 //// DISPLAY FORMS
 
@@ -65,10 +68,12 @@ public class AdminController {
 
         model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
         model.addAttribute("categoryTypeCount", Menus.catTypeCnt(categoriesDao, typesDao));
+        model.addAttribute("categoryStylesCount", Menus.catStyleCnt(categoriesDao, stylesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("title", "ADMIN");
         model.addAttribute("types", Menus.sortTypesAdmin(categoriesDao, typesDao));
+        model.addAttribute("styles", Menus.sortStylesAdmin(categoriesDao, stylesDao));
         model.addAttribute("adminMenu", "categories");
 
         return "admin/categories";
@@ -82,6 +87,7 @@ public class AdminController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("categories", categoriesDao.findAll());
         model.addAttribute("types", typesDao.findAll());
+        model.addAttribute("styles", stylesDao.findAll());
         model.addAttribute("sizes", sizesDao.findAll());
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
@@ -113,10 +119,18 @@ public class AdminController {
     }
 
     // MOVE SUBCATEGORY(TYPE) UP OR DOWN LIST
-    @RequestMapping(value="categories/{categoryId}/{sortId}/move{direction}")
+    @RequestMapping(value="categories/type/{categoryId}/{sortId}/move{direction}")
     public String moveType(@PathVariable int categoryId, @PathVariable int sortId,@PathVariable String direction){
 
         Admin.moveType(sortId, direction, typesDao, categoryId);
+        return "redirect:/admin/categories";
+    }
+
+    // MOVE STYLE UP OR DOWN LIST
+    @RequestMapping(value="categories/style/{categoryId}/{sortId}/move{direction}")
+    public String moveStyle(@PathVariable int categoryId, @PathVariable int sortId, @PathVariable String direction) {
+
+        Admin.moveStyle(sortId, direction, stylesDao, categoryId);
         return "redirect:/admin/categories";
     }
 
@@ -140,10 +154,18 @@ public class AdminController {
     }
 
     // HIDE SUBCATEGORY(TYPE) FROM CUSTOMERS
-    @RequestMapping(value="categories/{typeId}/hidden/{choice}")
+    @RequestMapping(value="categories/type/{typeId}/hidden/{choice}")
     public String changeTypeHiddenStatus(@PathVariable int typeId, @PathVariable String choice) {
 
         Admin.hideType(typeId, choice, typesDao);
+        return "redirect:/admin/categories";
+    }
+
+    // HIDE STYLE FROM CUSTOMERS
+    @RequestMapping(value="categories/style/{styleId}/hidden/{choice}")
+    public String changeStyleHiddenStatus(@PathVariable int styleId, @PathVariable String choice) {
+
+        Admin.hideStyle(styleId, choice, stylesDao);
         return "redirect:/admin/categories";
     }
 
@@ -164,10 +186,18 @@ public class AdminController {
     }
 
     // ARCHIVE SUBCATEGORY
-    @RequestMapping(value="categories/{typeId}/archive/{categoryId}")
+    @RequestMapping(value="categories/type/{typeId}/archive/{categoryId}")
     public String archiveType(@PathVariable int typeId, @PathVariable int categoryId) {
 
         Admin.archiveType(typeId, categoryId, typesDao);
+        return "redirect:/admin/categories";
+    }
+
+    // ARCHIVE STYLE
+    @RequestMapping(value="categories/style/{styleId}/archive/{categoryId}")
+    public String archiveStyle(@PathVariable int styleId, @PathVariable int categoryId) {
+
+        Admin.archiveStyle(styleId, categoryId, stylesDao);
         return "redirect:/admin/categories";
     }
 
@@ -192,6 +222,14 @@ public class AdminController {
     public String reactivateType(@PathVariable int id) {
 
         Admin.reactivateType(id, typesDao);
+        return "redirect:/admin/archive";
+    }
+
+    // REACTIVATE STYLE
+    @RequestMapping(value="categories/reactivate/style/{id}")
+    public String reactivateStyle(@PathVariable int id) {
+
+        Admin.reactivateStyle(id, stylesDao);
         return "redirect:/admin/archive";
     }
 

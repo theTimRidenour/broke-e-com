@@ -36,6 +36,19 @@
 
             </div>
         </div>
+        <div><h1 style="margin-left: 30px;">Styles:</h1></div>
+        <div th:each="item : ${styles}">
+            <div class="listItem" th:if="${item.archive == 'yes'}" style="background-color: #f7f6f6;">
+                <div th:each="cat : ${categories}" th:if="${item.categoryId == cat.id}">
+                    <a th:href="${'/data/delete/style/' + item.id}"><i class="fas fa-trash" style="position: absolute; margin: 10px 6px 0; color: red;"></i></a>
+                    <div class="oneItem" style="margin-left: 25px;"><span th:text="${cat.name + ': ' + item.name}"></span><a th:href="${'categories/reactivate/style/' + item.id}">REACTIVATE</a></div>
+                </div>
+            </div>
+            <div class="subItem" th:if="${item.archive == 'yes'}">
+                <div>Contains :</div>
+
+            </div>
+        </div>
         <div><h1 style="margin-left: 30px;">Sizes:</h1></div>
         <div th:each="size : ${sizes}">
             <div class="listItem" th:if="${size.archive == 'yes'}" style="background-color: #f7f6f6;">

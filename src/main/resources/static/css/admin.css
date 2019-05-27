@@ -56,17 +56,6 @@ a .admin_menu_button:hover {
     top: 400px;
 }
 
-.subcategory_text_box, .subcategoryForm {
-    position: absolute;
-    display: block;
-    margin: 0;
-    padding: 0;
-}
-
-.subcategory_text_box {
-    margin: -25px 0 0 610px;
-}
-
 .admin_text_box input {
     position: absolute;
     width: 590px;
@@ -85,18 +74,6 @@ a .admin_menu_button:hover {
     margin: 10px 0 0 15px;
 }
 
-.subcategory_text_box input {
-    width: 130px;
-    height: 24px;
-    font-size: 16px;
-    background-color: #f3ffff;
-    text-align: right;
-    border: 2px solid #72bcd4;
-    border-radius: 28px 0 0 28px;
-    padding-right: 10px;
-    margin: 0;
-}
-
 .admin_submit_button {
     display: block;
     position: absolute;
@@ -104,13 +81,6 @@ a .admin_menu_button:hover {
     width: 200px;
     height: 40px;
     margin: 15px 0 0 620px;
-    padding: 0;
-}
-
-.subcategory_submit_button {
-    display: block;
-    position: absolute;
-    margin: -25px 0 0 748px;
     padding: 0;
 }
 
@@ -124,17 +94,7 @@ a .admin_menu_button:hover {
     color: #ffffff;
 }
 
-.subcategory_submit_button input {
-    width: 28px;
-    height: 28px;
-    font-size: 20px;
-    border: 2px solid #72bcd4;
-    border-radius: 0 50% 50% 0;
-    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
-    color: #ffffff;
-}
-
-.admin_submit_button input:hover, .subcategory_submit_button input:hover {
+.admin_submit_button input:hover, .subcategory_submit_button input:hover, .style_submit_button input:hover {
     border: 2px solid #add8e6;
 }
 
@@ -147,11 +107,15 @@ a .admin_menu_button:hover {
 
 .subItem {
     height: 20px;
-    margin-left: 80px;
+    margin-left: 50px;
     padding-left: 5px;
     display: inline-block;
     font-size: 14px;
     vertical-align: baseline;
+}
+
+.styles {
+    margin-left: 104px;
 }
 
 .subItem div {
@@ -212,4 +176,62 @@ a .admin_menu_button:hover {
     margin: 10px 0 0 685px;
     width: 126px;
     font-weight: bold;
+}
+
+.subcategory_submit_button input, .style_submit_button input {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    border: 2px solid #72bcd4;
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+}
+
+.subcategory_submit_button, .style_submit_button {
+    display: block;
+    position: absolute;
+    margin: -25px 0 0 625px;
+    padding: 0;
+    z-index: 10;
+}
+
+.style_submit_button  {
+    margin-left: 748px;
+}
+
+.style_submit_button input {
+    border-radius: 0 50% 50% 0;
+}
+
+.subcategory_text_box input, .style_text_box input {
+    width: 100px;
+    height: 24px;
+    font-size: 16px;
+    background-color: #f3ffff;
+    text-align: right;
+    border: 2px solid #72bcd4;
+    border-radius: 28px 0 0 28px;
+    padding-right: 10px;
+    margin: 0;
+}
+
+
+.style_text_box input {
+    border-radius: 0;
+    width: 85px;
+}
+
+.subcategory_text_box, .subcategoryForm, .style_text_box {
+    position: absolute;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.subcategory_text_box {
+    margin: -25px 0 0 513px;
+}
+
+.style_text_box {
+    margin: -25px 0 0 651px;
 }

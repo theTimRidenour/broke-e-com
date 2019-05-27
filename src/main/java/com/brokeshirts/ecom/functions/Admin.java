@@ -62,6 +62,35 @@ public class Admin {
         }
     }
 
+    // MOVE STYLE UP OR DOWN LIST
+    public static void moveStyle(int sortId, String direction, StylesDao stylesDao, int categoryId) {
+        if (direction.equals("up")) {
+            for (Styles style : stylesDao.findAll()) {
+                if (style.getCategoryId() == categoryId) {
+                    if (style.getSortId() == sortId) {
+                        style.setSortId(sortId - 1);
+                        stylesDao.save(style);
+                    } else if (style.getSortId() == sortId - 1) {
+                        style.setSortId(sortId);
+                        stylesDao.save(style);
+                    }
+                }
+            }
+        } else if (direction.equals("down")) {
+            for (Styles style : stylesDao.findAll()) {
+                if (style.getCategoryId() == categoryId) {
+                    if (style.getSortId() == sortId) {
+                        style.setSortId(sortId + 1);
+                        stylesDao.save(style);
+                    } else if (style.getSortId() == sortId + 1) {
+                        style.setSortId(sortId);
+                        stylesDao.save(style);
+                    }
+                }
+            }
+        }
+    }
+
     // MOVE SIZE UP OR DOWN LIST
     public static void moveSize(int sortId, String direction, SizesDao sizesDao) {
 
@@ -105,7 +134,14 @@ public class Admin {
         Types hiddenType = typesDao.findOne(typeId);
         hiddenType.setHidden(choice);
         typesDao.save(hiddenType);
+    }
 
+    // STYLE
+    public static void hideStyle(int styleId, String choice, StylesDao stylesDao) {
+
+        Styles hiddenStyle = stylesDao.findOne(styleId);
+        hiddenStyle.setHidden(choice);
+        stylesDao.save(hiddenStyle);
     }
 
     // SIZE
@@ -161,7 +197,25 @@ public class Admin {
         updateType.setSortId(0);
         updateType.setArchive("yes");
         typesDao.save(updateType);
+    }
 
+    // STYLE
+    public static void archiveStyle(int styleId, int categoryId, StylesDao stylesDao) {
+
+        Styles updateStyle = stylesDao.findOne(styleId);
+
+        for (Styles sortStyle : stylesDao.findAll()) {
+            if (sortStyle.getCategoryId() == categoryId) {
+                if (sortStyle.getSortId() > updateStyle.getSortId()) {
+                    sortStyle.setSortId(sortStyle.getSortId() - 1);
+                    stylesDao.save(sortStyle);
+                }
+            }
+        }
+
+        updateStyle.setSortId(0);
+        updateStyle.setArchive("yes");
+        stylesDao.save(updateStyle);
     }
 
     // SIZE
@@ -228,7 +282,26 @@ public class Admin {
         reactivate.setHidden("yes");
         reactivate.setSortId(maxSortId + 1);
         typesDao.save(reactivate);
+    }
 
+    // STYLE
+    public static void reactivateStyle(int id, StylesDao stylesDao) {
+
+        Styles reactivate = stylesDao.findOne(id);
+        int maxSortId = 0;
+
+        for (Styles style : stylesDao.findAll()) {
+            if (style.getCategoryId() == reactivate.getCategoryId()) {
+                if (maxSortId < style.getSortId()) {
+                    maxSortId = style.getSortId();
+                }
+            }
+        }
+
+        reactivate.setArchive("no");
+        reactivate.setHidden("yes");
+        reactivate.setSortId(maxSortId + 1);
+        stylesDao.save(reactivate);
     }
 
     // SIZE

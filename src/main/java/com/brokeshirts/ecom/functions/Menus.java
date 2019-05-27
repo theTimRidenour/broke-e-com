@@ -103,6 +103,52 @@ public class Menus {
         return sortedTypes;
     }
 
+    // SORT ORDER OF STYLES FOR CUSTOMERS
+    public static ArrayList<Styles> sortStyles(CategoriesDao categoriesDao, StylesDao stylesDao) {
+
+        ArrayList<Styles> unsortedStyles = sortStylesAdmin(categoriesDao, stylesDao);
+        ArrayList<Styles> sortedStyles = new ArrayList<>();
+
+        for (Styles style : unsortedStyles) {
+            if (style.getHidden().equals("no")) {
+                sortedStyles.add(style);
+            }
+        }
+
+        return sortedStyles;
+    }
+
+    // SORT ORDER OF STYLES FOR ADMIN
+    public static ArrayList<Styles> sortStylesAdmin(CategoriesDao categoriesDao, StylesDao stylesDao) {
+
+        HashMap<Integer, Integer> categoryStyleCount = catStyleCnt(categoriesDao, stylesDao);
+        ArrayList<Styles> unsortedStyles = new ArrayList<>();
+        ArrayList<Styles> sortedStyles = new ArrayList<>();
+        int maxStyleCnt = 0;
+        int sortId = 1;
+
+        for (Map.Entry catStyleCnt : categoryStyleCount.entrySet()) {
+            if ((int)catStyleCnt.getValue() > maxStyleCnt) {
+                maxStyleCnt = (int)catStyleCnt.getValue();
+            }
+        }
+
+        for (Styles style : stylesDao.findAll()) {
+            unsortedStyles.add(style);
+        }
+
+        while (sortId <= maxStyleCnt) {
+            for (Styles style : unsortedStyles) {
+                if (style.getSortId() == sortId) {
+                    sortedStyles.add(style);
+                }
+            }
+            sortId++;
+        }
+
+        return sortedStyles;
+    }
+
     // SORT ORDER OF SIZES
     public static ArrayList<Sizes> sortSizes(SizesDao sizesDao) {
 
@@ -153,6 +199,31 @@ public class Menus {
         }
 
         return categoryTypeCount;
+    }
+
+    // STYLE TYPE COUNTS FOR ADMIN FORMS
+    public static HashMap<Integer, Integer> catStyleCnt(CategoriesDao categoriesDao, StylesDao stylesDao) {
+
+        HashMap<Integer, Integer> categoryStyleCount = new HashMap<>();
+        int count = 0;
+        int maxTypeCnt = 0;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            count = 0;
+            for (Styles style : stylesDao.findAll()) {
+                if (style.getCategoryId() == cat.getId()) {
+                    if (style.getSortId() != 0) {
+                        count++;
+                    }
+                }
+            }
+            categoryStyleCount.put(cat.getId(), count);
+            if (maxTypeCnt < count) {
+                maxTypeCnt = count;
+            }
+        }
+
+        return categoryStyleCount;
     }
 
 }
