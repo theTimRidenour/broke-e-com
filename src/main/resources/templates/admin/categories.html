@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <br />
+            <hr style="width: 780px; margin-left: 30px;" />
             <div class="subItem styles">
                 styles:
                 <div th:each="subCat : ${styles}" th:style="${subCat.categoryId != item.id}? 'display: none;'">
@@ -102,7 +102,7 @@
                         </div>
                         <div th:text="${subCat.name}"></div>
                         <div style="font-size: 8px;"><a th:href="${'categories/style/' + subCat.id + '/archive/' + item.id}">A</a></div>
-                        <div th:unless="${subCat.sortId == categoryTypeCount[item.id]}"><a th:href="'categories/style/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
+                        <div th:unless="${subCat.sortId == categoryStylesCount[item.id]}"><a th:href="'categories/style/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
                     </div>
                 </div>
             </div>

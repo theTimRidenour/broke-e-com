@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full">
+    <div th:replace="fragments :: admin_menu"></div>
+    <div id="admin_container">
+        <form method="post" enctype="multipart/form-data" th:action="@{/data/add/color}">
+            <div class="admin_text_box">
+                <div style="margin-top: 5px;">Color:</div>
+                <input type="file" name="file" accept="image/*" style="width: 220px; margin-left: 90px; font-size: 16px; border: 0; margin-top: 10px;" />
+                <input type="color" name="hex" style="width: 30px; margin-left: 317px;" />
+                <input type="text" required="required" name="name" placeholder="name" style="width: 245px; margin-left: 347px;" />
+            </div>
+            <div class="admin_submit_button">
+                <input type="submit" value="add" />
+            </div>
+        </form>
+
+        <div th:each="item, iStat : ${colors}">
+            <div class="listItem" th:style="${'background-color: #effcff;'}">
+                <div class="color_circle" th:style="|margin-left: 30px; width: 27px; height: 27px; border: 1px solid #7a7a7a; border-radius: 50%; position: absolute; background-color: ${item.hex}; background-image: url(/upload/image/${item.url}); background-position: center;|"></div>
+                <div class="oneItem"><span th:text="${item.name}" style="margin-left: 13px;"></span><a th:href="${'colors/archive/' + item.id}">ARCHIVE</a></div>
+                <div class="hideItem">
+                    <div th:if="${item.hidden == 'no'}">
+                        <form th:action="${'colors/hidden/' + item.id + '/yes'}" method="post">
+                            <input type="submit" value="&#9745;" />
+                        </form>
+                    </div>
+                    <div th:if="${item.hidden == 'yes'}">
+                        <form th:action="${'colors/hidden/' + item.id + '/no'}" method="post">
+                            <input type="submit" value="&#9744;" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="archive"><a th:href="'archive'">CHECK ARCHIVE</a></div>
+    </div>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>

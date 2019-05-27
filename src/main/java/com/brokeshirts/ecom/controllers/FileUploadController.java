@@ -1,8 +1,11 @@
 package com.brokeshirts.ecom.controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.stream.Collectors;
 
+import com.brokeshirts.ecom.storage.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +24,7 @@ import com.brokeshirts.ecom.storage.StorageService;
 @RequestMapping(value="upload")
 public class FileUploadController {
 
-    private final StorageService storageService;
+    private static StorageService storageService;
 
     @Autowired
     public FileUploadController(StorageService storageService) {
@@ -37,13 +40,23 @@ public class FileUploadController {
         return "uploadForm";
     }
 
-    //DISPLAY UPLOADED FILE
+    //DOWNLOAD UPLOADED FILE
     @RequestMapping(value="/files/{filename:.+}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = storageService.loadAsResource(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    // DISPLAY UPLOADED FILE
+    @RequestMapping(value = "/image/{filename:.+}", method = RequestMethod.GET)
+    @ResponseBody
+    public byte[] getImage(@PathVariable(value = "filename") String imageName) throws IOException {
+
+        File serverFile = new File( StorageProperties.getLocation() + imageName);
+
+        return Files.readAllBytes(serverFile.toPath());
     }
 
     // SAVE FILE FROM USER TO SERVER
@@ -54,6 +67,11 @@ public class FileUploadController {
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
 
         return "redirect:/upload";
+    }
+
+    // ALLOW APP TO UPLOAD FILE
+    public static void internalFileUpload(MultipartFile file) {
+        storageService.store(file);
     }
 
     // CREATE ERROR IF FILE NOT FOUND

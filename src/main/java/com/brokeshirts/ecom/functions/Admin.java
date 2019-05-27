@@ -3,6 +3,8 @@ package com.brokeshirts.ecom.functions;
 import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
 
+import java.util.ArrayList;
+
 public class Admin {
 
 //// CHANGE ORDER
@@ -125,7 +127,14 @@ public class Admin {
         Categories hiddenCat = categoriesDao.findOne(id);
         hiddenCat.setHidden(choice);
         categoriesDao.save(hiddenCat);
+    }
 
+    // COLOR
+    public static void hideColor(int id, String choice, ColorsDao colorsDao) {
+
+        Colors hiddenColor = colorsDao.findOne(id);
+        hiddenColor.setHidden(choice);
+        colorsDao.save(hiddenColor);
     }
 
     // SUB-CATEGORY
@@ -178,6 +187,15 @@ public class Admin {
             }
         }
 
+    }
+
+    // COLOR
+    public static void archiveColor(int colorId, ColorsDao colorsDao) {
+
+        Colors updateColor = colorsDao.findOne(colorId);
+
+        updateColor.setArchive("yes");
+        colorsDao.save(updateColor);
     }
 
     // SUB-CATEGORY
@@ -264,6 +282,16 @@ public class Admin {
 
     }
 
+    // COLOR
+    public static void reactivateColor(int id, ColorsDao colorsDao) {
+
+        Colors updateColor = colorsDao.findOne(id);
+
+        updateColor.setArchive("no");
+        updateColor.setHidden("yes");
+        colorsDao.save(updateColor);
+    }
+
     // SUB-CATEGORY
     public static void reactivateType(int id, TypesDao typesDao) {
 
@@ -321,5 +349,20 @@ public class Admin {
         reactivate.setSortId(maxSortId + 1);
         sizesDao.save(reactivate);
 
+    }
+
+//// EXTRA FUNCTIONS
+
+    // CONVERT IMAGE FILES FOR COLORS
+    public static ArrayList<Colors> convertColorImages(ColorsDao colorsDao) {
+
+        ArrayList<Colors> convertedImages = new ArrayList<>();
+
+        for (Colors color : colorsDao.findAll()) {
+            color.setUrl("'" + color.getUrl() + "'");
+            convertedImages.add(color);
+        }
+
+        return convertedImages;
     }
 }

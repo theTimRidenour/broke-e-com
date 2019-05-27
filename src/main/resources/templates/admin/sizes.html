@@ -26,7 +26,7 @@
                 <div class="moveDiv">&minus;</div>
                 <div class="moveDown" th:if="${item.sortId == sizes.size()}"></div>
                 <div class="moveDown" th:unless="${item.sortId == sizes.size()}"><a th:href="'sizes/movedown/' + ${item.SortId}">&#8910;</a></div>
-                <div class="oneItem"><span th:text="${item.longName + '(' + item.shortName + ')'}"></span><a th:href="${'sizes/archive/' + item.id}">ARCHIVE</a></div>
+                <div class="oneItem"><span th:text="${item.longName + '&nbsp;&nbsp;(' + item.shortName + ')'}"></span><a th:href="${'sizes/archive/' + item.id}">ARCHIVE</a></div>
                 <div class="hideItem">
                     <div th:if="${item.hidden == 'no'}">
                         <form th:action="${'sizes/hidden/' + item.id + '/yes'}" method="post">

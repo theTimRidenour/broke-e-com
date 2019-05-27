@@ -1,5 +1,6 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.functions.Data;
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.models.data.*;
 import com.brokeshirts.ecom.models.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
@@ -50,43 +52,45 @@ public class DataController {
     @Autowired
     private StylesDao stylesDao;
 
-//// ADD/REMOVE DATA
+//// ADD DATA
 
     // ADD CATEGORY
     @RequestMapping(value="add/category", method = RequestMethod.POST)
     public String addCategory(@RequestParam("categoryName") String categoryName) {
 
-        if (categoryName.isEmpty()) {
-            return "redirect:/admin/categories";
+        if (!categoryName.isEmpty()) {
+            Data.addCat(categoryName, categoriesDao);
         }
+        return "redirect:/admin/categories";
+    }
 
-        Categories cat = new Categories();
-        cat.setName(categoryName);
-        cat.setHidden("no");
-        cat.setArchive("no");
-        categoriesDao.save(cat);
+    // ADD COLOR
+    @RequestMapping(value="add/color", method = RequestMethod.POST)
+    public String addColor(@RequestParam("file") MultipartFile file, @RequestParam String hex, @RequestParam String name) {
 
-        Categories newCat = new Categories();
-
-        for (Categories findCat : categoriesDao.findAll()) {
-            if (findCat.getName().equals(categoryName)) {
-                newCat = findCat;
-            }
+        if (!hex.isEmpty() && !name.isEmpty()) {
+            Data.addColor(file, hex, name, colorsDao);
         }
+        return "redirect:/admin/colors";
+    }
 
-        int sortId = 0;
+    // ADD SIZE
+    @RequestMapping(value="add/size", method = RequestMethod.POST)
+    public String addSize(@RequestParam String longName, @RequestParam String shortName) {
 
-        for (Categories catSortMax : categoriesDao.findAll()) {
-            if (sortId < catSortMax.getSortId()) {
-                sortId = catSortMax.getSortId();
-            }
+        if (!longName.isEmpty() && !shortName.isEmpty()) {
+            Data.addSize(longName, shortName, sizesDao);
         }
+        return "redirect:/admin/sizes";
+    }
 
-        sortId++;
+    // ADD STYLE
+    @RequestMapping(value="add/style", method = RequestMethod.POST)
+    public String addStyle(@RequestParam("styleName") String styleName, @RequestParam("categoryId") int categoryId) {
 
-        newCat.setSortId(sortId);
-        categoriesDao.save(newCat);
-
+        if (!styleName.isEmpty() && categoryId != 0) {
+            Data.addStyle(styleName, categoryId, stylesDao);
+        }
         return "redirect:/admin/categories";
     }
 
@@ -94,150 +98,28 @@ public class DataController {
     @RequestMapping(value="add/subcategory", method = RequestMethod.POST)
     public String addType(@RequestParam("typeName") String typeName, @RequestParam("categoryId") int categoryId) {
 
-        if (typeName.isEmpty() || categoryId == 0) {
-            return "redirect:/admin/categories";
+        if (!typeName.isEmpty() && categoryId != 0) {
+            Data.addType(typeName, categoryId, typesDao);
         }
-
-        Types type = new Types();
-        type.setName(typeName);
-        type.setHidden("no");
-        type.setArchive("no");
-        type.setCatArchive("no");
-        type.setCategoryId(categoryId);
-        typesDao.save(type);
-
-        Types newType = new Types();
-
-        for (Types findType : typesDao.findAll()) {
-            if (findType.getName().equals(typeName)) {
-                newType = findType;
-            }
-        }
-
-        int sortId = 0;
-
-        for (Types typeSortMax : typesDao.findAll()) {
-            if (typeSortMax.getCategoryId() == categoryId) {
-                if (sortId < typeSortMax.getSortId()) {
-                    sortId = typeSortMax.getSortId();
-                }
-            }
-        }
-
-        sortId++;
-
-        newType.setSortId(sortId);
-        typesDao.save(newType);
-
         return "redirect:/admin/categories";
     }
 
-    // ADD STYLE
-    @RequestMapping(value="add/style", method = RequestMethod.POST)
-    public String addStyle(@RequestParam("styleName") String styleName, @RequestParam("categoryId") int categoryId) {
 
-        if (styleName.isEmpty() || categoryId == 0) {
-            return "redirect:/admin/categories";
-        }
-
-        Styles style = new Styles();
-        style.setName(styleName);
-        style.setHidden("yes");
-        style.setArchive("no");
-        style.setArchiveCat("no");
-        style.setCategoryId(categoryId);
-        stylesDao.save(style);
-
-        Styles newStyle = new Styles();
-
-        for (Styles findStyle : stylesDao.findAll()) {
-            if (findStyle.getName().equals(styleName)) {
-                newStyle = findStyle;
-            }
-        }
-
-        int sortId = 0;
-
-        for (Styles styleSortMax : stylesDao.findAll()) {
-            if (styleSortMax.getCategoryId() == categoryId) {
-                if (sortId < styleSortMax.getSortId()) {
-                    sortId = styleSortMax.getSortId();
-                }
-            }
-        }
-
-        sortId++;
-
-        newStyle.setSortId(sortId);
-        stylesDao.save(newStyle);
-
-        return "redirect:/admin/categories";
-    }
-
-    // ADD SIZE
-    @RequestMapping(value="add/size", method = RequestMethod.POST)
-    public String addSize(@RequestParam String longName, @RequestParam String shortName) {
-        Sizes newSize = new Sizes();
-        int maxSortId = 0;
-
-        newSize.setLongName(longName);
-        newSize.setShortName(shortName);
-        newSize.setArchive("no");
-        newSize.setHidden("no");
-        sizesDao.save(newSize);
-
-        for (Sizes size : sizesDao.findAll()) {
-            if (maxSortId < size.getSortId()) {
-                maxSortId = size.getSortId();
-            }
-        }
-
-        for (Sizes size : sizesDao.findAll()) {
-            if (size.getLongName().equals(longName) && size.getShortName().equals(shortName)) {
-                size.setSortId(maxSortId + 1);
-                sizesDao.save(size);
-            }
-        }
-
-        return "redirect:/admin/sizes";
-    }
+//// DELETE DATA
 
     // DELETE CATEGORY AND ALL ASSOCIATED FILES
     @RequestMapping(value="delete/cat/{id}")
     public String delCat(@PathVariable int id) {
 
-        Categories removeCat = categoriesDao.findOne(id);
-
-        for (Types type: typesDao.findAll()) {
-            if (type.getCategoryId() == removeCat.getId()) {
-                typesDao.delete(type);
-            }
-        }
-
-        categoriesDao.delete(removeCat);
-
+        Data.delCat(id, categoriesDao, typesDao, stylesDao);
         return "redirect:/admin/archive";
     }
 
-    // DELETE SUBCATEGORY AND ALL ASSOCIATED FILES
-    @RequestMapping(value="delete/type/{id}")
-    public String delType(@PathVariable int id) {
+    // DELETE COLOR AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/color/{id}")
+    public String delColor(@PathVariable int id) {
 
-        Types removeType = typesDao.findOne(id);
-
-        typesDao.delete(removeType);
-
-        return "redirect:/admin/archive";
-    }
-
-    // DELETE STYLE AND ALL ASSOCIATED FILES
-    @RequestMapping(value="delete/style/{id}")
-    public String delStyle(@PathVariable int id) {
-
-        Styles removeStyle = stylesDao.findOne(id);
-
-        stylesDao.delete(removeStyle);
-
+        Data.delColor(id, colorsDao);
         return "redirect:/admin/archive";
     }
 
@@ -245,12 +127,26 @@ public class DataController {
     @RequestMapping(value="delete/size/{id}")
     public String delSize(@PathVariable int id) {
 
-        Sizes removeSize = sizesDao.findOne(id);
-
-        sizesDao.delete(removeSize);
-
+        Data.delSize(id, sizesDao);
         return "redirect:/admin/archive";
     }
+
+    // DELETE STYLE AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/style/{id}")
+    public String delStyle(@PathVariable int id) {
+
+        Data.delStyle(id, stylesDao);
+        return "redirect:/admin/archive";
+    }
+
+    // DELETE SUBCATEGORY AND ALL ASSOCIATED FILES
+    @RequestMapping(value="delete/type/{id}")
+    public String delType(@PathVariable int id) {
+
+        Data.delType(id, typesDao);
+        return "redirect:/admin/archive";
+    }
+
 
 //// TEMP DATA FORMS
 

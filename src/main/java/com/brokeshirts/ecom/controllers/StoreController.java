@@ -1,6 +1,7 @@
 package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Menus;
+import com.brokeshirts.ecom.functions.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,46 +32,15 @@ public class StoreController {
     @Autowired
     ProductsDao productsDao;
 
-// DISPLAY FORMS
+//// DISPLAY FORMS
 
     // DISPLAY PRODUCTS IN SINGLE CATEGORY
     @RequestMapping(value="{categoryName}", method = RequestMethod.GET)
     public String showCat(@PathVariable String categoryName, Model model) {
 
-        Categories oneCategory = null;
-
-        for (Categories cat : categoriesDao.findAll()) {
-            if (cat.getName().equals(categoryName)) {
-                oneCategory = cat;
-            }
-        }
-
-        ArrayList<Types> categoryTypes = new ArrayList<>();
-
-        for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == oneCategory.getId()) {
-                categoryTypes.add(type);
-            }
-        }
-
-        ArrayList<Products> allProducts = new ArrayList<>();
-
-        int limit = 0;
-        for (Types type : categoryTypes) {
-            limit = 4;
-            for (Products product : productsDao.findAll()) {
-                if (limit > 0) {
-                    if (product.getTypeId() == type.getId()) {
-                        allProducts.add(product);
-                        limit--;
-                    }
-                }
-            }
-        }
-
         model.addAttribute("title", categoryName);
-        model.addAttribute("types", categoryTypes);
-        model.addAttribute("products", allProducts);
+        model.addAttribute("types", Store.allCatTypes(categoryName, typesDao, categoriesDao));
+        model.addAttribute("products", Store.limitedProductListByType(categoryName, typesDao, categoriesDao, productsDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
@@ -81,25 +51,9 @@ public class StoreController {
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
     public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
 
-        Types oneType = null;
-
-        for (Types type : typesDao.findAll()) {
-            if (type.getName().equals(typeName)) {
-                oneType = type;
-            }
-        }
-
-        ArrayList<Products> allProducts = new ArrayList<>();
-
-        for (Products product : productsDao.findAll()) {
-            if (product.getTypeId() == oneType.getId()) {
-                allProducts.add(product);
-            }
-        }
-
         model.addAttribute("title", categoryName + " : " + typeName);
-        model.addAttribute("type", oneType);
-        model.addAttribute("products", allProducts);
+        model.addAttribute("type", Store.oneTypeByName(typeName, typesDao));
+        model.addAttribute("products", Store.oneCatProducts(typeName, productsDao, typesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 

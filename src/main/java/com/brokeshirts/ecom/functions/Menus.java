@@ -57,6 +57,34 @@ public class Menus {
 
     }
 
+    // SORTING ORDER OF COLORS FOR CUSTOMERS
+    public static ArrayList<Colors> sortColors(ColorsDao colorsDao) {
+
+        ArrayList<Colors> sortedColors = new ArrayList<>();
+
+        for (Colors color : sortColorsAdmin(colorsDao)) {
+            if (color.getHidden().equals("no")) {
+                sortedColors.add(color);
+            }
+        }
+
+        return sortedColors;
+    }
+
+    // SORTING ORDER OF COLORS FOR ADMIN
+    public static ArrayList<Colors> sortColorsAdmin(ColorsDao colorsDao) {
+
+        ArrayList<Colors> sortedColors = new ArrayList<>();
+
+        for (Colors color : colorsDao.findAll()) {
+            if (color.getArchive().equals("no")) {
+                sortedColors.add(color);
+            }
+        }
+
+        return sortedColors;
+    }
+
     // SORT ORDER OF SUBCATEGORIES FOR CUSTOMERS
     public static ArrayList<Types> sortTypes(CategoriesDao categoriesDao, TypesDao typesDao) {
 

@@ -6,9 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class StorageProperties {
 
     // FOLDER LOCATION FOR STORING IMAGES
-    private String location = "upload-dir";
+    // private String location = "upload-dir";
+    private static String location = "src/main/resources/static/images/upload/";
 
-    public String getLocation() {
+    public static String getLocation() {
         return location;
     }
 
