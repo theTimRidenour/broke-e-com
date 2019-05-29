@@ -15,7 +15,6 @@ public class Photos {
     @NotNull
     private int productId;
 
-    @NotNull
     private int colorId;
 
     @NotNull

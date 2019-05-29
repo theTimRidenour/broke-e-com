@@ -235,3 +235,104 @@ a .admin_menu_button:hover {
 .style_text_box {
     margin: -25px 0 0 651px;
 }
+
+#add_product {
+    border-bottom: 2px solid #606060;
+    height: 40px;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: -60px;
+    margin-left: 30px;
+    padding-top: 8px;
+}
+
+#add_product i {
+    margin-top: -28px;
+    margin-left: 783px;
+    position: absolute;
+    display: block;
+}
+
+.add_form {
+    display: none;
+    margin-left: 30px;
+    margin-top: 3px;
+}
+
+.selection {
+    border: 0;
+    border-bottom: 1.5px solid black;
+    width: 395px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    display: inline-block;
+}
+
+.hidden_slc {
+    display: none;
+}
+
+#sel_style {
+    width: 810px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    margin-top: 60px;
+    justify-content: space-around;
+}
+
+#sel_style div, #sel_style div input, #sel_style div div {
+    display: inline-block;
+}
+
+#sel_style div input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+}
+
+#sel_style div div {
+    font-weight: bold;
+    margin-top: -1px;
+}
+
+#style_title {
+    display: flex;
+    position: absolute;
+    margin-top: 32px;
+    font-weight: bold;
+    font-size: 20px;
+    width: 810px;
+    justify-content: space-around;
+}
+
+#sel_image, #sel_name, #sel_submit {
+    display: block;
+    position: absolute;
+    width: 810px;
+    height: 40px;
+    margin-top: 95px;
+    border: 0;
+    border-bottom: 1.5px solid #606060;
+    font-size: 20px;
+    width: 810px;
+}
+
+#sel_name {
+    margin-top: 135px;
+}
+
+#sel_submit {
+    margin-top: 185px;
+    border: 2px solid #72bcd4;
+    border-radius: 15px;
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+}
+
+#sel_submit:hover {
+    border: 2px solid #add8e6;
+    background-image: linear-gradient(to bottom right, #61abc3, #bee9f7);
+}

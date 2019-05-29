@@ -96,6 +96,38 @@ public class AdminController {
         return "admin/colors";
     }
 
+    // ORDERS
+    @RequestMapping(value="")
+    public String adminOrders(Model model) {
+
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("title","ADMIN");
+        model.addAttribute("adminMenu", "orders");
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+
+        return "admin/index";
+    }
+
+    // PRODUCTS
+    @RequestMapping(value="products")
+    public String adminProducts(Model model) {
+
+        model.addAttribute("title", "ADMIN");
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("adminMenu", "products");
+        model.addAttribute("products", Menus.sortProductsAdmin(productsDao, categoriesDao, typesDao));
+        model.addAttribute("productsInventoryTotals", Menus.productInventoryCnt(productsDao, inventoryDao));
+        model.addAttribute("inventory", Menus.sortInventoryAdmin(inventoryDao, productsDao, categoriesDao, typesDao, sizesDao, colorsDao));
+        model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
+        model.addAttribute("types", Menus.sortTypesAdmin(categoriesDao, typesDao));
+        model.addAttribute("styles", Menus.sortStylesAdmin(categoriesDao, stylesDao));
+        model.addAttribute("colors", Menus.sortColorsAdmin(colorsDao));
+        model.addAttribute("sizes", Menus.sortSizes(sizesDao));
+
+        return "admin/products";
+    }
+
     // SIZES
     @RequestMapping(value="sizes")
     public String adminSizes(Model model) {
@@ -107,18 +139,6 @@ public class AdminController {
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "admin/sizes";
-    }
-
-    // ORDERS
-    @RequestMapping(value="")
-    public String adminOrders(Model model) {
-
-        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
-        model.addAttribute("title","ADMIN");
-        model.addAttribute("adminMenu", "orders");
-        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
-
-        return "admin/index";
     }
 
 

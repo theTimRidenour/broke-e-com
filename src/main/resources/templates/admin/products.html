@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full">
+    <div th:replace="fragments :: admin_menu"></div>
+    <div id="admin_container">
+
+        <div id="add_product">ADD PRODUCT <i class="far fa-caret-square-down"></i></div>
+        <div class="add_form">
+            <form th:action="@{'/data/add/product'}" method="post" enctype="multipart/form-data">
+                <select class="selection" id="sel_cat" name="categoryId" required="required">
+                    <option value="">-- Choose Category --</option>
+                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:id="${'cat' + cat.id}" th:text="${cat.name}"></option>
+                </select>
+                <select class="selection " id="sel_subcat" name="typeId" required="required" style="margin-left: 415px;">
+                    <option value="">-- Choose Sub-Category --</option>
+                    <div th:each="cat : ${categories}">
+                    <option th:name="${cat.id}" th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}" th:if="${type.categoryId == cat.id}"></option>
+                    </div>
+                </select>
+                <div id="style_title">Choice Styles (optional)</div>
+                <div id="sel_style">
+                    <div th:each="style : ${styles}" th:name="${style.categoryId}" style="display: none;">
+                        <input type="checkbox" name="styleIds" th:value="${style.id}" />
+                        <div th:text="${style.name}"></div>
+                    </div>
+                </div>
+                <input id="sel_image" type="file" accept="image/*" name="file" />
+                <input id="sel_name" required="required" type="text" name="name" placeholder="Name of product" />
+                <input id="sel_submit" type="submit" value="Add Product" />
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>

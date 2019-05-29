@@ -1,9 +1,12 @@
 package com.brokeshirts.ecom.models;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Products {
@@ -15,13 +18,16 @@ public class Products {
     @NotNull
     private String name;
 
+    @NotNull
+    private int categoryId;
+
+    @NotNull
     private int typeId;
 
-    private int styleId;
+    @ElementCollection
+    private List<Integer> styleIds = new ArrayList<>();
 
-    private int itemId;
-
-    private int categoryId;
+    private int imageId;
 
     private String hidden;
 
@@ -33,8 +39,9 @@ public class Products {
 
     private String archiveStyle;
 
-    public Products(String name, int typeId) {
+    public Products(String name, int typeId, int categoryId) {
         this.name = name;
+        this.categoryId = categoryId;
         this.typeId = typeId;
     }
 
@@ -58,21 +65,11 @@ public class Products {
         this.typeId = typeId;
     }
 
-    public int getStyleId() {
-        return styleId;
-    }
+    public List<Integer> getStyleIds() { return styleIds; }
 
-    public void setStyleId(int styleId) {
-        this.styleId = styleId;
-    }
+    public void addStyleId(int styleId) { styleIds.add((Integer) styleId); }
 
-    public int getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
+    public void removeStyleId(int styleId) { styleIds.remove(styleId); }
 
     public int getCategoryId() {
         return categoryId;
@@ -121,4 +118,8 @@ public class Products {
     public void setArchiveStyle(String archiveStyle) {
         this.archiveStyle = archiveStyle;
     }
+
+    public int getImageId() { return imageId; }
+
+    public void setImageId(int imageId) { this.imageId = imageId; }
 }

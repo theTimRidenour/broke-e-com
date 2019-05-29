@@ -74,6 +74,15 @@ public class DataController {
         return "redirect:/admin/colors";
     }
 
+    // ADD PRODUCT
+    @RequestMapping(value="add/product", method = RequestMethod.POST)
+    public String addProduct(@RequestParam int categoryId, @RequestParam int typeId, @RequestParam(value="styleIds", required = false) int[] styleIds, @RequestParam("file") MultipartFile file, String name) {
+
+        Data.addProduct(categoryId, typeId, styleIds, stylesDao, name, file, photosDao, productsDao);
+
+        return "redirect:/admin/products";
+    }
+
     // ADD SIZE
     @RequestMapping(value="add/size", method = RequestMethod.POST)
     public String addSize(@RequestParam String longName, @RequestParam String shortName) {

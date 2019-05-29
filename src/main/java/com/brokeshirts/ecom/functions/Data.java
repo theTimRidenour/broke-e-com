@@ -62,6 +62,87 @@ public class Data {
         colorsDao.save(newColor);
     }
 
+    // ADD IMAGE
+    private static int addImage(MultipartFile file, int productId, PhotosDao photosDao) {
+
+        String inPhotos = "no";
+        String checkFileName = file.getOriginalFilename();
+        int imageId = 0;
+
+        for (Photos findPhoto : photosDao.findAll()) {
+
+            if (findPhoto.getUrl().equals(checkFileName)) {
+                inPhotos.equals("yes");
+                imageId = findPhoto.getId();
+            }
+        }
+
+        if (inPhotos.equals("no")) {
+
+            Photos newPhoto = new Photos();
+
+            internalFileUpload(file);
+
+            newPhoto.setProductId(productId);
+            newPhoto.setUrl(file.getOriginalFilename());
+            photosDao.save(newPhoto);
+
+            for (Photos findPhoto : photosDao.findAll()) {
+                if (findPhoto.getProductId() == productId && findPhoto.getUrl().equals(checkFileName)) {
+                    imageId = findPhoto.getId();
+                }
+            }
+        }
+
+        return imageId;
+    }
+
+    // ADD PRODUCT
+    public static void addProduct (int categoryId, int typeId, int[] styleId, StylesDao stylesDao, String name, MultipartFile file, PhotosDao photosDao, ProductsDao productsDao) {
+
+        Products newProduct = new Products();
+
+        newProduct.setName(name);
+        newProduct.setCategoryId(categoryId);
+        newProduct.setTypeId(typeId);
+        newProduct.setArchive("no");
+        newProduct.setArchiveCat("no");
+        newProduct.setArchiveStyle("no");
+        newProduct.setArchiveType("no");
+        newProduct.setHidden("yes");
+
+        if (styleId != null) {
+
+            for (int i : styleId) {
+                if (stylesDao.findOne(i).getCategoryId() == categoryId) {
+                    newProduct.addStyleId(i);
+                }
+            }
+        }
+
+        productsDao.save(newProduct);
+
+        int productId = 0;
+
+        for (Products findProduct : productsDao.findAll()) {
+            if (findProduct.getCategoryId() == categoryId && findProduct.getTypeId() == typeId && findProduct.getName().equals(name)) {
+                productId = findProduct.getId();
+            }
+        }
+
+        if (!file.isEmpty()) {
+            System.out.println("file not empty");
+            int imageId = addImage(file, productId, photosDao);
+
+            System.out.println(imageId);
+
+            Products updateProduct = productsDao.findOne(productId);
+            updateProduct.setImageId(imageId);
+
+            productsDao.save(updateProduct);
+        }
+    }
+
     // ADD SIZE
     public static void addSize(String longName, String shortName, SizesDao sizesDao) {
 
