@@ -108,7 +108,7 @@ public class Menus {
             for (Sizes size : sortSizes(sizesDao)) {
                 for (Products product : sortProductsAdmin(productsDao, categoriesDao, typesDao)) {
                     for (Inventory item : inventoryDao.findAll()) {
-                        if (item.getProductId() == product.getId() && item.getSizeId() == size.getId() && item.getColorId() == color.getId() && item.getArchive().equals("no")) {
+                        if (item.getProduct() == product && item.getSizeId() == size.getId() && item.getColorId() == color.getId() && item.getArchive().equals("no")) {
                             sortedInventory.add(item);
                         }
                     }
@@ -141,7 +141,7 @@ public class Menus {
         for (Categories cat : categoriesDao.findAll()) {
             for (Types type : typesDao.findAll()) {
                 for (Products product : productsDao.findAll()) {
-                    if (product.getCategoryId() == cat.getId() && product.getTypeId() == type.getId() && product.getArchive().equals("no")) {
+                    if (product.getCategoryId() == cat.getId() && product.getType() == type && product.getArchive().equals("no")) {
                         sortedProducts.add(product);
                     }
                 }
@@ -281,7 +281,7 @@ public class Menus {
             if (product.getArchive().equals("no")) {
                 count = 0;
                 for (Inventory item : inventoryDao.findAll()) {
-                    if (item.getArchive().equals("no") && item.getProductId() == product.getId()) {
+                    if (item.getArchive().equals("no") && item.getProduct() == product) {
                         count = count + item.getQuantity();
                     }
                 }
@@ -302,7 +302,7 @@ public class Menus {
         for (Categories cat : categoriesDao.findAll()) {
             count = 0;
             for (Types type : typesDao.findAll()) {
-                if (type.getCategoryId() == cat.getId()) {
+                if (type.getCategory() == cat) {
                     if (type.getSortId() != 0) {
                         count++;
                     }
@@ -327,7 +327,7 @@ public class Menus {
         for (Categories cat : categoriesDao.findAll()) {
             count = 0;
             for (Styles style : stylesDao.findAll()) {
-                if (style.getCategoryId() == cat.getId()) {
+                if (style.getCategory() == cat) {
                     if (style.getSortId() != 0) {
                         count++;
                     }
@@ -341,5 +341,4 @@ public class Menus {
 
         return categoryStyleCount;
     }
-
 }

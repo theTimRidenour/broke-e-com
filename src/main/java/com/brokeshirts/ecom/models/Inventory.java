@@ -3,6 +3,7 @@ package com.brokeshirts.ecom.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,8 +16,8 @@ public class Inventory {
     @NotNull
     private String sku;
 
-    @NotNull
-    private int productId;
+    @ManyToOne
+    private Products products;
 
     @NotNull
     private int sizeId;
@@ -40,9 +41,8 @@ public class Inventory {
 
     private String archiveProduct;
 
-    public Inventory(String sku, int productId, int sizeId, int colorId, double price, int quantity) {
+    public Inventory(String sku, int sizeId, int colorId, double price, int quantity) {
         this.sku = sku;
-        this.productId = productId;
         this.sizeId = sizeId;
         this.colorId = colorId;
         this.price = price;
@@ -59,14 +59,6 @@ public class Inventory {
 
     public void setSku(String sku) {
         this.sku = sku;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public int getSizeId() {
@@ -101,9 +93,7 @@ public class Inventory {
         this.quantity = quantity;
     }
 
-    public String getHidden() {
-        return hidden;
-    }
+    public String getHidden() { return hidden; }
 
     public void setHidden(String hidden) {
         this.hidden = hidden;
@@ -140,4 +130,8 @@ public class Inventory {
     public void setArchiveProduct(String archiveProduct) {
         this.archiveProduct = archiveProduct;
     }
+
+    public Products getProduct() { return products; }
+
+    public void setProduct(Products products) { this.products = products; }
 }

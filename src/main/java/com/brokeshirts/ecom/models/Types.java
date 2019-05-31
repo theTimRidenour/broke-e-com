@@ -1,9 +1,8 @@
 package com.brokeshirts.ecom.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Types {
@@ -15,8 +14,11 @@ public class Types {
     @NotNull
     private String name;
 
-    @NotNull
-    private int categoryId;
+    @ManyToOne
+    private Categories category;
+
+    @OneToMany(mappedBy = "types")
+    private List<Products> products;
 
     private int sortId;
 
@@ -26,9 +28,8 @@ public class Types {
 
     private String catArchive;
 
-    public Types(String name, int categoryId) {
+    public Types(String name) {
         this.name = name;
-        this.categoryId = categoryId;
     }
 
     public Types() {}
@@ -43,13 +44,11 @@ public class Types {
         this.name = name;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Categories getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
+    public void setCategory(Categories category) { this.category = category; }
 
     public int getSortId() {
         return sortId;
@@ -83,4 +82,7 @@ public class Types {
         this.catArchive = catArchive;
     }
 
+    public List<Products> getProducts() { return products; }
+
+    public void setProducts(List<Products> products) { this.products = products; }
 }

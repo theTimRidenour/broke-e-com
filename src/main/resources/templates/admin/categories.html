@@ -17,7 +17,7 @@
             </div>
         </form>
 
-        <div th:each="item, iStat : ${categories}">
+        <div th:each="item : ${categories}">
             <div class="listItem" style="background-color: #effcff;">
                 <div class="moveUp" th:if="${item.sortId == 1}"></div>
                 <div class="moveUp" th:unless="${item.sortId == 1}"><a th:href="'categories/moveup/' + ${item.SortId}">&#8911;</a></div>
@@ -61,9 +61,9 @@
 
             <div class="subItem">
                 sub-categories:
-                <div th:each="subCat : ${types}" th:style="${subCat.categoryId != item.id}? 'display: none;'">
-                    <div th:if="${subCat.categoryId == item.id}">
-                        <div th:unless="${subCat.sortId == 1}"><a th:href="'categories/type/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/moveup'">&#8827;</a></div>
+                <div th:each="subCat : ${types}" th:if="${subCat.archive != 'yes'}">
+                    <div th:if="${item.id == subCat.category.id}">
+                        <div th:unless="${subCat.sortId == 1}"><a th:href="'categories/type/' + ${item.id} + '/' + ${subCat.sortId} + '/moveup'">&#8827;</a></div>
                         <div>
                             <div th:if="${subCat.hidden == 'no'}">
                                 <form th:action="${'categories/type/' + subCat.id + '/hidden/yes'}" method="post">
@@ -78,31 +78,32 @@
                         </div>
                         <div th:text="${subCat.name}"></div>
                         <div style="font-size: 8px;"><a th:href="${'categories/type/' + subCat.id + '/archive/' + item.id}">A</a></div>
-                        <div th:unless="${subCat.sortId == categoryTypeCount[item.id]}"><a th:href="'categories/type/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
+                        <div th:unless="${subCat.sortId == typesCnt[item.id]}"><a th:href="'categories/type/' + ${item.id} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
                     </div>
                 </div>
             </div>
             <hr style="width: 780px; margin-left: 30px;" />
+
             <div class="subItem styles">
                 styles:
-                <div th:each="subCat : ${styles}" th:style="${subCat.categoryId != item.id}? 'display: none;'">
-                    <div th:if="${subCat.categoryId == item.id}">
-                        <div th:unless="${subCat.sortId == 1}"><a th:href="'categories/style/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/moveup'">&#8827;</a></div>
+                <div th:each="style : ${styles}">
+                    <div th:if="${item.id == style.category.id}">
+                        <div th:unless="${style.sortId == 1}"><a th:href="'categories/style/' + ${item.id} + '/' + ${style.sortId} + '/moveup'">&#8827;</a></div>
                         <div>
-                            <div th:if="${subCat.hidden == 'no'}">
-                                <form th:action="${'categories/style/' + subCat.id + '/hidden/yes'}" method="post">
+                            <div th:if="${style.hidden == 'no'}">
+                                <form th:action="${'categories/style/' + style.id + '/hidden/yes'}" method="post">
                                     <input type="submit" value="&#8864;" style="border: 0; background: none;" />
                                 </form>
                             </div>
-                            <div th:if="${subCat.hidden == 'yes'}">
-                                <form th:action="${'categories/style/' + subCat.id + '/hidden/no'}" method="post">
+                            <div th:if="${style.hidden == 'yes'}">
+                                <form th:action="${'categories/style/' + style.id + '/hidden/no'}" method="post">
                                     <input type="submit" value="&#9744;" style="border: 0; background: none;" />
                                 </form>
                             </div>
                         </div>
-                        <div th:text="${subCat.name}"></div>
-                        <div style="font-size: 8px;"><a th:href="${'categories/style/' + subCat.id + '/archive/' + item.id}">A</a></div>
-                        <div th:unless="${subCat.sortId == categoryStylesCount[item.id]}"><a th:href="'categories/style/' + ${subCat.categoryId} + '/' + ${subCat.sortId} + '/movedown'">&#8826;</a></div>
+                        <div th:text="${style.name}"></div>
+                        <div style="font-size: 8px;"><a th:href="${'categories/style/' + style.id + '/archive/' + item.id}">A</a></div>
+                        <div th:unless="${style.sortId == stylesCnt[item.id]}"><a th:href="'categories/style/' + ${item.id} + '/' + ${style.sortId} + '/movedown'">&#8826;</a></div>
                     </div>
                 </div>
             </div>

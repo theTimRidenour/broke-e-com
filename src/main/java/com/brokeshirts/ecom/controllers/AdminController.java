@@ -62,6 +62,7 @@ public class AdminController {
         model.addAttribute("sizes", sizesDao.findAll());
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("colors", colorsDao.findAll());
+        model.addAttribute("products", productsDao.findAll());
 
         return "admin/archive";
     }
@@ -71,13 +72,13 @@ public class AdminController {
     public String adminCategories(Model model) {
 
         model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
-        model.addAttribute("categoryTypeCount", Menus.catTypeCnt(categoriesDao, typesDao));
-        model.addAttribute("categoryStylesCount", Menus.catStyleCnt(categoriesDao, stylesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("title", "ADMIN");
         model.addAttribute("types", Menus.sortTypesAdmin(categoriesDao, typesDao));
+        model.addAttribute("typesCnt", Menus.catTypeCnt(categoriesDao, typesDao));
         model.addAttribute("styles", Menus.sortStylesAdmin(categoriesDao, stylesDao));
+        model.addAttribute("stylesCnt", Menus.catStyleCnt(categoriesDao, stylesDao));
         model.addAttribute("adminMenu", "categories");
 
         return "admin/categories";
@@ -203,6 +204,14 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
+    // HIDE PRODUCT FROM CUSTOMERS
+    @RequestMapping(value="products/hidden/{productId}/{choice}")
+    public String changeProductHiddenStatus(@PathVariable int productId, @PathVariable String choice) {
+
+        Admin.hideProduct(productId, productsDao, choice);
+        return "redirect:/admin/products";
+    }
+
     // HIDE STYLE FROM CUSTOMERS
     @RequestMapping(value="categories/style/{styleId}/hidden/{choice}")
     public String changeStyleHiddenStatus(@PathVariable int styleId, @PathVariable String choice) {
@@ -236,6 +245,14 @@ public class AdminController {
 
         Admin.archiveColor(colorId, colorsDao);
         return "redirect:/admin/colors";
+    }
+
+    // ARCHIVE PRODUCT
+    @RequestMapping(value="products/archive/{productId}")
+    public String archiveProduct(@PathVariable int productId) {
+
+        Admin.archiveProduct(productId, productsDao);
+        return "redirect:/admin/products";
     }
 
     // ARCHIVE SUBCATEGORY
@@ -278,6 +295,14 @@ public class AdminController {
     public String reactivateColor(@PathVariable int id) {
 
         Admin.reactivateColor(id, colorsDao);
+        return "redirect:/admin/archive";
+    }
+
+    // REACTIVATE PRODUCT
+    @RequestMapping(value="products/reactivate/{id}")
+    public String reactivateProduct(@PathVariable int id) {
+
+        Admin.reactivateProduct(id, productsDao);
         return "redirect:/admin/archive";
     }
 

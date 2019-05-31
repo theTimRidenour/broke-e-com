@@ -16,15 +16,15 @@
                     <option value="">-- Choose Category --</option>
                     <option th:each="cat : ${categories}" th:value="${cat.id}" th:id="${'cat' + cat.id}" th:text="${cat.name}"></option>
                 </select>
-                <select class="selection " id="sel_subcat" name="typeId" required="required" style="margin-left: 415px;">
+                <select class="selection " id="sel_subcat" name="typeId" required="required" style="margin-left: 412px;">
                     <option value="">-- Choose Sub-Category --</option>
                     <div th:each="cat : ${categories}">
-                    <option th:name="${cat.id}" th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}" th:if="${type.categoryId == cat.id}"></option>
+                    <option th:name="${cat.id}" th:each="type : ${cat.types}" th:value="${type.id}" th:text="${type.name}"></option>
                     </div>
                 </select>
                 <div id="style_title">Choice Styles (optional)</div>
                 <div id="sel_style">
-                    <div th:each="style : ${styles}" th:name="${style.categoryId}" style="display: none;">
+                    <div th:each="style : ${styles}" th:name="${style.category.id}" style="display: none;">
                         <input type="checkbox" name="styleIds" th:value="${style.id}" />
                         <div th:text="${style.name}"></div>
                     </div>
@@ -35,6 +35,54 @@
             </form>
         </div>
 
+        <div th:each="cat : ${categories}"><div th:each="type : ${cat.types}"><span th:id="${'pDiv' + cat.id + '-' + type.id}" class="prodTitle" th:text="${cat.name + ' - ' + type.name}"></span>
+            <div th:class="${'cDiv' + cat.id + '-' + type.id}" style="display: none;" th:each="product : ${type.products}">
+                <div class="listItem productList" style="background-color: #effcff;">
+                    <i class="far fa-image productImage" th:if="${product.imageId != 0}"></i>
+                    <div class="oneItem productOne"><span th:text="${product.name}"></span><a th:href="${'products/archive/' + product.id}">ARCHIVE</a></div>
+                    <div class="hideItem">
+                        <div th:if="${product.hidden == 'no'}">
+                            <form th:action="${'products/hidden/' + product.id + '/yes'}" method="post">
+                                <input type="submit" value="&#9745;" />
+                            </form>
+                        </div>
+                        <div th:if="${product.hidden == 'yes'}">
+                            <form th:action="${'products/hidden/' + product.id + '/no'}" method="post">
+                                <input type="submit" value="&#9744;" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script style="display: none;" th:inline="javascript">
+                    $(document).ready(function(){
+                        $('#pDiv[[${cat.id}]]-[[${type.id}]]').click(function() {
+                            $('.cDiv[[${cat.id}]]-[[${type.id}]]').toggle();
+                        });
+                    });
+                </script>
+
+                <div class="subItem">
+                    inventory:
+                    <div th:each="item : ${inventory}">
+                        <div th:if="${item.hidden == 'no'}">
+                            <form th:action="${'products/inventory/' + item.id + '/hidden/yes'}" method="post">
+                                <input type="submit" value="&#8864;" style="border: 0; background: none;" />
+                            </form>
+                        </div>
+                        <div th:if="${item.hidden == 'yes'}">
+                            <form th:action="${'products/inventory/' + item.id + '/hidden/no'}" method="post">
+                                <input type="submit" value="&#9744;" style="border: 0; background: none;" />
+                            </form>
+                        </div>
+                        <div th:text="${item.name}"></div>
+                        <div style="font-size: 8px;"><a th:href="${'products/inventory/' + item.id + '/archive/' + product.id}">A</a></div>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+
+        <div id="archive"><a th:href="'archive'">CHECK ARCHIVE</a></div>
     </div>
 </div>
 

@@ -3,6 +3,7 @@ package com.brokeshirts.ecom.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,8 +16,8 @@ public class Styles {
     @NotNull
     private String name;
 
-    @NotNull
-    private int categoryId;
+    @ManyToOne
+    private Categories category;
 
     private int sortId;
 
@@ -28,7 +29,6 @@ public class Styles {
 
     public Styles(String name, int categoryId) {
         this.name = name;
-        this.categoryId = categoryId;
     }
 
     public Styles() {}
@@ -37,21 +37,17 @@ public class Styles {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Categories getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
+    public void setCategory(Categories category) { this.category = category; }
 
     public int getSortId() {
         return sortId;

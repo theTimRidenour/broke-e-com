@@ -39,7 +39,7 @@ public class Admin {
     public static void moveType(int sortId, String direction, TypesDao typesDao, int categoryId) {
         if (direction.equals("up")) {
             for (Types type : typesDao.findAll()) {
-                if (type.getCategoryId() == categoryId) {
+                if (type.getCategory().getId() == categoryId) {
                     if (type.getSortId() == sortId) {
                         type.setSortId(sortId - 1);
                         typesDao.save(type);
@@ -51,7 +51,7 @@ public class Admin {
             }
         } else if (direction.equals("down")) {
             for (Types type : typesDao.findAll()) {
-                if (type.getCategoryId() == categoryId) {
+                if (type.getCategory().getId() == categoryId) {
                     if (type.getSortId() == sortId) {
                         type.setSortId(sortId + 1);
                         typesDao.save(type);
@@ -68,7 +68,7 @@ public class Admin {
     public static void moveStyle(int sortId, String direction, StylesDao stylesDao, int categoryId) {
         if (direction.equals("up")) {
             for (Styles style : stylesDao.findAll()) {
-                if (style.getCategoryId() == categoryId) {
+                if (style.getCategory().getId() == categoryId) {
                     if (style.getSortId() == sortId) {
                         style.setSortId(sortId - 1);
                         stylesDao.save(style);
@@ -80,7 +80,7 @@ public class Admin {
             }
         } else if (direction.equals("down")) {
             for (Styles style : stylesDao.findAll()) {
-                if (style.getCategoryId() == categoryId) {
+                if (style.getCategory().getId() == categoryId) {
                     if (style.getSortId() == sortId) {
                         style.setSortId(sortId + 1);
                         stylesDao.save(style);
@@ -137,6 +137,14 @@ public class Admin {
         colorsDao.save(hiddenColor);
     }
 
+    // PRODUCT
+    public static void hideProduct(int productId, ProductsDao productsDao, String choice) {
+
+        Products hiddenProduct = productsDao.findOne(productId);
+        hiddenProduct.setHidden(choice);
+        productsDao.save(hiddenProduct);
+    }
+
     // SUB-CATEGORY
     public static void hideType(int typeId, String choice, TypesDao typesDao) {
 
@@ -181,7 +189,7 @@ public class Admin {
         categoriesDao.save(updateCat);
 
         for (Types findTypes : typesDao.findAll()) {
-            if (findTypes.getCategoryId() == categoryId) {
+            if (findTypes.getCategory().getId() == categoryId) {
                 findTypes.setCatArchive("yes");
                 typesDao.save(findTypes);
             }
@@ -198,13 +206,22 @@ public class Admin {
         colorsDao.save(updateColor);
     }
 
+    // PRODUCT
+    public static void archiveProduct(int productId, ProductsDao productsDao) {
+
+        Products updateProduct = productsDao.findOne(productId);
+
+        updateProduct.setArchive("yes");
+        productsDao.save(updateProduct);
+    }
+
     // SUB-CATEGORY
     public static void archiveType(int typeId, int categoryId, TypesDao typesDao) {
 
         Types updateType = typesDao.findOne(typeId);
 
         for (Types sortType : typesDao.findAll()) {
-            if (sortType.getCategoryId() == categoryId) {
+            if (sortType.getCategory().getId() == categoryId) {
                 if (sortType.getSortId() > updateType.getSortId()) {
                     sortType.setSortId(sortType.getSortId() - 1);
                     typesDao.save(sortType);
@@ -223,7 +240,7 @@ public class Admin {
         Styles updateStyle = stylesDao.findOne(styleId);
 
         for (Styles sortStyle : stylesDao.findAll()) {
-            if (sortStyle.getCategoryId() == categoryId) {
+            if (sortStyle.getCategory().getId() == categoryId) {
                 if (sortStyle.getSortId() > updateStyle.getSortId()) {
                     sortStyle.setSortId(sortStyle.getSortId() - 1);
                     stylesDao.save(sortStyle);
@@ -274,7 +291,7 @@ public class Admin {
         categoriesDao.save(reactivate);
 
         for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == reactivate.getId()) {
+            if (type.getCategory() == reactivate) {
                 type.setCatArchive("no");
                 typesDao.save(type);
             }
@@ -292,6 +309,16 @@ public class Admin {
         colorsDao.save(updateColor);
     }
 
+    // PRODUCT
+    public static void reactivateProduct(int id, ProductsDao productsDao) {
+
+        Products updateProduct = productsDao.findOne(id);
+
+        updateProduct.setArchive("no");
+        updateProduct.setHidden("yes");
+        productsDao.save(updateProduct);
+    }
+
     // SUB-CATEGORY
     public static void reactivateType(int id, TypesDao typesDao) {
 
@@ -299,7 +326,7 @@ public class Admin {
         int maxSortId = 0;
 
         for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == reactivate.getCategoryId()) {
+            if (type.getCategory() == reactivate.getCategory()) {
                 if (maxSortId < type.getSortId()) {
                     maxSortId = type.getSortId();
                 }
@@ -319,7 +346,7 @@ public class Admin {
         int maxSortId = 0;
 
         for (Styles style : stylesDao.findAll()) {
-            if (style.getCategoryId() == reactivate.getCategoryId()) {
+            if (style.getCategory() == reactivate.getCategory()) {
                 if (maxSortId < style.getSortId()) {
                     maxSortId = style.getSortId();
                 }

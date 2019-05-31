@@ -1,9 +1,6 @@
 package com.brokeshirts.ecom.models;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +18,11 @@ public class Products {
     @NotNull
     private int categoryId;
 
-    @NotNull
-    private int typeId;
+    @ManyToOne
+    private Types types;
+
+    @OneToMany(mappedBy = "products")
+    private List<Inventory> inventory;
 
     @ElementCollection
     private List<Integer> styleIds = new ArrayList<>();
@@ -42,7 +42,6 @@ public class Products {
     public Products(String name, int typeId, int categoryId) {
         this.name = name;
         this.categoryId = categoryId;
-        this.typeId = typeId;
     }
 
     public Products() {}
@@ -55,14 +54,6 @@ public class Products {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
     }
 
     public List<Integer> getStyleIds() { return styleIds; }
@@ -122,4 +113,14 @@ public class Products {
     public int getImageId() { return imageId; }
 
     public void setImageId(int imageId) { this.imageId = imageId; }
+
+    public Types getType() { return types; }
+
+    public void setType(Types types) { this.types = types; }
+
+    public void setStyleIds(List<Integer> styleIds) { this.styleIds = styleIds; }
+
+    public List<Inventory> getInventory() { return inventory; }
+
+    public void setInventory(List<Inventory> inventory) { this.inventory = inventory; }
 }

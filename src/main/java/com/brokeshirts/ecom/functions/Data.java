@@ -98,23 +98,24 @@ public class Data {
     }
 
     // ADD PRODUCT
-    public static void addProduct (int categoryId, int typeId, int[] styleId, StylesDao stylesDao, String name, MultipartFile file, PhotosDao photosDao, ProductsDao productsDao) {
+    public static void addProduct (int categoryId, int typeId, int[] styleId, StylesDao stylesDao, String name, MultipartFile file, PhotosDao photosDao, ProductsDao productsDao, TypesDao typesDao) {
 
         Products newProduct = new Products();
+        Types oneType = typesDao.findOne(typeId);
 
         newProduct.setName(name);
         newProduct.setCategoryId(categoryId);
-        newProduct.setTypeId(typeId);
         newProduct.setArchive("no");
         newProduct.setArchiveCat("no");
         newProduct.setArchiveStyle("no");
         newProduct.setArchiveType("no");
         newProduct.setHidden("yes");
+        newProduct.setType(oneType);
 
         if (styleId != null) {
 
             for (int i : styleId) {
-                if (stylesDao.findOne(i).getCategoryId() == categoryId) {
+                if (stylesDao.findOne(i).getCategory().getId() == categoryId) {
                     newProduct.addStyleId(i);
                 }
             }
@@ -122,10 +123,12 @@ public class Data {
 
         productsDao.save(newProduct);
 
+        Types type = typesDao.findOne(typeId);
+
         int productId = 0;
 
         for (Products findProduct : productsDao.findAll()) {
-            if (findProduct.getCategoryId() == categoryId && findProduct.getTypeId() == typeId && findProduct.getName().equals(name)) {
+            if (findProduct.getCategoryId() == categoryId && findProduct.getType() == type && findProduct.getName().equals(name)) {
                 productId = findProduct.getId();
             }
         }
@@ -133,8 +136,6 @@ public class Data {
         if (!file.isEmpty()) {
             System.out.println("file not empty");
             int imageId = addImage(file, productId, photosDao);
-
-            System.out.println(imageId);
 
             Products updateProduct = productsDao.findOne(productId);
             updateProduct.setImageId(imageId);
@@ -170,14 +171,16 @@ public class Data {
     }
 
     // ADD STYLE
-    public static void addStyle(String styleName, int categoryId, StylesDao stylesDao) {
+    public static void addStyle(String styleName, int categoryId, StylesDao stylesDao, CategoriesDao categoriesDao) {
+
+        Categories cat = categoriesDao.findOne(categoryId);
 
         Styles style = new Styles();
         style.setName(styleName);
         style.setHidden("yes");
         style.setArchive("no");
         style.setArchiveCat("no");
-        style.setCategoryId(categoryId);
+        style.setCategory(cat);
         stylesDao.save(style);
 
         Styles newStyle = new Styles();
@@ -191,7 +194,7 @@ public class Data {
         int sortId = 0;
 
         for (Styles styleSortMax : stylesDao.findAll()) {
-            if (styleSortMax.getCategoryId() == categoryId) {
+            if (styleSortMax.getCategory() == cat) {
                 if (sortId < styleSortMax.getSortId()) {
                     sortId = styleSortMax.getSortId();
                 }
@@ -206,14 +209,15 @@ public class Data {
     }
 
     // ADD SUB-CATEGORY
-    public static void addType(String typeName, int categoryId, TypesDao typesDao) {
+    public static void addType(String typeName, int categoryId, TypesDao typesDao, CategoriesDao categoriesDao) {
 
         Types type = new Types();
         type.setName(typeName);
         type.setHidden("yes");
         type.setArchive("no");
         type.setCatArchive("no");
-        type.setCategoryId(categoryId);
+        Categories cat = categoriesDao.findOne(categoryId);
+        type.setCategory(cat);
         typesDao.save(type);
 
         Types newType = new Types();
@@ -227,7 +231,7 @@ public class Data {
         int sortId = 0;
 
         for (Types typeSortMax : typesDao.findAll()) {
-            if (typeSortMax.getCategoryId() == categoryId) {
+            if (typeSortMax.getCategory() == cat) {
                 if (sortId < typeSortMax.getSortId()) {
                     sortId = typeSortMax.getSortId();
                 }
@@ -246,16 +250,18 @@ public class Data {
     // DELETE CATEGORY
     public static void delCat(int categoryId, CategoriesDao categoriesDao, TypesDao typesDao, StylesDao stylesDao) {
 
-        categoriesDao.delete(categoryId);
+        Categories cat = categoriesDao.findOne(categoryId);
+
+        categoriesDao.delete(cat);
 
         for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == categoryId) {
+            if (type.getCategory() == cat) {
                 delType(type.getId(), typesDao);
             }
         }
 
         for (Styles style : stylesDao.findAll()) {
-            if (style.getCategoryId() == categoryId) {
+            if (style.getCategory() == cat) {
                 delStyle(style.getId(), stylesDao);
             }
         }
@@ -267,12 +273,26 @@ public class Data {
         Colors color = colorsDao.findOne(colorId);
         // IF COLOR HAS AN IMAGE ASSOCIATION, DELETE IMAGE
         if (color.getUrl() != null) {
-            System.out.println(color.getUrl());
             File file = new File(StorageProperties.getLocation() + color.getUrl());
             file.delete();
         }
 
         colorsDao.delete(color);
+    }
+
+    // DELETE PRODUCT
+    public static void delProduct(int productId, ProductsDao productsDao, PhotosDao photosDao) {
+
+        Products product = productsDao.findOne(productId);
+        // IF PRODUCT HAS AN IMAGE ASSOCIATED, DELETE IMAGE
+        if (product.getImageId() != 0) {
+            Photos photo = photosDao.findOne(product.getImageId());
+            File file = new File(StorageProperties.getLocation() + photo.getUrl());
+            file.delete();
+            photosDao.delete(photo);
+        }
+
+        productsDao.delete(product);
     }
 
     // DELETE SIZE

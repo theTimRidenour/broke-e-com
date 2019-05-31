@@ -1,10 +1,8 @@
 package com.brokeshirts.ecom.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Categories {
@@ -22,6 +20,12 @@ public class Categories {
 
     private String archive;
 
+    @OneToMany(mappedBy = "category")
+    private List<Types> types;
+
+    @OneToMany(mappedBy = "category")
+    private List<Styles> styles;
+
     public Categories(String name) {
         this.name = name;
     }
@@ -29,6 +33,10 @@ public class Categories {
     public Categories() {}
 
     public int getId() { return id; }
+
+    public List<Types> getTypes() { return types; }
+
+    public void setTypes(List<Types> types) { this.types = types; }
 
     public String getName() { return name; }
 
@@ -56,4 +64,7 @@ public class Categories {
         this.archive = archive;
     }
 
+    public List<Styles> getStyles() { return styles; }
+
+    public void setStyles(List<Styles> styles) { this.styles = styles; }
 }

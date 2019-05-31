@@ -51,7 +51,7 @@ public class Store {
         Types oneType = oneTypeByName(typeName, typesDao);
 
         for (Products product : productsDao.findAll()) {
-            if (product.getTypeId() == oneType.getId()) {
+            if (product.getType() == oneType) {
                 allProducts.add(product);
             }
         }
@@ -66,7 +66,7 @@ public class Store {
         Categories oneCategory = oneCatByName(categoryName, categoriesDao);
 
         for (Types type : typesDao.findAll()) {
-            if (type.getCategoryId() == oneCategory.getId()) {
+            if (type.getCategory() == oneCategory) {
                 categoryTypes.add(type);
             }
         }
@@ -85,7 +85,7 @@ public class Store {
             limit = 4;
             for (Products product : productsDao.findAll()) {
                 if (limit > 0) {
-                    if (product.getTypeId() == type.getId()) {
+                    if (product.getType() == type) {
                         allProducts.add(product);
                         limit--;
                     }
@@ -129,7 +129,7 @@ public class Store {
             counter = 4;
             for (Products product : revProducts(productsDao)) {
                 if (counter > 0) {
-                    if (product.getTypeId() == type.getId()) {
+                    if (product.getType() == type) {
                         indexProducts.add(product);
                         counter--;
                     }
