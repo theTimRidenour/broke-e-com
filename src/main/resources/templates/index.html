@@ -15,7 +15,7 @@
 
     <div class="product" th:each="product : ${featured}">
       <div class="product_img"></div>
-      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
+      <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.type.id}">$17.00</strong></div>
     </div>
 
   </div>
@@ -23,13 +23,13 @@
   <div th:each="category : ${menuItems}">
       <div class="section_full">
         <span class="title1" th:text="${category.name}">category</span>
-          <span class="title2" th:each="type : ${types}" th:if="${type.categoryId == category.id}">
+          <span class="title2" th:each="type : ${category.types}">
              <a th:href="'/store/' + ${category.name} + '/' + ${type.name}" th:text="'&nbsp;&nbsp;' + ${type.name} + '&nbsp;&nbsp;'"></a>
           </span><br />
           <div th:each="product : ${products}" style="display: inline-block;">
-              <div class="product" th:each="type : ${types}" th:if="${product.typeId == type.id and type.categoryId == category.id}">
+              <div class="product" th:each="type : ${types}" th:if="${product.type.id == type.id and type.category.id == category.id}">
                  <div class="product_img"></div>
-                 <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
+                 <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.type.id}">$17.00</strong></div>
                </div>
           </div>
       </div>
