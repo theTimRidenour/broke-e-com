@@ -16,7 +16,7 @@
                     <option value="">-- Choose Category --</option>
                     <option th:each="cat : ${categories}" th:value="${cat.id}" th:id="${'cat' + cat.id}" th:text="${cat.name}"></option>
                 </select>
-                <select class="selection " id="sel_subcat" name="typeId" required="required" style="margin-left: 412px;">
+                <select class="selection " id="sel_subcat" name="typeId" required="required" style="margin-left: 395px;">
                     <option value="">-- Choose Sub-Category --</option>
                     <div th:each="cat : ${categories}">
                     <option th:name="${cat.id}" th:each="type : ${cat.types}" th:value="${type.id}" th:text="${type.name}"></option>
@@ -29,14 +29,40 @@
                         <div th:text="${style.name}"></div>
                     </div>
                 </div>
-                <input id="sel_image" type="file" accept="image/*" name="file" />
-                <input id="sel_name" required="required" type="text" name="name" placeholder="Name of product" />
-                <input id="sel_submit" type="submit" value="Add Product" />
+                <input class="sel_image" type="file" accept="image/*" name="file" />
+                <input class="sel_name" required="required" type="text" name="name" placeholder="Name of product" />
+                <input class="sel_submit" type="submit" value="Add Product" />
+            </form>
+        </div>
+
+        <div id="add_item">ADD ITEM TO INVENTORY <i class="far fa-caret-square-down"></i></div>
+        <div class="add_ItemForm">
+            <form th:action="@{'/data/add/product'}" method="post" enctype="multipart/form-data">
+                <select class="selection" id="sel_catSubcat" name="typeId" required="required">
+                    <option value="">-- Choose Category / Sub-Category --</option>
+                    <div th:each="cat : ${categories}">
+                        <option th:each="subCat : ${cat.types}" th:value="${subCat.id}" th:id="${'subCat' + subCat.id}" th:text="${cat.name + ': ' + subCat.name}"></option>
+                    </div>
+                </select>
+                <select class="selection " id="sel_product" name="typeId" required="required" style="margin-left: 395px;">
+                    <option value="">-- Choose Product --</option>
+                    <option th:each="product : ${products}" th:name="${product.type.id}" th:value="${product.id}" th:text="${product.name}"></option>
+                </select>
+                <div id="color_title">Choice Color</div>
+                <div id="sel_color">
+                    <div th:each="color : ${colors}">
+                        <input required="required" type="radio" th:alt="${color.name}" name="colorId" th:id="${'color-' + color.id}" th:value="${color.id}" />
+                        <label class="radio_color" th:for="${'color-' + color.id}" th:style="|background-color: ${color.hex}; background-image: url(/upload/image/${color.url});|" />
+                    </div>
+                </div>
+                <input class="sel_image" type="file" accept="image/*" name="file" />
+                <input class="sel_name" required="required" type="text" name="name" placeholder="Name of product" />
+                <input class="sel_submit" type="submit" value="Add Product" />
             </form>
         </div>
 
         <div th:each="cat : ${categories}"><div th:each="type : ${cat.types}"><span th:id="${'pDiv' + cat.id + '-' + type.id}" class="prodTitle" th:text="${cat.name + ' - ' + type.name}"></span>
-            <div th:class="${'cDiv' + cat.id + '-' + type.id}" style="display: none;" th:each="product : ${type.products}">
+            <div th:class="${'cDiv' + cat.id + '-' + type.id}" style="/* display: none; */" th:each="product : ${type.products}">
                 <div class="listItem productList" style="background-color: #effcff;">
                     <i class="far fa-image productImage" th:if="${product.imageId != 0}"></i>
                     <div class="oneItem productOne"><span th:text="${product.name}"></span><a th:href="${'products/archive/' + product.id}">ARCHIVE</a></div>
@@ -54,6 +80,10 @@
                     </div>
                 </div>
 
+
+                <!--
+
+
                 <script style="display: none;" th:inline="javascript">
                     $(document).ready(function(){
                         $('#pDiv[[${cat.id}]]-[[${type.id}]]').click(function() {
@@ -61,6 +91,10 @@
                         });
                     });
                 </script>
+
+
+                -->
+
 
                 <div class="subItem">
                     inventory:

@@ -244,12 +244,11 @@ a .admin_menu_button:hover {
     z-index: 3;
 }
 
-/************ PRODUCT SPECIFIC ************/
+/************ ADD PRODUCT ************/
 
-.add_form {
+.add_form, .add_ItemForm {
     display: none;
-    margin-left: 30px;
-    margin-top: 3px;
+    margin: 0 30px;
     background-color: #ffffff;
     height: 250px;
     border-bottom: 2px solid #606060;
@@ -258,19 +257,22 @@ a .admin_menu_button:hover {
     border-radius: 0 0 15px 15px;
 }
 
-#add_product {
+#add_product, #add_item {
     border-bottom: 2px solid #606060;
     height: 40px;
     font-weight: bold;
     font-size: 26px;
-    margin-top: -60px;
-    margin-left: 30px;
+    margin: -60px 30px 0;
     padding-top: 8px;
 }
 
-#add_product i {
+#add_item {
+    margin-top: 0;
+}
+
+#add_product i, #add_item i {
     margin-top: -28px;
-    margin-left: 783px;
+    margin-left: 753px;
     position: absolute;
     display: block;
 }
@@ -279,7 +281,7 @@ a .admin_menu_button:hover {
     display: none;
 }
 
-#sel_image, #sel_name, #sel_submit {
+.sel_image, .sel_name, .sel_submit {
     display: block;
     position: absolute;
     height: 40px;
@@ -288,15 +290,15 @@ a .admin_menu_button:hover {
     border: 0;
     border-bottom: 1.5px solid #606060;
     font-size: 20px;
-    width: 803px;
+    width: 773px;
 }
 
-#sel_name {
+.sel_name {
     margin-top: 135px;
 }
 
-#sel_style {
-    width: 810px;
+#sel_style, #sel_color {
+    width: 780px;
     display: flex;
     flex-direction: row;
     position: absolute;
@@ -319,7 +321,7 @@ a .admin_menu_button:hover {
     border: 1px solid black;
 }
 
-#sel_submit {
+.sel_submit {
     margin-top: 185px;
     border: 2px solid #72bcd4;
     border-radius: 15px;
@@ -327,7 +329,7 @@ a .admin_menu_button:hover {
     color: #ffffff;
 }
 
-#sel_submit:hover {
+.sel_submit:hover {
     border: 2px solid #add8e6;
     background-image: linear-gradient(to bottom right, #61abc3, #bee9f7);
 }
@@ -338,14 +340,14 @@ a .admin_menu_button:hover {
     margin-top: 32px;
     font-weight: bold;
     font-size: 20px;
-    width: 808px;
+    width: 778px;
     justify-content: space-around;
 }
 
 .selection {
     border: 0;
     border-bottom: 1.5px solid black;
-    width: 395px;
+    width: 380px;
     height: 30px;
     margin-left: 3px;
     font-size: 18px;
@@ -379,4 +381,35 @@ a .admin_menu_button:hover {
     font-size: 18px;
     font-weight: bold;
     margin-left: 70px;
+}
+
+/********** PRODUCT COLOR CHOICES **********/
+
+#sel_color {
+    margin-top: 20px;
+}
+
+#sel_color input {
+    margin:0;
+    padding: 0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+#sel_color label {
+    cursor:pointer;
+}
+
+.radio_color {
+    border: 1px solid black;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    position: absolute;
+    background-position: center;
+}
+
+#sel_color input:checked + .radio_color {
+    border: 2px solid #ffcc00;
 }

@@ -26,8 +26,15 @@
                 $('.add_form').toggle();
             });
         });
+
+        $(document).ready(function(){
+            $('#add_item').click(function() {
+                $('.add_ItemForm').toggle();
+            });
+        });
+
     </script>
-    <script style="display: none;">
+<!--    <script style="display: none;">
         $(document).ready(function() {
             $("#sel_subcat").children('option:gt(0)').hide();
             $("#sel_style").children('div:gt(0)').hide();
@@ -36,6 +43,16 @@
                 $("#sel_style").children('div').hide();
                 $("#sel_subcat").children("option[name^=" + $(this).val() + "]").show()
                 $("#sel_style").children("div[name^=" + $(this).val() + "]").show()
+            })
+        })
+    </script>
+-->
+    <script style="display: none;">
+        $(document).ready(function() {
+            $("#sel_product").children('option:gt(0)').hide();
+            $("#sel_catSubcat").change(function() {
+                $("#sel_product").children('option').hide();
+                $("#sel_product").children("option[name^=" + $(this).val() + "]").show()
             })
         })
     </script>
