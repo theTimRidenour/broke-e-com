@@ -124,7 +124,7 @@ public class Admin {
     // CATEGORY
     public static void hideCat(int id, String choice, CategoriesDao categoriesDao) {
 
-        Categories hiddenCat = categoriesDao.findOne(id);
+        Categories hiddenCat = categoriesDao.findById(id).orElse(new Categories());
         hiddenCat.setHidden(choice);
         categoriesDao.save(hiddenCat);
     }
@@ -132,7 +132,7 @@ public class Admin {
     // COLOR
     public static void hideColor(int id, String choice, ColorsDao colorsDao) {
 
-        Colors hiddenColor = colorsDao.findOne(id);
+        Colors hiddenColor = colorsDao.findById(id).orElse(new Colors());
         hiddenColor.setHidden(choice);
         colorsDao.save(hiddenColor);
     }
@@ -140,7 +140,7 @@ public class Admin {
     // PRODUCT
     public static void hideProduct(int productId, ProductsDao productsDao, String choice) {
 
-        Products hiddenProduct = productsDao.findOne(productId);
+        Products hiddenProduct = productsDao.findById(productId).orElse(new Products());
         hiddenProduct.setHidden(choice);
         productsDao.save(hiddenProduct);
     }
@@ -148,7 +148,7 @@ public class Admin {
     // SUB-CATEGORY
     public static void hideType(int typeId, String choice, TypesDao typesDao) {
 
-        Types hiddenType = typesDao.findOne(typeId);
+        Types hiddenType = typesDao.findById(typeId).orElse(new Types());
         hiddenType.setHidden(choice);
         typesDao.save(hiddenType);
     }
@@ -156,7 +156,7 @@ public class Admin {
     // STYLE
     public static void hideStyle(int styleId, String choice, StylesDao stylesDao) {
 
-        Styles hiddenStyle = stylesDao.findOne(styleId);
+        Styles hiddenStyle = stylesDao.findById(styleId).orElse(new Styles());
         hiddenStyle.setHidden(choice);
         stylesDao.save(hiddenStyle);
     }
@@ -164,7 +164,7 @@ public class Admin {
     // SIZE
     public static void hideSize(int id, String choice, SizesDao sizesDao) {
 
-        Sizes hiddenSize = sizesDao.findOne(id);
+        Sizes hiddenSize = sizesDao.findById(id).orElse(new Sizes());
         hiddenSize.setHidden(choice);
         sizesDao.save(hiddenSize);
 
@@ -175,7 +175,7 @@ public class Admin {
     // CATEGORY
     public static void archiveCat(int categoryId, CategoriesDao categoriesDao, TypesDao typesDao) {
 
-        Categories updateCat = categoriesDao.findOne(categoryId);
+        Categories updateCat = categoriesDao.findById(categoryId).orElse(new Categories());
 
         for (Categories sortCat : categoriesDao.findAll()) {
             if (sortCat.getSortId() > updateCat.getSortId()) {
@@ -200,7 +200,7 @@ public class Admin {
     // COLOR
     public static void archiveColor(int colorId, ColorsDao colorsDao) {
 
-        Colors updateColor = colorsDao.findOne(colorId);
+        Colors updateColor = colorsDao.findById(colorId).orElse(new Colors());
 
         updateColor.setArchive("yes");
         colorsDao.save(updateColor);
@@ -209,7 +209,7 @@ public class Admin {
     // PRODUCT
     public static void archiveProduct(int productId, ProductsDao productsDao) {
 
-        Products updateProduct = productsDao.findOne(productId);
+        Products updateProduct = productsDao.findById(productId).orElse(new Products());
 
         updateProduct.setArchive("yes");
         productsDao.save(updateProduct);
@@ -218,7 +218,7 @@ public class Admin {
     // SUB-CATEGORY
     public static void archiveType(int typeId, int categoryId, TypesDao typesDao) {
 
-        Types updateType = typesDao.findOne(typeId);
+        Types updateType = typesDao.findById(typeId).orElse(new Types());
 
         for (Types sortType : typesDao.findAll()) {
             if (sortType.getCategory().getId() == categoryId) {
@@ -237,7 +237,7 @@ public class Admin {
     // STYLE
     public static void archiveStyle(int styleId, int categoryId, StylesDao stylesDao) {
 
-        Styles updateStyle = stylesDao.findOne(styleId);
+        Styles updateStyle = stylesDao.findById(styleId).orElse(new Styles());
 
         for (Styles sortStyle : stylesDao.findAll()) {
             if (sortStyle.getCategory().getId() == categoryId) {
@@ -256,7 +256,7 @@ public class Admin {
     // SIZE
     public static void archiveSize(int id, SizesDao sizesDao) {
 
-        Sizes updateSize = sizesDao.findOne(id);
+        Sizes updateSize = sizesDao.findById(id).orElse(new Sizes());
 
         for (Sizes sortSize : sizesDao.findAll()) {
             if (sortSize.getSortId() > updateSize.getSortId()) {
@@ -276,7 +276,7 @@ public class Admin {
     // CATEGORY
     public static void reactivateCat(int id, CategoriesDao categoriesDao, TypesDao typesDao) {
 
-        Categories reactivate = categoriesDao.findOne(id);
+        Categories reactivate = categoriesDao.findById(id).orElse(new Categories());
         int maxSortId = 0;
 
         for (Categories cat : categoriesDao.findAll()) {
@@ -302,7 +302,7 @@ public class Admin {
     // COLOR
     public static void reactivateColor(int id, ColorsDao colorsDao) {
 
-        Colors updateColor = colorsDao.findOne(id);
+        Colors updateColor = colorsDao.findById(id).orElse(new Colors());
 
         updateColor.setArchive("no");
         updateColor.setHidden("yes");
@@ -312,7 +312,7 @@ public class Admin {
     // PRODUCT
     public static void reactivateProduct(int id, ProductsDao productsDao) {
 
-        Products updateProduct = productsDao.findOne(id);
+        Products updateProduct = productsDao.findById(id).orElse(new Products());
 
         updateProduct.setArchive("no");
         updateProduct.setHidden("yes");
@@ -322,7 +322,7 @@ public class Admin {
     // SUB-CATEGORY
     public static void reactivateType(int id, TypesDao typesDao) {
 
-        Types reactivate = typesDao.findOne(id);
+        Types reactivate = typesDao.findById(id).orElse(new Types());
         int maxSortId = 0;
 
         for (Types type : typesDao.findAll()) {
@@ -342,7 +342,7 @@ public class Admin {
     // STYLE
     public static void reactivateStyle(int id, StylesDao stylesDao) {
 
-        Styles reactivate = stylesDao.findOne(id);
+        Styles reactivate = stylesDao.findById(id).orElse(new Styles());
         int maxSortId = 0;
 
         for (Styles style : stylesDao.findAll()) {
@@ -362,7 +362,7 @@ public class Admin {
     // SIZE
     public static void reactivateSize(int id, SizesDao sizesDao) {
 
-        Sizes reactivate = sizesDao.findOne(id);
+        Sizes reactivate = sizesDao.findById(id).orElse(new Sizes());
         int maxSortId = 0;
 
         for (Sizes size : sizesDao.findAll()) {

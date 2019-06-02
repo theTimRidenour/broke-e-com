@@ -104,7 +104,7 @@ public class Data {
 
             int imageId = addImage(file, productId, photosDao);
             Inventory newItem = new Inventory();
-            Products oneProduct = productsDao.findOne(productId);
+            Products oneProduct = productsDao.findById(productId).orElse(new Products());
 
             for (int i : sizeIds) {
                 newItem = new Inventory();
@@ -131,7 +131,7 @@ public class Data {
     public static void addProduct (int categoryId, int typeId, int[] styleId, StylesDao stylesDao, String name, MultipartFile file, PhotosDao photosDao, ProductsDao productsDao, TypesDao typesDao) {
 
         Products newProduct = new Products();
-        Types oneType = typesDao.findOne(typeId);
+        Types oneType = typesDao.findById(typeId).orElse(new Types());
 
         newProduct.setName(name);
         newProduct.setCategoryId(categoryId);
@@ -145,7 +145,7 @@ public class Data {
         if (styleId != null) {
 
             for (int i : styleId) {
-                if (stylesDao.findOne(i).getCategory().getId() == categoryId) {
+                if (stylesDao.findById(i).orElse(new Styles()).getCategory().getId() == categoryId) {
                     newProduct.addStyleId(i);
                 }
             }
@@ -153,7 +153,7 @@ public class Data {
 
         productsDao.save(newProduct);
 
-        Types type = typesDao.findOne(typeId);
+        Types type = typesDao.findById(typeId).orElse(new Types());
 
         int productId = 0;
 
@@ -166,7 +166,7 @@ public class Data {
         if (!file.isEmpty()) {
             int imageId = addImage(file, productId, photosDao);
 
-            Products updateProduct = productsDao.findOne(productId);
+            Products updateProduct = productsDao.findById(productId).orElse(new Products());
             updateProduct.setImageId(imageId);
 
             productsDao.save(updateProduct);
@@ -202,7 +202,7 @@ public class Data {
     // ADD STYLE
     public static void addStyle(String styleName, int categoryId, StylesDao stylesDao, CategoriesDao categoriesDao) {
 
-        Categories cat = categoriesDao.findOne(categoryId);
+        Categories cat = categoriesDao.findById(categoryId).orElse(new Categories());
 
         Styles style = new Styles();
         style.setName(styleName);
@@ -245,7 +245,7 @@ public class Data {
         type.setHidden("yes");
         type.setArchive("no");
         type.setCatArchive("no");
-        Categories cat = categoriesDao.findOne(categoryId);
+        Categories cat = categoriesDao.findById(categoryId).orElse(new Categories());
         type.setCategory(cat);
         typesDao.save(type);
 
@@ -278,7 +278,7 @@ public class Data {
     // UPDATE QUANTITY OF INVENTORY ITEM
     public static void updateItemQuantity(int itemId, int quantity, InventoryDao inventoryDao) {
 
-        Inventory item = inventoryDao.findOne(itemId);
+        Inventory item = inventoryDao.findById(itemId).orElse(new Inventory());
 
         if (quantity < 0) {
             quantity = 0;
@@ -293,7 +293,7 @@ public class Data {
     // DELETE CATEGORY
     public static void delCat(int categoryId, CategoriesDao categoriesDao, TypesDao typesDao, StylesDao stylesDao) {
 
-        Categories cat = categoriesDao.findOne(categoryId);
+        Categories cat = categoriesDao.findById(categoryId).orElse(new Categories());
 
         categoriesDao.delete(cat);
 
@@ -313,7 +313,7 @@ public class Data {
     // DELETE COLOR
     public static void delColor(int colorId, ColorsDao colorsDao) {
 
-        Colors color = colorsDao.findOne(colorId);
+        Colors color = colorsDao.findById(colorId).orElse(new Colors());
         // IF COLOR HAS AN IMAGE ASSOCIATION, DELETE IMAGE
         if (color.getUrl() != null) {
             File file = new File(StorageProperties.getLocation() + color.getUrl());
@@ -326,10 +326,10 @@ public class Data {
     // DELETE PRODUCT
     public static void delProduct(int productId, ProductsDao productsDao, PhotosDao photosDao) {
 
-        Products product = productsDao.findOne(productId);
+        Products product = productsDao.findById(productId).orElse(new Products());
         // IF PRODUCT HAS AN IMAGE ASSOCIATED, DELETE IMAGE
         if (product.getImageId() != 0) {
-            Photos photo = photosDao.findOne(product.getImageId());
+            Photos photo = photosDao.findById(product.getImageId()).orElse(new Photos());
             File file = new File(StorageProperties.getLocation() + photo.getUrl());
             file.delete();
             photosDao.delete(photo);
@@ -341,18 +341,18 @@ public class Data {
     // DELETE SIZE
     public static void delSize(int sizeId, SizesDao sizesDao) {
 
-        sizesDao.delete(sizeId);
+        sizesDao.deleteById(sizeId);
     }
 
     // DELETE STYLE
     public static void delStyle(int styleId, StylesDao stylesDao) {
 
-        stylesDao.delete(styleId);
+        stylesDao.deleteById(styleId);
     }
 
     // DELETE SUB-CATEGORY
     public static void delType(int typeId, TypesDao typesDao) {
 
-        typesDao.delete(typeId);
+        typesDao.deleteById(typeId);
     }
 }
