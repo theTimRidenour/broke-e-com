@@ -115,7 +115,7 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
-    // ADD SUBCATEGORY
+    // ADD SUB-CATEGORY
     @RequestMapping(value="add/subcategory", method = RequestMethod.POST)
     public String addType(@RequestParam("typeName") String typeName, @RequestParam("categoryId") int categoryId) {
 
@@ -180,7 +180,7 @@ public class DataController {
         return "redirect:/admin/archive";
     }
 
-    // DELETE SUBCATEGORY AND ALL ASSOCIATED FILES
+    // DELETE SUB-CATEGORY AND ALL ASSOCIATED FILES
     @RequestMapping(value="delete/type/{id}")
     public String delType(@PathVariable int id) {
 

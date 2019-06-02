@@ -2,22 +2,15 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.data.CategoriesDao;
+import com.brokeshirts.ecom.models.data.ProductsDao;
+import com.brokeshirts.ecom.models.data.TypesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.brokeshirts.ecom.models.Types;
-import com.brokeshirts.ecom.models.Products;
-import com.brokeshirts.ecom.models.Categories;
-
-import com.brokeshirts.ecom.models.data.CategoriesDao;
-import com.brokeshirts.ecom.models.data.ProductsDao;
-import com.brokeshirts.ecom.models.data.TypesDao;
-
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value="store")
@@ -47,7 +40,7 @@ public class StoreController {
         return "store/category";
     }
 
-    // DISPLAY PRODUCTS IN SINGLE SUBCATEGORY
+    // DISPLAY PRODUCTS IN SINGLE SUB-CATEGORY
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
     public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
 

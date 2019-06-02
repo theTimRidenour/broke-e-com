@@ -9,7 +9,7 @@ public class Admin {
 
 //// CHANGE ORDER
 
-    // MOVE CATEGORY UP OR DOWN LIST.
+    // MOVE CATEGORY UP OR DOWN LIST
     public static void moveCat(int sortId, String direction, CategoriesDao categoriesDao) {
 
         if (direction.equals("up")) {
@@ -35,7 +35,7 @@ public class Admin {
         }
     }
 
-    // MOVE SUBCATEGORY UP OR DOWN LIST
+    // MOVE SUB-CATEGORY UP OR DOWN LIST
     public static void moveType(int sortId, String direction, TypesDao typesDao, int categoryId) {
         if (direction.equals("up")) {
             for (Types type : typesDao.findAll()) {

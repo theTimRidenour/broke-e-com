@@ -1,14 +1,13 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.functions.Admin;
+import com.brokeshirts.ecom.functions.Menus;
+import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.brokeshirts.ecom.models.*;
-import com.brokeshirts.ecom.models.data.*;
-import com.brokeshirts.ecom.functions.*;
 
 @Controller
 @RequestMapping(value="admin")
@@ -153,7 +152,7 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    // MOVE SUBCATEGORY(TYPE) UP OR DOWN LIST
+    // MOVE SUB-CATEGORY(TYPE) UP OR DOWN LIST
     @RequestMapping(value="categories/type/{categoryId}/{sortId}/move{direction}")
     public String moveType(@PathVariable int categoryId, @PathVariable int sortId,@PathVariable String direction){
 
@@ -196,7 +195,7 @@ public class AdminController {
         return "redirect:/admin/colors";
     }
 
-    // HIDE SUBCATEGORY(TYPE) FROM CUSTOMERS
+    // HIDE SUB-CATEGORY(TYPE) FROM CUSTOMERS
     @RequestMapping(value="categories/type/{typeId}/hidden/{choice}")
     public String changeTypeHiddenStatus(@PathVariable int typeId, @PathVariable String choice) {
 
@@ -255,7 +254,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    // ARCHIVE SUBCATEGORY
+    // ARCHIVE SUB-CATEGORY
     @RequestMapping(value="categories/type/{typeId}/archive/{categoryId}")
     public String archiveType(@PathVariable int typeId, @PathVariable int categoryId) {
 

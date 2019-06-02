@@ -151,7 +151,7 @@ public class Menus {
         return sortedProducts;
     }
 
-    // SORT ORDER OF SUBCATEGORIES FOR CUSTOMERS
+    // SORT ORDER OF SUB-CATEGORIES FOR CUSTOMERS
     public static ArrayList<Types> sortTypes(CategoriesDao categoriesDao, TypesDao typesDao) {
 
         ArrayList<Types> unsortedTypes = sortTypesAdmin(categoriesDao, typesDao);
@@ -166,7 +166,7 @@ public class Menus {
         return sortedTypes;
     }
 
-    // SORT ORDER OF SUBCATEGORIES FOR ADMIN
+    // SORT ORDER OF SUB-CATEGORIES FOR ADMIN
     public static ArrayList<Types> sortTypesAdmin(CategoriesDao categoriesDao, TypesDao typesDao) {
 
         HashMap<Integer, Integer> categoryTypeCount = catTypeCnt(categoriesDao, typesDao);
@@ -292,7 +292,7 @@ public class Menus {
         return totalProductCnt;
     }
 
-    // SUBCATEGORY TYPE COUNTS FOR ADMIN FORMS
+    // SUB-CATEGORY TYPE COUNTS FOR ADMIN FORMS
     public static HashMap<Integer, Integer> catTypeCnt(CategoriesDao categoriesDao, TypesDao typesDao) {
 
         HashMap<Integer, Integer> categoryTypeCount = new HashMap<>();
