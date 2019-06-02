@@ -19,10 +19,10 @@ public class Inventory {
     @ManyToOne
     private Products products;
 
-    @NotNull
+    private int imageId;
+
     private int sizeId;
 
-    @NotNull
     private int colorId;
 
     @NotNull
@@ -39,12 +39,8 @@ public class Inventory {
 
     private String archiveColor;
 
-    private String archiveProduct;
-
     public Inventory(String sku, int sizeId, int colorId, double price, int quantity) {
         this.sku = sku;
-        this.sizeId = sizeId;
-        this.colorId = colorId;
         this.price = price;
         this.quantity = quantity;
     }
@@ -59,22 +55,6 @@ public class Inventory {
 
     public void setSku(String sku) {
         this.sku = sku;
-    }
-
-    public int getSizeId() {
-        return sizeId;
-    }
-
-    public void setSizeId(int sizeId) {
-        this.sizeId = sizeId;
-    }
-
-    public int getColorId() {
-        return colorId;
-    }
-
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
     }
 
     public double getPrice() {
@@ -123,15 +103,35 @@ public class Inventory {
         this.archiveColor = archiveColor;
     }
 
-    public String getArchiveProduct() {
-        return archiveProduct;
+    public Products getProducts() {
+        return products;
     }
 
-    public void setArchiveProduct(String archiveProduct) {
-        this.archiveProduct = archiveProduct;
+    public void setProducts(Products products) {
+        this.products = products;
     }
 
-    public Products getProduct() { return products; }
+    public int getSizeId() {
+        return sizeId;
+    }
 
-    public void setProduct(Products products) { this.products = products; }
+    public void setSizeId(int sizeId) {
+        this.sizeId = sizeId;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
 }

@@ -108,7 +108,7 @@ public class Menus {
             for (Sizes size : sortSizes(sizesDao)) {
                 for (Products product : sortProductsAdmin(productsDao, categoriesDao, typesDao)) {
                     for (Inventory item : inventoryDao.findAll()) {
-                        if (item.getProduct() == product && item.getSizeId() == size.getId() && item.getColorId() == color.getId() && item.getArchive().equals("no")) {
+                        if (item.getProducts().getId() == product.getId() && item.getSizeId() == size.getId() && item.getColorId() == color.getId() && item.getArchive().equals("no")) {
                             sortedInventory.add(item);
                         }
                     }
@@ -281,7 +281,7 @@ public class Menus {
             if (product.getArchive().equals("no")) {
                 count = 0;
                 for (Inventory item : inventoryDao.findAll()) {
-                    if (item.getArchive().equals("no") && item.getProduct() == product) {
+                    if (item.getArchive().equals("no") && item.getProducts() == product) {
                         count = count + item.getQuantity();
                     }
                 }

@@ -97,6 +97,36 @@ public class Data {
         return imageId;
     }
 
+    // ADD INVENTORY ITEM
+    public static void addItem(double price, int productId, int colorId, int[] sizeIds, MultipartFile file, String sku, ProductsDao productsDao, PhotosDao photosDao, InventoryDao inventoryDao) {
+
+        if (sizeIds != null && !file.isEmpty() && colorId != 0 && productId != 0 && !sku.isEmpty()) {
+
+            int imageId = addImage(file, productId, photosDao);
+            Inventory newItem = new Inventory();
+            Products oneProduct = productsDao.findOne(productId);
+
+            for (int i : sizeIds) {
+                newItem = new Inventory();
+
+                newItem.setProducts(oneProduct);
+                newItem.setColorId(colorId);
+                newItem.setSizeId(i);
+                newItem.setImageId(imageId);
+                newItem.setSku(String.format("%s%s", sku, i));
+                newItem.setPrice(price);
+                newItem.setQuantity(0);
+                newItem.setHidden("yes");
+                newItem.setArchive("no");
+                newItem.setArchiveSize("no");
+                newItem.setArchiveColor("no");
+
+                inventoryDao.save(newItem);
+            }
+
+        }
+    }
+
     // ADD PRODUCT
     public static void addProduct (int categoryId, int typeId, int[] styleId, StylesDao stylesDao, String name, MultipartFile file, PhotosDao photosDao, ProductsDao productsDao, TypesDao typesDao) {
 
@@ -134,7 +164,6 @@ public class Data {
         }
 
         if (!file.isEmpty()) {
-            System.out.println("file not empty");
             int imageId = addImage(file, productId, photosDao);
 
             Products updateProduct = productsDao.findOne(productId);

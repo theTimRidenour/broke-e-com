@@ -1,19 +1,14 @@
 package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Data;
-import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.models.data.*;
-import com.brokeshirts.ecom.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value="data")
@@ -72,6 +67,23 @@ public class DataController {
             Data.addColor(file, hex, name, colorsDao);
         }
         return "redirect:/admin/colors";
+    }
+
+    // ADD INVENTORY ITEM
+    @RequestMapping(value="add/item", method = RequestMethod.POST)
+    public String addItem(@RequestParam int productId, @RequestParam int colorId, @RequestParam(value="sizeIds", required = true) int[] sizeIds, @RequestParam("file") MultipartFile file, @RequestParam String sku, @RequestParam double price) {
+
+        System.out.println("productId: " + productId);
+        System.out.println("colorId: " + colorId);
+        for (int i : sizeIds) {
+            System.out.println("sizeId: " + i);
+        }
+        System.out.println("SKU: " + sku);
+        System.out.println("Price: $" + price);
+
+        Data.addItem(price, productId, colorId, sizeIds, file, sku, productsDao, photosDao, inventoryDao);
+
+        return "redirect:/admin/products";
     }
 
     // ADD PRODUCT
