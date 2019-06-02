@@ -468,3 +468,31 @@ a .admin_menu_button:hover {
     margin-top: 255px;
 }
 
+.blockIt {
+    display: block;
+    margin: 0 30px;
+    padding-left: 20px;
+}
+
+.blockIt:hover {
+    border: 0.5px solid #606060;
+}
+
+.quant_input {
+    display: block;
+    position: absolute;
+    width: 40px;
+    font-size: 12px;
+    text-align: right;
+    margin-top: -19px;
+    margin-left: 675px;
+    padding-top: 1px;
+}
+
+.quant_submit {
+    display: block;
+    position: absolute;
+    margin-top: -19px;
+    margin-left: 720px;
+    font-size: 12px;
+}

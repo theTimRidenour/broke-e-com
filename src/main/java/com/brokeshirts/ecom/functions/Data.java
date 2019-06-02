@@ -273,6 +273,20 @@ public class Data {
         typesDao.save(newType);
     }
 
+//// UPDATE DATA
+
+    // UPDATE QUANTITY OF INVENTORY ITEM
+    public static void updateItemQuantity(int itemId, int quantity, InventoryDao inventoryDao) {
+
+        Inventory item = inventoryDao.findOne(itemId);
+
+        if (quantity < 0) {
+            quantity = 0;
+        }
+
+        item.setQuantity(quantity);
+        inventoryDao.save(item);
+    }
 
 //// DELETE ITEM AND ASSOCIATED FILES
 

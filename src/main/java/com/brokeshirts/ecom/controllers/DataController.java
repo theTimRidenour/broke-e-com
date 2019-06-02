@@ -125,6 +125,18 @@ public class DataController {
         return "redirect:/admin/categories";
     }
 
+//// UPDATE DATA
+
+    // UPDATE QUANTITY OF INVENTORY ITEM
+    @RequestMapping(value="update/quantity", method = RequestMethod.POST)
+    public String updateItemQuantity(@RequestParam int itemId, @RequestParam int quantity) {
+
+        if (itemId != 0) {
+            Data.updateItemQuantity(itemId, quantity, inventoryDao);
+        }
+        return "redirect:/admin/products";
+    }
+
 
 //// DELETE DATA
 
