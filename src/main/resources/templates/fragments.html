@@ -1,10 +1,16 @@
-<head th:fragment="head">
+<!-- HEAD -->
+
+<head th:fragment="head" xmlns:th="http://www.w3.org/1999/xhtml">
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" />
     <title th:text="${title}" style="display: none;">Page Title</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <link th:if="${title == 'CHECKOUT'}" rel="stylesheet" th:href="@{/css/checkout.css}" />
     <link th:if="${title == 'ADMIN'}" rel="stylesheet" th:href="@{/css/admin.css}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
+    <script style="display: none;" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script style="display: none;" src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <style style="display: none;" th:each="menuItem : ${menuItems}" th:text="${'
     .subMenuClass' + menuItem.id + ' {
          display: none;
@@ -19,7 +25,6 @@
         margin-left: -5px;
     }'}">
     </style>
-    <script style="display: none;" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script style="display: none;">
         $(document).ready(function(){
             $('#add_product').click(function() {
@@ -56,7 +61,37 @@
             })
         })
     </script>
+    <script type="text/javascript" style="display: none;">
+        $.get("/user", function(data) {
+            $("#user").html(data.userAuthentication.details.name);
+            $(".unauthenticated").hide()
+            $(".authenticated").show()
+        });
+
+        var logout = function() {
+            $.post("/logout", function() {
+                $("#user").html('');
+                $(".unauthenticated").show();
+                $(".authenticated").hide();
+            })
+            return true;
+        }
+
+        $.ajaxSetup({
+            beforeSend : function(xhr, settings) {
+                if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        xhr.setRequestHeader("X-XSRF-TOKEN", Cookies.get('XSRF-TOKEN'));
+                    }
+                }
+            }
+        });
+    </script>
 </head>
+
+
+<!-- HEADER -->
+
 
 <div id="header" th:fragment="header">
     <div id="header_box">
@@ -66,7 +101,15 @@
             <div class="divide txt_white">|</div>
             <div class="link txt_white">Contact</div>
             <div class="divide txt_white">|</div>
-            <div class="link txt_white">Login</div>
+            <div class="link txt_white container unauthenticated">
+                Login with <a href="/login/facebook">Facebook</a><a href="/login/github">Github</a>
+            </div>
+            <div class="link txt_white container authenticated" style="display: none;">
+                <div style="color: #ffffff;" id="user"></div>
+                <div>
+                    <button onclick="logout()" class="btn btn-primary">Logout</button>
+                </div>
+            </div>
         </div>
         <div id="cart">
             <i class="fas fa-shopping-cart cart"></i>
@@ -89,6 +132,10 @@
         </div>
     </div>
 </div>
+
+
+<!-- FOOTER -->
+
 
 <div id="footer" th:fragment="footer">
     <div class="nav flex-row">
@@ -124,6 +171,10 @@
     </div>
     <div class="copyright txt_white">&copy;2019 &nbsp; 4425 Entertainment Company</div>
 </div>
+
+
+<!-- ADMIN MENU -->
+
 
 <div id="admin_menu" th:fragment="admin_menu">
     <a th:href="@{'/admin'}" th:unless="${adminMenu == 'orders'}"><div class="admin_menu_button">Orders</div></a>
