@@ -54,6 +54,7 @@ public class MainController {
         model.addAttribute("products", Store.revProdsByType(typesDao, productsDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("photos", photosDao.findAll());
 
         return "index";
     }

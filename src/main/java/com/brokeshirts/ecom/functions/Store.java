@@ -1,6 +1,7 @@
 package com.brokeshirts.ecom.functions;
 
 import com.brokeshirts.ecom.models.Categories;
+import com.brokeshirts.ecom.models.Inventory;
 import com.brokeshirts.ecom.models.Products;
 import com.brokeshirts.ecom.models.Types;
 import com.brokeshirts.ecom.models.data.CategoriesDao;
@@ -9,6 +10,7 @@ import com.brokeshirts.ecom.models.data.TypesDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class Store {
 
@@ -97,21 +99,23 @@ public class Store {
     }
 
     // LIST OF FEATURED PRODUCTS
-    public static ArrayList<Products> featuredProducts(ProductsDao productsDao) {
+    public static ArrayList<HashMap<Products, HashMap<Float, Float>>> featuredProducts(ProductsDao productsDao) {
 
         ArrayList<Products> revProds = revProducts(productsDao);
-        ArrayList<Products> featured = new ArrayList<>();
+        ArrayList<Products> availableProds = availableProducts(revProds);
+        ArrayList<HashMap<Products, HashMap<Float, Float>>> productsWithPriceRange = productPriceRange(availableProds);
+        ArrayList<HashMap<Products, HashMap<Float, Float>>> featured = new ArrayList<>();
         int counter = 0;
 
-        if (revProds.size() < 4) {
-            counter = revProds.size();
+        if (availableProds.size() < 4) {
+            counter = availableProds.size();
         } else {
             counter = 4;
         }
 
-        for (Products product : revProds) {
+        for (HashMap<Products, HashMap<Float, Float>> item : productsWithPriceRange) {
             if (counter > 0) {
-                featured.add(product);
+                featured.add(item);
                 counter--;
             }
         }
@@ -138,6 +142,54 @@ public class Store {
         }
 
         return indexProducts;
+    }
+
+    // LIST OF AVAILABLE PRODUCTS
+    private static ArrayList<Products> availableProducts(ArrayList<Products> products) {
+        ArrayList<Products> availableProds = new ArrayList<>();
+        int addProd = 0;
+
+        for (Products checkProduct : products) {
+            addProd = 0;
+            for (Inventory item : checkProduct.getInventory()) {
+                if (item.getQuantity() > 0) {
+                    addProd = 1;
+                }
+            }
+            if (addProd == 1) {
+                availableProds.add(checkProduct);
+            }
+        }
+
+        return availableProds;
+    }
+
+    // LIST OF PRODUCTS WITH RANGE OF PRICES
+    private static ArrayList<HashMap<Products, HashMap<Float, Float>>> productPriceRange(ArrayList<Products> products) {
+        ArrayList<HashMap<Products, HashMap<Float, Float>>> prodsWithPriceRange = new ArrayList<>();
+        HashMap<Products, HashMap<Float, Float>> prosWithPriceRange = new HashMap<>();
+        HashMap<Float, Float> prices = new HashMap<>();
+
+        Float maxPrice = Float.valueOf(0);
+        Float minPrice = Float.valueOf(0);
+
+        for (Products findPrices : products) {
+            for (Inventory item : findPrices.getInventory()) {
+                if (maxPrice == 0) {
+                    maxPrice = item.getPrice();
+                    minPrice = item.getPrice();
+                } else if (maxPrice < item.getPrice()) {
+                    maxPrice = item.getPrice();
+                } else if (minPrice > item.getPrice()) {
+                    minPrice = item.getPrice();
+                }
+            }
+            prices.put(minPrice, maxPrice);
+            prosWithPriceRange.put(findPrices, prices);
+            prodsWithPriceRange.add(prosWithPriceRange);
+        }
+
+        return prodsWithPriceRange;
     }
 
 

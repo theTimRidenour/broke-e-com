@@ -54,9 +54,7 @@ public class Inventory {
         this.sku = sku;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    public Float getPrice() { return (float) price; }
 
     public void setPrice(double price) {
         this.price = price;
