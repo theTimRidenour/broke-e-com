@@ -64,7 +64,7 @@
                 </div>
                 <input class="sel_image2" type="file" accept="image/*" name="file" />
                 <input class="sel_name2" required="required" type="text" name="sku" placeholder="SKU (prefix)" />
-                <input class="sel_price" required="required" type="number" name="price" placeholder="price ($)" />
+                <input class="sel_price" required="required" type="number" name="price" value="0.00" step="0.01" placeholder="price ($)" />
                 <input class="sel_submit2" type="submit" value="Add Product" />
             </form>
         </div>
@@ -101,7 +101,7 @@
                         <div th:each="item, iStat : ${product.inventory}" th:if="${color.id == item.colorId}">
                             <div class="subItem blockIt" th:if="${size.id == item.sizeId}" th:style="${iStat.odd}? 'background-color: #f3f2f2;'">
                                 <i class="fas fa-palette" th:style="|color: ${color.hex}; text-shadow: 1px 1px black; margin-top: 2px;|"></i>
-                                <div th:text="${'&nbsp; ' + size.longName + ' - $' + item.price + '0'}"></div>
+                                <div th:text="${'&nbsp; ' + size.longName + ' - $' + item.price}"></div>
                                 <div style="font-size: 8px;"><a th:href="${'products/inventory/' + item.id + '/archive/' + product.id}">A</a><br /></div>
                                 <form th:action="@{/data/update/quantity}" method="post">
                                     <input type="hidden" name="itemId" th:value="${item.id}" />

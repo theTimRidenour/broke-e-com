@@ -1,18 +1,51 @@
 package com.brokeshirts.ecom.functions;
 
-import com.brokeshirts.ecom.models.Categories;
-import com.brokeshirts.ecom.models.Inventory;
-import com.brokeshirts.ecom.models.Products;
-import com.brokeshirts.ecom.models.Types;
+import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.CategoriesDao;
+import com.brokeshirts.ecom.models.data.PhotosDao;
 import com.brokeshirts.ecom.models.data.ProductsDao;
 import com.brokeshirts.ecom.models.data.TypesDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Store {
+
+    public static class listedProducts {
+        private String name;
+
+        private String imageUrl;
+
+        private String maxPrice;
+
+        private String minPrice;
+
+        private int categoryId;
+
+        public listedProducts() {}
+
+        public String getName() { return name; }
+
+        public void setName(String name) { this.name = name; }
+
+        public String getImageUrl() { return imageUrl; }
+
+        public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+        public String getMaxPrice() { return maxPrice; }
+
+        public void setMaxPrice(String maxPrice) { this.maxPrice = maxPrice; }
+
+        public String getMinPrice() { return minPrice; }
+
+        public void setMinPrice(String minPrice) { this.minPrice = minPrice; }
+
+        public int getCategoryId() { return categoryId; }
+
+        public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+    }
 
 //// FIND BY NAME
 
@@ -99,49 +132,201 @@ public class Store {
     }
 
     // LIST OF FEATURED PRODUCTS
-    public static ArrayList<HashMap<Products, HashMap<Float, Float>>> featuredProducts(ProductsDao productsDao) {
+    public static ArrayList<listedProducts> featuredProducts(ProductsDao productsDao, PhotosDao photosDao) {
+        ArrayList<listedProducts> returnProducts = new ArrayList<>();
+        listedProducts newProd = new listedProducts();
+        String name = "";
+        int imageId = 0;
+        Photos photo = new Photos();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+        int isAvailable = 0;
 
-        ArrayList<Products> revProds = revProducts(productsDao);
-        ArrayList<Products> availableProds = availableProducts(revProds);
-        ArrayList<HashMap<Products, HashMap<Float, Float>>> productsWithPriceRange = productPriceRange(availableProds);
-        ArrayList<HashMap<Products, HashMap<Float, Float>>> featured = new ArrayList<>();
-        int counter = 0;
+        for (Products available : revProducts(productsDao)) {
+            for (Inventory itemCheck : available.getInventory()) {
+                if (itemCheck.getQuantity() > 0) {
+                    isAvailable = 1;
+                }
+            }
+            if (isAvailable == 1) {
+                name = available.getName();
 
-        if (availableProds.size() < 4) {
-            counter = availableProds.size();
-        } else {
-            counter = 4;
+                for (Inventory items : available.getInventory()) {
+                    if (maxPrice == 0) {
+                        maxPrice = (float) items.getPrice();
+                        minPrice = (float) items.getPrice();
+                        imageId = items.getImageId();
+                    } else if (maxPrice < items.getPrice()) {
+                        maxPrice = (float) items.getPrice();
+                    } else if (minPrice > items.getPrice()) {
+                        minPrice = (float) items.getPrice();
+                    }
+                }
+                photo = photosDao.findById(imageId).orElse(new Photos());
+
+                newProd.setName(name);
+                newProd.setImageUrl(photo.getUrl());
+                newProd.setMaxPrice(String.format("%.2f", maxPrice));
+                newProd.setMinPrice(String.format("%.2f", minPrice));
+                returnProducts.add(newProd);
+                newProd = new listedProducts();
+                name = "";
+                imageId = 0;
+                maxPrice = (float) 0;
+                minPrice = (float) 0;
+            }
+            isAvailable = 0;
         }
 
-        for (HashMap<Products, HashMap<Float, Float>> item : productsWithPriceRange) {
-            if (counter > 0) {
-                featured.add(item);
-                counter--;
+        ArrayList<listedProducts> cntReturnProducts = new ArrayList<>();
+
+        int cnt = 1;
+        int maxCnt = 4;
+
+        if (returnProducts.size() < maxCnt) {
+            maxCnt = returnProducts.size();
+        }
+
+        for (listedProducts listed : returnProducts) {
+            if (cnt <= maxCnt) {
+                cntReturnProducts.add(listed);
+                cnt++;
             }
         }
 
-        return featured;
+        return cntReturnProducts;
     }
 
     // LIST OF LAST FOUR PRODUCTS FROM EACH SUB-CATEGORY
-    public static ArrayList<Products> revProdsByType(TypesDao typesDao, ProductsDao productsDao) {
-
-        ArrayList<Products> indexProducts = new ArrayList<>();
-        int counter = 0;
+    public static ArrayList<listedProducts> revProdsByType(TypesDao typesDao, ProductsDao productsDao, PhotosDao photosDao) {
+        ArrayList<listedProducts> returnList = new ArrayList<>();
+        ArrayList<Products> sortListOne = revProducts(productsDao);
+        ArrayList<Products> sortListTwo = availableProducts(sortListOne);
+        int cnt = 1;
+        int maxCnt = 4;
 
         for (Types type : typesDao.findAll()) {
-            counter = 4;
-            for (Products product : revProducts(productsDao)) {
-                if (counter > 0) {
-                    if (product.getType() == type) {
-                        indexProducts.add(product);
-                        counter--;
+            for (Products product : sortListTwo) {
+                if (product.getType() == type) {
+                    if (cnt <= maxCnt) {
+                        sortListOne.add(product);
+                        cnt++;
                     }
                 }
             }
+            cnt = 1;
         }
 
-        return indexProducts;
+        listedProducts newProd = new listedProducts();
+        String name = "";
+        int categoryId = 0;
+        int imageId = 0;
+        Photos photo = new Photos();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+
+        for (Products product : sortListOne) {
+            name = product.getName();
+            categoryId = product.getCategoryId();
+
+            for (Inventory items : product.getInventory()) {
+                if (maxPrice == 0) {
+                    maxPrice = (float) items.getPrice();
+                    minPrice = (float) items.getPrice();
+                    imageId = items.getImageId();
+                } else if (maxPrice < items.getPrice()) {
+                    maxPrice = (float) items.getPrice();
+                } else if (minPrice > items.getPrice()) {
+                    minPrice = (float) items.getPrice();
+                }
+            }
+            photo = photosDao.findById(imageId).orElse(new Photos());
+
+            newProd.setName(name);
+            newProd.setCategoryId(categoryId);
+            newProd.setImageUrl(photo.getUrl());
+            newProd.setMaxPrice(String.format("%.2f", maxPrice));
+            newProd.setMinPrice(String.format("%.2f", minPrice));
+            returnList.add(newProd);
+            newProd = new listedProducts();
+            name = "";
+            imageId = 0;
+            maxPrice = (float) 0;
+            minPrice = (float) 0;
+        }
+
+        return returnList;
+    }
+
+    // LIST OF LAST FOUR PRODUCTS FROM EACH CATEGORY
+    public static ArrayList<listedProducts> revProdsByCat(CategoriesDao categoriesDao, ProductsDao productsDao, PhotosDao photosDao) {
+        ArrayList<listedProducts> returnList = new ArrayList<>();
+        ArrayList<Products> sortListOne = revProducts(productsDao);
+
+        for (Products prod : sortListOne) {
+        }
+
+        ArrayList<Products> sortListTwo = availableProducts(sortListOne);
+        sortListOne.clear();
+
+        for (Products prod : sortListTwo) {
+        }
+
+        int cnt = 1;
+        int maxCnt = 4;
+
+        for (Categories cat : categoriesDao.findAll()) {
+            for (Products product : sortListTwo) {
+                if (product.getCategoryId() == cat.getId()) {
+                    if (cnt <= maxCnt) {
+                        sortListOne.add(product);
+                        cnt++;
+                    }
+                }
+            }
+            cnt = 1;
+        }
+
+        listedProducts newProd = new listedProducts();
+        String name = "";
+        int categoryId = 0;
+        int imageId = 0;
+        Photos photo = new Photos();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+
+        for (Products product : sortListOne) {
+
+            name = product.getName();
+            categoryId = product.getCategoryId();
+
+            for (Inventory items : product.getInventory()) {
+                if (maxPrice == 0) {
+                    maxPrice = (float) items.getPrice();
+                    minPrice = (float) items.getPrice();
+                    imageId = items.getImageId();
+                } else if (maxPrice < items.getPrice()) {
+                    maxPrice = (float) items.getPrice();
+                } else if (minPrice > items.getPrice()) {
+                    minPrice = (float) items.getPrice();
+                }
+            }
+            photo = photosDao.findById(imageId).orElse(new Photos());
+
+            newProd.setName(name);
+            newProd.setCategoryId(categoryId);
+            newProd.setImageUrl(photo.getUrl());
+            newProd.setMaxPrice(String.format("%.2f", maxPrice));
+            newProd.setMinPrice(String.format("%.2f", minPrice));
+            returnList.add(newProd);
+            newProd = new listedProducts();
+            name = "";
+            imageId = 0;
+            maxPrice = (float) 0;
+            minPrice = (float) 0;
+        }
+
+        return returnList;
     }
 
     // LIST OF AVAILABLE PRODUCTS
@@ -207,5 +392,30 @@ public class Store {
         Collections.reverse(reverseList);
 
         return reverseList;
+    }
+
+    // ADD IMAGE_IDs
+    private static ArrayList<HashMap<Products, HashMap<Integer, HashMap<Float, Float>>>> addImages(ArrayList<HashMap<Products, HashMap<Float, Float>>> products) {
+        ArrayList<HashMap<Products, HashMap<Integer, HashMap<Float, Float>>>> returnList = new ArrayList<>();
+        HashMap<Integer, HashMap<Float, Float>> addedImage = new HashMap<>();
+        HashMap<Products, HashMap<Integer, HashMap<Float, Float>>> singleListItem = new HashMap<>();
+        Integer imageId = 0;
+
+        for (HashMap<Products, HashMap<Float, Float>> prods : products) {
+            for (Map.Entry<Products, HashMap<Float, Float>> singleProd : prods.entrySet()) {
+                if (singleProd.getKey().getImageId() != 0) {
+                    imageId = singleProd.getKey().getImageId();
+                } else {
+                    for (Inventory item : singleProd.getKey().getInventory()) {
+                        imageId = item.getImageId();
+                    }
+                }
+                addedImage.put(imageId, singleProd.getValue());
+                singleListItem.put(singleProd.getKey(), addedImage);
+                returnList.add(singleListItem);
+            }
+        }
+
+        return returnList;
     }
 }

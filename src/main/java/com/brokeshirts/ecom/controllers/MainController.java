@@ -2,12 +2,11 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
-
-import com.brokeshirts.ecom.models.data.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
@@ -49,12 +48,11 @@ public class MainController {
     public String index(Model model) {
 
         model.addAttribute("title", "Broke Shirts");
-        model.addAttribute("featured", Store.featuredProducts(productsDao));
+        model.addAttribute("featured", Store.featuredProducts(productsDao, photosDao));
         model.addAttribute("types", Menus.sortTypes(categoriesDao, typesDao));
-        model.addAttribute("products", Store.revProdsByType(typesDao, productsDao));
+        model.addAttribute("products", Store.revProdsByCat(categoriesDao, productsDao, photosDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
-        model.addAttribute("photos", photosDao.findAll());
 
         return "index";
     }

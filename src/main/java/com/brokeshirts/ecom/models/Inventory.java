@@ -23,7 +23,7 @@ public class Inventory {
     private int colorId;
 
     @NotNull
-    private double price;
+    private float price;
 
     @NotNull
     private int quantity;
@@ -36,7 +36,7 @@ public class Inventory {
 
     private String archiveColor;
 
-    public Inventory(String sku, int sizeId, int colorId, double price, int quantity) {
+    public Inventory(String sku, int sizeId, int colorId, float price, int quantity) {
         this.sku = sku;
         this.price = price;
         this.quantity = quantity;
@@ -54,11 +54,9 @@ public class Inventory {
         this.sku = sku;
     }
 
-    public Float getPrice() { return (float) price; }
+    public float getPrice() { return price; }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public void setPrice(float price) { this.price = price; }
 
     public int getQuantity() {
         return quantity;

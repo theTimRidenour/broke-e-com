@@ -9,15 +9,13 @@
     <span class="title1">Featured Products</span>
     <span class="title2">The latest and greatest products from Broke Shirts.</span>
   </div>
-  <div class="section_full">
 
-    <p th:unless="${featured} and ${featured.size()}"><strong>No Featured Products</strong></p>
-    <div class="product" th:each="products : ${featured}">
-        <div th:each="product : ${products}"><div th:each="price : ${product.value}">
-            <div class="product_img" th:style="${'background-image: url(/upload/image/' + photos[product.key.imageId].url + ');'}"></div>
-            <div class="product_des"><span th:text="${product.key.name}">TITLE</span><strong th:text="'$' + ${price.key + '0 - $' + price.value + '0'}">$17.00</strong></div>
-        </div></div>
-    </div>
+  <div class="section_full">
+      <p th:unless="${featured} and ${featured.size()}"><strong>No Featured Products</strong></p>
+      <div class="product" th:each="product : ${featured}">
+          <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}"></div>
+          <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.minPrice + ' - $' + product.maxPrice}" th:unless="${product.minPrice == product.maxPrice}">$17.00</strong><strong th:text="'$' + ${product.minPrice}" th:if="${product.minPrice == product.maxPrice}">$17.00</strong></div>
+      </div>
   </div>
 
   <div th:each="category : ${menuItems}">
@@ -27,10 +25,10 @@
              <a th:href="'/store/' + ${category.name} + '/' + ${type.name}" th:text="'&nbsp;&nbsp;' + ${type.name} + '&nbsp;&nbsp;'"></a>
           </span><br />
           <div th:each="product : ${products}" style="display: inline-block;">
-              <div class="product" th:each="type : ${types}" th:if="${product.type.id == type.id and type.category.id == category.id}">
-                 <div class="product_img"></div>
-                 <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.type.id}">$17.00</strong></div>
-               </div>
+              <div class="product" th:if="${product.categoryId == category.id}">
+                  <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}"></div>
+                  <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.minPrice + ' - $' + product.maxPrice}" th:unless="${product.minPrice == product.maxPrice}">$17.00</strong><strong th:text="'$' + ${product.minPrice}" th:if="${product.minPrice == product.maxPrice}">$17.00</strong></div>
+              </div>
           </div>
       </div>
   </div>
