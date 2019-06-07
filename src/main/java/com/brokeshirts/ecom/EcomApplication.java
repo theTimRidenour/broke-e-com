@@ -121,7 +121,7 @@ public class EcomApplication extends WebSecurityConfigurerAdapter {
 		http
 				.antMatcher("/**")
 				.authorizeRequests()
-					.antMatchers("/", "/login**", "/error**", "/store**", "/store/**", "/terms", "/policy")
+					.antMatchers("/", "/login**", "/error**", "/store**", "/store/**", "/terms", "/policy", "/css/**", "/images/**", "/upload/**")
 					.permitAll()
 				.anyRequest()
 					.authenticated()
