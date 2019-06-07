@@ -98,7 +98,7 @@ public class Data {
     }
 
     // ADD INVENTORY ITEM
-    public static void addItem(double price, int productId, int colorId, int[] sizeIds, MultipartFile file, String sku, ProductsDao productsDao, PhotosDao photosDao, InventoryDao inventoryDao) {
+    public static void addItem(float price, int productId, int colorId, int[] sizeIds, MultipartFile file, String sku, ProductsDao productsDao, PhotosDao photosDao, InventoryDao inventoryDao) {
 
         if (sizeIds != null && !file.isEmpty() && colorId != 0 && productId != 0 && !sku.isEmpty()) {
 

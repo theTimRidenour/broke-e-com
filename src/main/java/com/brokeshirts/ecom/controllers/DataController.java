@@ -71,7 +71,7 @@ public class DataController {
 
     // ADD INVENTORY ITEM
     @RequestMapping(value="add/item", method = RequestMethod.POST)
-    public String addItem(@RequestParam int productId, @RequestParam int colorId, @RequestParam(value="sizeIds", required = true) int[] sizeIds, @RequestParam("file") MultipartFile file, @RequestParam String sku, @RequestParam double price) {
+    public String addItem(@RequestParam int productId, @RequestParam int colorId, @RequestParam(value="sizeIds", required = true) int[] sizeIds, @RequestParam("file") MultipartFile file, @RequestParam String sku, @RequestParam float price) {
 
         System.out.println("productId: " + productId);
         System.out.println("colorId: " + colorId);
