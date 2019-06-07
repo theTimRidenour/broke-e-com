@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,8 +82,8 @@ public class EcomApplication extends WebSecurityConfigurerAdapter {
 
 	@RequestMapping("/user")
 	public Principal user(Principal principal) {
-		return principal;
-	}
+
+		return principal; }
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcomApplication.class, args);
@@ -96,33 +97,9 @@ public class EcomApplication extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	@ConfigurationProperties("facebook.client")
-	public AuthorizationCodeResourceDetails facebook() {
-		return new AuthorizationCodeResourceDetails();
-	}
-
-	@Bean
-	@ConfigurationProperties("facebook.resource")
-	public ResourceServerProperties facebookResource() {
-		return new ResourceServerProperties();
-	}
-
-	@Bean
 	@ConfigurationProperties("facebook")
 	public ClientResources facebook() {
 		return new ClientResources();
-	}
-
-	@Bean
-	@ConfigurationProperties("github.client")
-	public AuthorizationCodeResourceDetails github() {
-		return new AuthorizationCodeResourceDetails();
-	}
-
-	@Bean
-	@ConfigurationProperties("github.resource")
-	public ResourceServerProperties githubResource() {
-		return new ResourceServerProperties();
 	}
 
 	@Bean
@@ -148,6 +125,9 @@ public class EcomApplication extends WebSecurityConfigurerAdapter {
 					.permitAll()
 				.anyRequest()
 					.authenticated()
+					.and()
+				.exceptionHandling()
+					.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
 					.and()
 				.logout()
 					.logoutSuccessUrl("/")
