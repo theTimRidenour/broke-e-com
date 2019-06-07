@@ -3,6 +3,7 @@ package com.brokeshirts.ecom.controllers;
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.functions.Store;
 import com.brokeshirts.ecom.models.data.CategoriesDao;
+import com.brokeshirts.ecom.models.data.PhotosDao;
 import com.brokeshirts.ecom.models.data.ProductsDao;
 import com.brokeshirts.ecom.models.data.TypesDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class StoreController {
     @Autowired
     ProductsDao productsDao;
 
+    @Autowired
+    PhotosDao photosDao;
+
 //// DISPLAY FORMS
 
     // DISPLAY PRODUCTS IN SINGLE CATEGORY
@@ -33,7 +37,7 @@ public class StoreController {
 
         model.addAttribute("title", categoryName);
         model.addAttribute("types", Store.allCatTypes(categoryName, typesDao, categoriesDao));
-        model.addAttribute("products", Store.limitedProductListByType(categoryName, typesDao, categoriesDao, productsDao));
+        model.addAttribute("products", Store.limitedProductListByType(categoryName, typesDao, categoriesDao, productsDao, photosDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 

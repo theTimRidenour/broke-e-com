@@ -24,6 +24,8 @@ public class Store {
 
         private int categoryId;
 
+        private int typeId;
+
         public listedProducts() {}
 
         public String getName() { return name; }
@@ -45,6 +47,10 @@ public class Store {
         public int getCategoryId() { return categoryId; }
 
         public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+
+        public int getTypeId() { return typeId; }
+
+        public void setTypeId(int typeId) { this.typeId = typeId; }
     }
 
 //// FIND BY NAME
@@ -110,25 +116,58 @@ public class Store {
     }
 
     // LIST FIRST FOUR PRODUCTS FROM EACH SUB-CATEGORY OF A SINGLE CATEGORY BY CATEGORY NAME
-    public static ArrayList<Products> limitedProductListByType(String categoryName, TypesDao typesDao, CategoriesDao categoriesDao, ProductsDao productsDao) {
+    public static ArrayList<listedProducts> limitedProductListByType(String categoryName, TypesDao typesDao, CategoriesDao categoriesDao, ProductsDao productsDao, PhotosDao photosDao) {
 
-        ArrayList<Products> allProducts = new ArrayList<>();
+        ArrayList<Products> allProducts = revProducts(productsDao);
+        ArrayList<Products> availableProducts = availableProducts(allProducts);
         ArrayList<Types> categoryTypes = allCatTypes(categoryName, typesDao, categoriesDao);
+        ArrayList<Products> availableProductsFromTypes = new ArrayList<>();
 
         int limit = 0;
         for (Types type : categoryTypes) {
             limit = 4;
-            for (Products product : productsDao.findAll()) {
+            for (Products product : availableProducts) {
                 if (limit > 0) {
                     if (product.getType() == type) {
-                        allProducts.add(product);
+                        availableProductsFromTypes.add(product);
                         limit--;
                     }
                 }
             }
         }
 
-        return allProducts;
+        ArrayList<listedProducts> returnList = new ArrayList<>();
+        listedProducts newProd = new listedProducts();
+        String name = "";
+        int imageId = 0;
+        Photos photo = new Photos();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+
+        for (Products product : availableProductsFromTypes) {
+            newProd.setName(product.getName());
+
+            for (Inventory items : product.getInventory()) {
+                if (maxPrice == 0) {
+                    maxPrice = (float) items.getPrice();
+                    minPrice = (float) items.getPrice();
+                    imageId = items.getImageId();
+                } else if (maxPrice < items.getPrice()) {
+                    maxPrice = (float) items.getPrice();
+                } else if (minPrice > items.getPrice()) {
+                    minPrice = (float) items.getPrice();
+                }
+            }
+            photo = photosDao.findById(imageId).orElse(new Photos());
+            newProd.setImageUrl(photo.getUrl());
+            newProd.setMaxPrice(String.format("%.2f", maxPrice));
+            newProd.setMinPrice(String.format("%.2f", minPrice));
+            newProd.setTypeId(product.getType().getId());
+            returnList.add(newProd);
+            newProd = new listedProducts();
+        }
+
+        return returnList;
     }
 
     // LIST OF FEATURED PRODUCTS
