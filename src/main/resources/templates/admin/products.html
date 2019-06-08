@@ -101,7 +101,7 @@
                         <div th:each="item, iStat : ${product.inventory}" th:if="${color.id == item.colorId}">
                             <div class="subItem blockIt" th:if="${size.id == item.sizeId}" th:style="${iStat.odd}? 'background-color: #f3f2f2;'">
                                 <i class="fas fa-palette" th:style="|color: ${color.hex}; text-shadow: 1px 1px black; margin-top: 2px;|"></i>
-                                <div th:text="${'&nbsp; ' + size.longName + ' - $' + item.price}"></div>
+                                <div th:text="|&nbsp; ${size.longName} - $${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}|"></div>
                                 <div style="font-size: 8px;"><a th:href="${'products/inventory/' + item.id + '/archive/' + product.id}">A</a><br /></div>
                                 <form th:action="@{/data/update/quantity}" method="post">
                                     <input type="hidden" name="itemId" th:value="${item.id}" />
