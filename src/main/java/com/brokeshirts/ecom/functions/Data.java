@@ -11,6 +11,14 @@ import static com.brokeshirts.ecom.controllers.FileUploadController.internalFile
 
 public class Data {
 
+    private class inventoryCnt {
+        int categoryId;
+        int typeId;
+        int productId;
+        int cnt;
+        int totalCnt;
+    }
+
 //// ADD ITEM
 
     // ADD CATEGORY
@@ -354,5 +362,13 @@ public class Data {
     public static void delType(int typeId, TypesDao typesDao) {
 
         typesDao.deleteById(typeId);
+    }
+
+//// EXTRA DATA FUNCTIONS
+
+    // REPLACE "_" WITH " "
+    public static String replaceUnderscore(String underscoreString) {
+        String replaced = underscoreString.replace('_',' ');
+        return replaced;
     }
 }

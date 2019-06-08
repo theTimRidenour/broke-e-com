@@ -125,7 +125,7 @@
                 <a th:href="'/store/' + ${menuItem.name}" th:text="${menuItem.name}"></a>
                 <div class="subMenu">
                     <span th:class="${'subMenuClass' + menuItem.id}">
-                        <a th:each="subMenuItem : ${subMenuItems}" th:href="${subMenuItem.category.id == menuItem.id}? ${'/store/' + menuItem.name + '/' + subMenuItem.name}" th:text="${subMenuItem.category.id == menuItem.id}? ${subMenuItem.name + '&nbsp;&nbsp;&nbsp;&nbsp;'}" th:unless="${subMenuItem.category.id != menuItem.id}? 'display: none;'"></a>
+                        <a th:each="subMenuItem : ${subMenuItems}" th:href="${subMenuItem.category.id == menuItem.id}? ${'/store/' + #strings.replace(menuItem.name, ' ', '_') + '/' + #strings.replace(subMenuItem.name, ' ', '_')}" th:text="${subMenuItem.category.id == menuItem.id}? ${subMenuItem.name + '&nbsp;&nbsp;&nbsp;&nbsp;'}" th:unless="${subMenuItem.category.id != menuItem.id}? 'display: none;'"></a>
                     </span>
                 </div>
             </span>

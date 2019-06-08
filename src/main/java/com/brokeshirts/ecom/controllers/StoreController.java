@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import static com.brokeshirts.ecom.functions.Data.replaceUnderscore;
+
 @Controller
 @RequestMapping(value="store")
 public class StoreController {
@@ -36,8 +38,8 @@ public class StoreController {
     public String showCat(@PathVariable String categoryName, Model model) {
 
         model.addAttribute("title", categoryName);
-        model.addAttribute("types", Store.allCatTypes(categoryName, typesDao, categoriesDao));
-        model.addAttribute("products", Store.limitedProductListByType(categoryName, typesDao, categoriesDao, productsDao, photosDao));
+        model.addAttribute("types", Store.allCatTypes(replaceUnderscore(categoryName), typesDao, categoriesDao));
+        model.addAttribute("products", Store.limitedProductListByType(replaceUnderscore(categoryName), typesDao, categoriesDao, productsDao, photosDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
@@ -48,9 +50,9 @@ public class StoreController {
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
     public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model) {
 
-        model.addAttribute("title", categoryName + " : " + typeName);
-        model.addAttribute("type", Store.oneTypeByName(typeName, typesDao));
-        model.addAttribute("products", Store.oneCatProducts(typeName, productsDao, typesDao));
+        model.addAttribute("title", replaceUnderscore(categoryName) + " : " + replaceUnderscore(typeName));
+        model.addAttribute("type", Store.oneTypeByName(replaceUnderscore(typeName), typesDao));
+        model.addAttribute("products", Store.oneCatProducts(replaceUnderscore(typeName), productsDao, typesDao, photosDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 

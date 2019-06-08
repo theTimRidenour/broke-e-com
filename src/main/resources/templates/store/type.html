@@ -8,8 +8,8 @@
 <div class="section_full">
     <span class="title1" th:text="${type.name}">Category Name</span>
     <div class="product" th:each="product : ${products}">
-        <div class="product_img" th:if="${product.typeId == type.id}"></div>
-        <div class="product_des" th:if="${product.typeId == type.id}"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.typeId}">$17.00</strong></div>
+        <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}"></div>
+        <div class="product_des"><a th:href="@{'/store/product/' + ${product.productId}}" style="text-decoration: none;" th:text="${product.name}">TITLE</a><strong th:text="'$' + ${product.minPrice + ' - $' + product.maxPrice}" th:unless="${product.minPrice == product.maxPrice}">$17.00</strong><strong th:text="'$' + ${product.minPrice}" th:if="${product.minPrice == product.maxPrice}">$17.00</strong></div>
     </div>
 
 </div>

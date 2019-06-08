@@ -1,10 +1,7 @@
 package com.brokeshirts.ecom.functions;
 
 import com.brokeshirts.ecom.models.*;
-import com.brokeshirts.ecom.models.data.CategoriesDao;
-import com.brokeshirts.ecom.models.data.PhotosDao;
-import com.brokeshirts.ecom.models.data.ProductsDao;
-import com.brokeshirts.ecom.models.data.TypesDao;
+import com.brokeshirts.ecom.models.data.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +22,10 @@ public class Store {
         private int categoryId;
 
         private int typeId;
+
+        private String sku;
+
+        private int productId;
 
         public listedProducts() {}
 
@@ -51,6 +52,14 @@ public class Store {
         public int getTypeId() { return typeId; }
 
         public void setTypeId(int typeId) { this.typeId = typeId; }
+
+        public String getSku() { return sku; }
+
+        public void setSku(String sku) { this.sku = sku; }
+
+        public int getProductId() { return productId; }
+
+        public void setProductId(int productId) { this.productId = productId; }
     }
 
 //// FIND BY NAME
@@ -86,18 +95,52 @@ public class Store {
 //// CREATE LIST
 
     // LIST ALL PRODUCTS FROM SINGLE CATEGORY BY CATEGORY NAME
-    public static ArrayList<Products> oneCatProducts(String typeName, ProductsDao productsDao, TypesDao typesDao) {
+    public static ArrayList<listedProducts> oneCatProducts(String typeName, ProductsDao productsDao, TypesDao typesDao, PhotosDao photosDao) {
 
-        ArrayList<Products> allProducts = new ArrayList<>();
+        ArrayList<Products> allAvailableProducts = availableProducts(revProducts(productsDao));
+        ArrayList<Products> allAvailableTypeProducts = new ArrayList<>();
         Types oneType = oneTypeByName(typeName, typesDao);
+        ArrayList<listedProducts> returnList = new ArrayList<>();
 
-        for (Products product : productsDao.findAll()) {
+        for (Products product : allAvailableProducts) {
             if (product.getType() == oneType) {
-                allProducts.add(product);
+                allAvailableTypeProducts.add(product);
             }
         }
 
-        return allProducts;
+        listedProducts newProd = new listedProducts();
+        Photos photo = new Photos();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+
+        for (Products product : allAvailableTypeProducts) {
+            newProd.setName(product.getName());
+            newProd.setProductId(product.getId());
+
+            for (Inventory item : product.getInventory()) {
+                if (item.getQuantity() > 0) {
+                    if (maxPrice == 0) {
+                        maxPrice = item.getPrice();
+                        minPrice = item.getPrice();
+                        photo = photosDao.findById(item.getImageId()).orElse(new Photos());
+                        newProd.setImageUrl(photo.getUrl());
+                    } else if (maxPrice < item.getPrice()) {
+                        maxPrice = item.getPrice();
+                    } else if (minPrice > item.getPrice()) {
+                        minPrice = item.getPrice();
+                    }
+                }
+            }
+            newProd.setMinPrice(String.format("%.2f", minPrice));
+            newProd.setMaxPrice(String.format("%.2f", maxPrice));
+            returnList.add(newProd);
+            newProd = new listedProducts();
+            maxPrice = (float) 0;
+            minPrice = (float) 0;
+
+        }
+
+        return returnList;
     }
 
     // LIST ALL SUB-CATEGORIES FROM SINGLE CATEGORY BY CATEGORY NAME
@@ -148,14 +191,16 @@ public class Store {
             newProd.setName(product.getName());
 
             for (Inventory items : product.getInventory()) {
-                if (maxPrice == 0) {
-                    maxPrice = (float) items.getPrice();
-                    minPrice = (float) items.getPrice();
-                    imageId = items.getImageId();
-                } else if (maxPrice < items.getPrice()) {
-                    maxPrice = (float) items.getPrice();
-                } else if (minPrice > items.getPrice()) {
-                    minPrice = (float) items.getPrice();
+                if (items.getQuantity() > 0) {
+                    if (maxPrice == 0) {
+                        maxPrice = (float) items.getPrice();
+                        minPrice = (float) items.getPrice();
+                        imageId = items.getImageId();
+                    } else if (maxPrice < items.getPrice()) {
+                        maxPrice = (float) items.getPrice();
+                    } else if (minPrice > items.getPrice()) {
+                        minPrice = (float) items.getPrice();
+                    }
                 }
             }
             photo = photosDao.findById(imageId).orElse(new Photos());
@@ -165,6 +210,8 @@ public class Store {
             newProd.setTypeId(product.getType().getId());
             returnList.add(newProd);
             newProd = new listedProducts();
+            maxPrice = (float) 0;
+            minPrice = (float) 0;
         }
 
         return returnList;
@@ -191,14 +238,16 @@ public class Store {
                 name = available.getName();
 
                 for (Inventory items : available.getInventory()) {
-                    if (maxPrice == 0) {
-                        maxPrice = (float) items.getPrice();
-                        minPrice = (float) items.getPrice();
-                        imageId = items.getImageId();
-                    } else if (maxPrice < items.getPrice()) {
-                        maxPrice = (float) items.getPrice();
-                    } else if (minPrice > items.getPrice()) {
-                        minPrice = (float) items.getPrice();
+                    if (items.getQuantity() > 0) {
+                        if (maxPrice == 0) {
+                            maxPrice = (float) items.getPrice();
+                            minPrice = (float) items.getPrice();
+                            imageId = items.getImageId();
+                        } else if (maxPrice < items.getPrice()) {
+                            maxPrice = (float) items.getPrice();
+                        } else if (minPrice > items.getPrice()) {
+                            minPrice = (float) items.getPrice();
+                        }
                     }
                 }
                 photo = photosDao.findById(imageId).orElse(new Photos());
@@ -269,14 +318,16 @@ public class Store {
             categoryId = product.getCategoryId();
 
             for (Inventory items : product.getInventory()) {
-                if (maxPrice == 0) {
-                    maxPrice = (float) items.getPrice();
-                    minPrice = (float) items.getPrice();
-                    imageId = items.getImageId();
-                } else if (maxPrice < items.getPrice()) {
-                    maxPrice = (float) items.getPrice();
-                } else if (minPrice > items.getPrice()) {
-                    minPrice = (float) items.getPrice();
+                if (items.getQuantity() > 0) {
+                    if (maxPrice == 0) {
+                        maxPrice = (float) items.getPrice();
+                        minPrice = (float) items.getPrice();
+                        imageId = items.getImageId();
+                    } else if (maxPrice < items.getPrice()) {
+                        maxPrice = (float) items.getPrice();
+                    } else if (minPrice > items.getPrice()) {
+                        minPrice = (float) items.getPrice();
+                    }
                 }
             }
             photo = photosDao.findById(imageId).orElse(new Photos());
@@ -340,14 +391,16 @@ public class Store {
             categoryId = product.getCategoryId();
 
             for (Inventory items : product.getInventory()) {
-                if (maxPrice == 0) {
-                    maxPrice = (float) items.getPrice();
-                    minPrice = (float) items.getPrice();
-                    imageId = items.getImageId();
-                } else if (maxPrice < items.getPrice()) {
-                    maxPrice = (float) items.getPrice();
-                } else if (minPrice > items.getPrice()) {
-                    minPrice = (float) items.getPrice();
+                if (items.getQuantity() > 0) {
+                    if (maxPrice == 0) {
+                        maxPrice = (float) items.getPrice();
+                        minPrice = (float) items.getPrice();
+                        imageId = items.getImageId();
+                    } else if (maxPrice < items.getPrice()) {
+                        maxPrice = (float) items.getPrice();
+                    } else if (minPrice > items.getPrice()) {
+                        minPrice = (float) items.getPrice();
+                    }
                 }
             }
             photo = photosDao.findById(imageId).orElse(new Photos());

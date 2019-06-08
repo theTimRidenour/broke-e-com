@@ -6,9 +6,9 @@
 <div th:replace="fragments :: header"></div>
 
 <div class="section_full" th:each="type : ${types}">
-    <a th:href="@{'/store/' + ${title} + '/' + ${type.name}}" style="text-decoration: none;"><span class="title1" th:text="${type.name}">Type Name</span></a>
-    <div class="product" th:each="product : ${products}">
-        <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}" th:if="${product.typeId == type.id}"></div>
+    <span class="title1"><a th:href="@{'/store/' + ${#strings.replace(title, ' ', '_')} + '/' + ${#strings.replace(type.name, ' ', '_')}}" style="text-decoration: none; width: 300px; margin: 0 auto;" th:text="${type.name}">Type Name</a></span>
+    <div class="product" th:each="product : ${products}" th:if="${product.typeId == type.id}">
+        <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}"></div>
         <div class="product_des" th:if="${product.typeId == type.id}"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.minPrice + ' - $' + product.maxPrice}" th:unless="${product.minPrice == product.maxPrice}">$17.00</strong><strong th:text="'$' + ${product.minPrice}" th:if="${product.minPrice == product.maxPrice}">$17.00</strong></div>
     </div>
 </div>
