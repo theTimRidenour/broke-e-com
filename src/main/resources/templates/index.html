@@ -24,8 +24,8 @@
           <span class="title2" th:each="type : ${category.types}">
              <a th:href="'/store/' + ${#strings.replace(category.name, ' ', '_')} + '/' + ${#strings.replace(type.name, ' ', '_')}" th:text="'&nbsp;&nbsp;' + ${type.name} + '&nbsp;&nbsp;'"></a>
           </span><br />
-          <div th:each="product : ${products}" style="display: inline-block;">
-              <div class="product" th:if="${product.categoryId == category.id}">
+          <div th:each="product : ${products}" style="display: inline-block;" th:if="${product.categoryId == category.id}">
+              <div class="product">
                   <div class="product_img" th:style="${'background-image: url(/upload/image/' + product.imageUrl + ');'}"></div>
                   <div class="product_des"><span th:text="${product.name}">TITLE</span><strong th:text="'$' + ${product.minPrice + ' - $' + product.maxPrice}" th:unless="${product.minPrice == product.maxPrice}">$17.00</strong><strong th:text="'$' + ${product.minPrice}" th:if="${product.minPrice == product.maxPrice}">$17.00</strong></div>
               </div>
