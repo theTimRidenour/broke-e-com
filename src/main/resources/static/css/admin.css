@@ -496,3 +496,16 @@ a .admin_menu_button:hover {
     margin-left: 720px;
     font-size: 12px;
 }
+
+#header #title, #header form {
+    display: none;
+}
+
+#header #menu {
+    top: 85px;
+}
+
+#header {
+    height: 140px;
+    background-position: bottom;
+}
