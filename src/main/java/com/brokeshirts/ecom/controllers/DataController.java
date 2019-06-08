@@ -73,14 +73,6 @@ public class DataController {
     @RequestMapping(value="add/item", method = RequestMethod.POST)
     public String addItem(@RequestParam int productId, @RequestParam int colorId, @RequestParam(value="sizeIds", required = true) int[] sizeIds, @RequestParam("file") MultipartFile file, @RequestParam String sku, @RequestParam float price) {
 
-        System.out.println("productId: " + productId);
-        System.out.println("colorId: " + colorId);
-        for (int i : sizeIds) {
-            System.out.println("sizeId: " + i);
-        }
-        System.out.println("SKU: " + sku);
-        System.out.println("Price: $" + price);
-
         Data.addItem(price, productId, colorId, sizeIds, file, sku, productsDao, photosDao, inventoryDao);
 
         return "redirect:/admin/products";

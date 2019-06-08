@@ -114,7 +114,17 @@ public class Store {
         Float minPrice = (float) 0;
 
         for (Products product : allAvailableTypeProducts) {
-            newProd.setName(product.getName());
+            String name = "";
+            int nameCharCnt = 17;
+
+            for (char c : product.getName().toCharArray()) {
+                if (nameCharCnt > 0) {
+                    name += c;
+                    nameCharCnt--;
+                }
+            }
+
+            newProd.setName(name);
             newProd.setProductId(product.getId());
 
             for (Inventory item : product.getInventory()) {
@@ -181,14 +191,23 @@ public class Store {
 
         ArrayList<listedProducts> returnList = new ArrayList<>();
         listedProducts newProd = new listedProducts();
-        String name = "";
         int imageId = 0;
         Photos photo = new Photos();
         Float maxPrice = (float) 0;
         Float minPrice = (float) 0;
 
         for (Products product : availableProductsFromTypes) {
-            newProd.setName(product.getName());
+            String name = "";
+            int nameCharCnt = 17;
+
+            for (char c : product.getName().toCharArray()) {
+                if (nameCharCnt > 0) {
+                    name += c;
+                    nameCharCnt--;
+                }
+            }
+
+            newProd.setName(name);
 
             for (Inventory items : product.getInventory()) {
                 if (items.getQuantity() > 0) {
@@ -221,7 +240,6 @@ public class Store {
     public static ArrayList<listedProducts> featuredProducts(ProductsDao productsDao, PhotosDao photosDao) {
         ArrayList<listedProducts> returnProducts = new ArrayList<>();
         listedProducts newProd = new listedProducts();
-        String name = "";
         int imageId = 0;
         Photos photo = new Photos();
         Float maxPrice = (float) 0;
@@ -235,7 +253,15 @@ public class Store {
                 }
             }
             if (isAvailable == 1) {
-                name = available.getName();
+                String name = "";
+                int nameCharCnt = 17;
+
+                for (char c : available.getName().toCharArray()) {
+                    if (nameCharCnt > 0) {
+                        name += c;
+                        nameCharCnt--;
+                    }
+                }
 
                 for (Inventory items : available.getInventory()) {
                     if (items.getQuantity() > 0) {
@@ -306,7 +332,6 @@ public class Store {
         }
 
         listedProducts newProd = new listedProducts();
-        String name = "";
         int categoryId = 0;
         int imageId = 0;
         Photos photo = new Photos();
@@ -314,7 +339,16 @@ public class Store {
         Float minPrice = (float) 0;
 
         for (Products product : sortListOne) {
-            name = product.getName();
+            String name = "";
+            int nameCharCnt = 17;
+
+            for (char c : product.getName().toCharArray()) {
+                if (nameCharCnt > 0) {
+                    name += c;
+                    nameCharCnt--;
+                }
+            }
+
             categoryId = product.getCategoryId();
 
             for (Inventory items : product.getInventory()) {
@@ -386,8 +420,15 @@ public class Store {
         Float minPrice = (float) 0;
 
         for (Products product : sortListOne) {
+            int nameCharCnt = 17;
 
-            name = product.getName();
+            for (char c : product.getName().toCharArray()) {
+                if (nameCharCnt > 0) {
+                    name += c;
+                    nameCharCnt--;
+                }
+            }
+
             categoryId = product.getCategoryId();
 
             for (Inventory items : product.getInventory()) {
