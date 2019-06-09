@@ -208,6 +208,7 @@ public class Store {
             }
 
             newProd.setName(name);
+            newProd.setProductId(product.getId());
 
             for (Inventory items : product.getInventory()) {
                 if (items.getQuantity() > 0) {
@@ -279,6 +280,7 @@ public class Store {
                 photo = photosDao.findById(imageId).orElse(new Photos());
 
                 newProd.setName(name);
+                newProd.setProductId(available.getId());
                 newProd.setImageUrl(photo.getUrl());
                 newProd.setMaxPrice(String.format("%.2f", maxPrice));
                 newProd.setMinPrice(String.format("%.2f", minPrice));
@@ -367,6 +369,7 @@ public class Store {
             photo = photosDao.findById(imageId).orElse(new Photos());
 
             newProd.setName(name);
+            newProd.setProductId(product.getId());
             newProd.setCategoryId(categoryId);
             newProd.setImageUrl(photo.getUrl());
             newProd.setMaxPrice(String.format("%.2f", maxPrice));
@@ -447,6 +450,7 @@ public class Store {
             photo = photosDao.findById(imageId).orElse(new Photos());
 
             newProd.setName(name);
+            newProd.setProductId(product.getId());
             newProd.setCategoryId(categoryId);
             newProd.setImageUrl(photo.getUrl());
             newProd.setMaxPrice(String.format("%.2f", maxPrice));
