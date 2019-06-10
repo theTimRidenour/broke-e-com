@@ -50,6 +50,9 @@
     </div>
     <input hidden name="productId" th:value="${productId}" style="display: none;" />
     <input type="submit" style="display: block; position: absolute; margin: 190px 0 0 410px; font-size: 22px; border: 0; background: none;" value="Add to Cart" />
+    <ul style="display: inline-block; position: absolute; margin: 250px 0 0 402px; width: 620px;">
+        <li th:each="desc : ${prodInfo.descriptions}" th:text="${'&bull; ' + desc}"></li>
+    </ul>
 </form>
 
 <script style="display: none;" th:inline="javascript">
