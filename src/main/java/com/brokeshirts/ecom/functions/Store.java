@@ -36,6 +36,8 @@ public class Store {
 
         private String productName;
 
+        private ArrayList<String> descriptions;
+
         public listedProducts() {}
 
         public String getName() { return name; }
@@ -116,6 +118,14 @@ public class Store {
 
         public void setProductName(String productName) {
             this.productName = productName;
+        }
+
+        public ArrayList<String> getDescriptions() {
+            return descriptions;
+        }
+
+        public void setDescriptions(ArrayList<String> descriptions) {
+            this.descriptions = descriptions;
         }
     }
 
@@ -701,6 +711,22 @@ public class Store {
         returnProd.setProductName(product.getName());
         returnProd.setCategoryName(product.getType().getCategory().getName());
         returnProd.setTypeName(product.getType().getName());
+
+        ArrayList<String> desc = new ArrayList<>();
+        String description = "";
+        if (product.getDescriptions() != null) {
+            for (char c : product.getDescriptions().toCharArray()) {
+                if (c == ';') {
+                    desc.add(description);
+                    description = "";
+                } else {
+                    description += c;
+                }
+            }
+            desc.add(description);
+
+            returnProd.setDescriptions(desc);
+        }
 
         return returnProd;
     }

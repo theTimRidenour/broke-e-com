@@ -1,9 +1,12 @@
 package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Data;
+import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.Products;
 import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,6 +86,27 @@ public class DataController {
     public String addProduct(@RequestParam int categoryId, @RequestParam int typeId, @RequestParam(value="styleIds", required = false) int[] styleIds, @RequestParam("file") MultipartFile file, String name) {
 
         Data.addProduct(categoryId, typeId, styleIds, stylesDao, name, file, photosDao, productsDao, typesDao);
+
+        return "redirect:/admin/products";
+    }
+
+    // DISPLAY ADD PRODUCT DESCRIPTIONS FORM
+    @RequestMapping(value="add/descriptions/{productId}", method = RequestMethod.GET)
+    public String addDescriptionForm(@PathVariable int productId, Model model) {
+        model.addAttribute("title", "ADMIN");
+        model.addAttribute("product", productsDao.findById(productId).orElse(new Products()));
+        model.addAttribute("colors", Store.prodColorsImages(productsDao.findById(productId).orElse(new Products()), colorsDao, photosDao));
+
+        return "admin/description";
+    }
+
+    // PROCESS ADD PRODUCT DESCRIPTIONS FORM
+    @RequestMapping(value = "description", method = RequestMethod.POST)
+    public String processAddDescription(@RequestParam int productId, @RequestParam String desc) {
+
+        Products theProduct = productsDao.findById(productId).orElse(new Products());
+        theProduct.setDescriptions(desc);
+        productsDao.save(theProduct);
 
         return "redirect:/admin/products";
     }

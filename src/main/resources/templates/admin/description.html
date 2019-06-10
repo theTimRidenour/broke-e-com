@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full" style="text-align: left;">
+    <div th:text="${'category: ' + product.types.category.name}"></div>
+    <div th:text="${'sub-category: ' + product.types.name}"></div>
+    <div th:each="color : ${colors}" th:text="${'color: ' + color.key.name}"></div>
+    <br />
+    <form th:action="@{/data/description}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}" />
+        <label>Separate descriptions with ;</label>
+        <textarea name="desc" style="width: 400px; height:300px;" th:text="${product.descriptions}"></textarea>
+        <input type="submit" value="update" />
+    </form>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>

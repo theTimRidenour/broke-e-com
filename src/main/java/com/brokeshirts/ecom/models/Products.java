@@ -39,6 +39,8 @@ public class Products {
 
     private String archiveStyle;
 
+    private String descriptions;
+
     public Products(String name, int typeId, int categoryId) {
         this.name = name;
         this.categoryId = categoryId;
@@ -123,4 +125,12 @@ public class Products {
     public List<Inventory> getInventory() { return inventory; }
 
     public void setInventory(List<Inventory> inventory) { this.inventory = inventory; }
+
+    public Types getTypes() { return types; }
+
+    public void setTypes(Types types) { this.types = types; }
+
+    public String getDescriptions() { return descriptions; }
+
+    public void setDescriptions(String descriptions) { this.descriptions = descriptions; }
 }
