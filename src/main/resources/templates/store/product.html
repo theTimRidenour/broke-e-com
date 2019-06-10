@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<script style="display: none;" th:inline="javascript">
+    $(document).ready(function(){
+        $("input:radio[name=colorId]").click(function() {
+            var value = $(this).val();
+            var image_name;
+            /*[# th:each="prodColor : ${prodColors}"]*/
+            if(value == '[[${prodColor.key.id}]]') {
+                image_name = "[(${prodColor.value})]";
+            }else{
+            /*[/]*/
+                image_name = "none.jpg";
+            /*[# th:each="prodColor : ${prodColors}"]*/
+            }
+            /*[/]*/
+            $('#color_image').attr('src', image_name);
+        });
+    });
+</script>
+
+<div class="section_full prod_trail">
+    <a th:href="@{'/'}">STORE</a> > <a th:href="@{'/store/' + ${prodInfo.categoryName}}" th:text="${#strings.toUpperCase(prodInfo.categoryName)}">CATEGORY</a> > <a th:href="@{'/store/' + ${prodInfo.categoryName} + '/' + ${prodInfo.typeName}}" th:text="${#strings.toUpperCase(prodInfo.typeName)}">SUB-CATEGORY</a>
+</div>
+
+<form class="section_full" id="addToCart" style="text-align: left; min-height: 400px; margin-top: -10px;" action="" method="get">
+    <div class="product_title" th:text="${#strings.capitalizeWords(prodInfo.productName)}"></div>
+    <div id="image_block">
+        <img th:each="colorImg, iStat: ${prodColors}" th:src="${colorImg.value}" id="color_image" th:if="${iStat.last}" style="height: 400px; margin: 0 auto;" />
+    </div>
+    <div id="product_options">
+        <input type="text" id="price_range" th:placeholder="${prodPriceRange.minPrice + ' - ' + prodPriceRange.maxPrice}" readonly="readonly"/>
+        <div id="sel_color" style="width: 622px; margin-left: 401px; margin-top: 100px; justify-content: flex-start;">
+            <div th:each="color: ${prodColors}">
+                <input required="required" type="radio" name="colorId" th:value="${color.key.id}" style="display: inline-block; display: none;" th:id="${'color-' + color.key.id}" checked="checked" />
+                <label class="radio_color" th:for="${'color-' + color.key.id}" th:style="|position: relative; margin-right: 5px; margin-left: 5px; background-color: ${color.key.hex}; background-image: url(${color.value});|" />
+            </div>
+        </div>
+    </div>
+    <div id="sel_size" style="width: 622px; margin-left: 401px; justify-content: flex-start; margin-top: 155px;">
+        <div th:each="size : ${prodSizes}">
+            <input required="required" type="radio" name="sizeId" th:id="${'size-' + size.id}" th:value="${size.id}" />
+            <label class="radio_size" th:for="${'size-' + size.id}" th:text="${size.shortName}" style="position: relative; margin-right: 5px; margin-left: 5px;" />
+        </div>
+    </div>
+    <input hidden name="productId" th:value="${productId}" style="display: none;" />
+    <input type="submit" style="display: block; position: absolute; margin: 190px 0 0 410px; font-size: 22px; border: 0; background: none;" value="Add to Cart" />
+</form>
+
+<script style="display: none;" th:inline="javascript">
+    $(document).ready(function(){
+        $("input:radio[name=sizeId]").click(function() {
+            var value = $(this).val();
+            var price;
+            /*[# th:each="prodSize : ${prodSizes}"]*/
+            if(value == '[[${prodSize.id}]]') {
+                price = "[(${prodPrices.get(prodSize.id)})]";
+            }else{
+            /*[/]*/
+            /*[# th:each="prodSize : ${prodSizes}"]*/
+            }
+            /*[/]*/
+            $('#price_range').attr('placeholder', price);
+        });
+    });
+</script>
+
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>

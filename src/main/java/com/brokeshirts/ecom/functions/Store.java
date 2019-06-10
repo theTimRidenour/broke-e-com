@@ -3,10 +3,7 @@ package com.brokeshirts.ecom.functions;
 import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Store {
 
@@ -23,9 +20,21 @@ public class Store {
 
         private int typeId;
 
+        private int colorId;
+
+        private int sizeId;
+
+        private boolean active;
+
         private String sku;
 
         private int productId;
+
+        private String categoryName;
+
+        private String typeName;
+
+        private String productName;
 
         public listedProducts() {}
 
@@ -60,6 +69,54 @@ public class Store {
         public int getProductId() { return productId; }
 
         public void setProductId(int productId) { this.productId = productId; }
+
+        public int getColorId() {
+            return colorId;
+        }
+
+        public void setColorId(int colorId) {
+            this.colorId = colorId;
+        }
+
+        public int getSizeId() {
+            return sizeId;
+        }
+
+        public void setSizeId(int sizeId) {
+            this.sizeId = sizeId;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public void setActive(boolean active) {
+            this.active = active;
+        }
+
+        public String getCategoryName() {
+            return categoryName;
+        }
+
+        public void setCategoryName(String categoryName) {
+            this.categoryName = categoryName;
+        }
+
+        public String getTypeName() {
+            return typeName;
+        }
+
+        public void setTypeName(String typeName) {
+            this.typeName = typeName;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
     }
 
 //// FIND BY NAME
@@ -554,5 +611,97 @@ public class Store {
         }
 
         return returnList;
+    }
+
+//// CREATING DATA FOR SINGLE PRODUCT PAGE
+
+    // COLORS AVAILABLE WITH IMAGE URL
+    public static HashMap<Colors, String> prodColorsImages(Products product, ColorsDao colorsDao, PhotosDao photosDao) {
+        HashMap<Colors, String> productColors = new HashMap<>();
+        Photos photo = new Photos();
+
+        for (Colors color : colorsDao.findAll()) {
+            for (Inventory item : product.getInventory()) {
+                if (item.getQuantity() > 0) {
+                    if (item.getColorId() == color.getId()) {
+                        if(!productColors.containsKey(color)) {
+                            photo = photosDao.findById(item.getImageId()).orElse(new Photos());
+                            productColors.put(color, "/images/upload/" + photo.getUrl());
+                            photo = new Photos();
+                        }
+                    }
+                }
+            }
+        }
+
+        return productColors;
+    }
+
+    // SIZES AVAILABLE
+    public static ArrayList<Sizes> prodSizes(Products product, SizesDao sizesDao) {
+        ArrayList<Sizes> productSizes = new ArrayList<>();
+
+        for (Sizes size : sizesDao.findAll()) {
+            for (Inventory item : product.getInventory()) {
+                if (item.getQuantity() > 0) {
+                    if (item.getSizeId() == size.getId()) {
+                        if(!productSizes.contains(size)) {
+                            productSizes.add(size);
+                        }
+                    }
+                }
+            }
+        }
+
+        return productSizes;
+    }
+
+    // PRICE LIST BY SIZE
+    public static HashMap<Integer, String> priceList(Products product) {
+        HashMap<Integer, String> returnList = new HashMap<>();
+        ArrayList<Integer> prodSizes = new ArrayList<>();
+        String price = "";
+
+        for (Inventory item : product.getInventory()) {
+            if (!prodSizes.contains(item.getSizeId())) {
+                prodSizes.add(item.getSizeId());
+                returnList.put(item.getSizeId(), String.format("$%.2f", item.getPrice()));
+            }
+        }
+        return returnList;
+    }
+
+    // MAXIMUM AND MINIMUM PRICE FOR PRODUCT
+    public static listedProducts maxMinPrice(Products product) {
+        listedProducts returnValues = new listedProducts();
+        Float maxPrice = (float) 0;
+        Float minPrice = (float) 0;
+
+        for (Inventory item : product.getInventory()) {
+            if (maxPrice == 0) {
+                maxPrice = item.getPrice();
+                minPrice = item.getPrice();
+            } else if (maxPrice < item.getPrice()) {
+                maxPrice = item.getPrice();
+            } else if (minPrice > item.getPrice()) {
+                minPrice = item.getPrice();
+            }
+        }
+        returnValues.setMaxPrice(String.format("$%.2f", maxPrice));
+        returnValues.setMinPrice(String.format("$%.2f", minPrice));
+
+        return returnValues;
+    }
+
+    // PRODUCT INFORMATION FOR PRODUCT PAGE
+    public static listedProducts productInfo(Products product) {
+        listedProducts returnProd = new listedProducts();
+
+        returnProd.setProductId(product.getId());
+        returnProd.setProductName(product.getName());
+        returnProd.setCategoryName(product.getType().getCategory().getName());
+        returnProd.setTypeName(product.getType().getName());
+
+        return returnProd;
     }
 }

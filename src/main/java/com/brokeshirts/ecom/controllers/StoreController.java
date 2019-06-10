@@ -2,10 +2,8 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.functions.Store;
-import com.brokeshirts.ecom.models.data.CategoriesDao;
-import com.brokeshirts.ecom.models.data.PhotosDao;
-import com.brokeshirts.ecom.models.data.ProductsDao;
-import com.brokeshirts.ecom.models.data.TypesDao;
+import com.brokeshirts.ecom.models.Products;
+import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +28,12 @@ public class StoreController {
 
     @Autowired
     PhotosDao photosDao;
+
+    @Autowired
+    ColorsDao colorsDao;
+
+    @Autowired
+    SizesDao sizesDao;
 
 //// DISPLAY FORMS
 
@@ -57,5 +61,23 @@ public class StoreController {
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
 
         return "store/type";
+    }
+
+    // DISPLAY A PRODUCT
+    @RequestMapping(value = "product/{productId}", method = RequestMethod.GET)
+    public String showProduct(@PathVariable int productId, Model model) {
+
+        Products product = productsDao.findById(productId).orElse(new Products());
+
+        model.addAttribute("title", product.getName());
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("prodColors", Store.prodColorsImages(product, colorsDao, photosDao));
+        model.addAttribute("prodSizes", Store.prodSizes(product, sizesDao));
+        model.addAttribute("prodPrices", Store.priceList(product));
+        model.addAttribute("prodPriceRange", Store.maxMinPrice(product));
+        model.addAttribute("prodInfo", Store.productInfo(product));
+
+        return "store/product";
     }
 }

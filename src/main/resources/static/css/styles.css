@@ -42,7 +42,8 @@
 .product .product_img {
   background-image: url("../images/placeholder-image.jpg");
   background-position: center;
-  background-size: cover;
+  background-repeat: no-repeat;
+  background-size: 150px auto;
   height: 250px;
   margin: 0 auto 7px;
   width: 150px;
@@ -262,6 +263,131 @@
   height: 23px;
   justify-content: space-around;
   width: 388px;
+}
+
+/********** PRODUCT PAGE **********/
+
+.product_image {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 400px;
+    display: none;
+    height: 400px;
+    width: 400px;
+}
+
+#sel_color input, #sel_size input {
+    margin:0;
+    padding: 0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+#sel_color label, #sel_size label {
+    cursor:pointer;
+}
+
+#sel_color input:checked + .radio_color, #sel_size input:checked + .radio_size {
+    border: 2px solid #ffcc00;
+}
+
+.radio_color, .radio_size {
+    border: 1px solid black;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    position: absolute;
+    background-position: center;
+}
+
+.radio_color {
+    height: 45px;
+    width: 40px;
+    border-radius: 3px;
+    background-size: cover;
+}
+
+#size_title {
+    margin-top: 90px;
+}
+
+#sel_size {
+    margin-top: 120px;
+}
+
+.radio_size {
+    height: 18px;
+    display: block;
+    font-weight: bold;
+    font-size: 9px;
+    font-family: sans-serif;
+    padding-top: 10px;
+    text-align: center;
+}
+
+#sel_style, #sel_color, #sel_size {
+    width: 780px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    margin-top: 60px;
+    justify-content: space-around;
+}
+
+#style_title, #color_title, #size_title {
+    display: flex;
+    position: absolute;
+    margin-top: 32px;
+    font-weight: bold;
+    font-size: 20px;
+    width: 778px;
+    justify-content: space-around;
+}
+
+#image_block {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    margin: 0;
+    padding: 10px 0 0;
+    display: inline-block;
+
+}
+
+.prod_trail {
+    text-align: left;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 0.5px solid #606060;
+    margin-top: 0;
+}
+
+.prod_trail a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+}
+
+#price_range {
+    border: 0;
+    position:absolute;
+    font-size: 22px;
+    font-weight: bold;
+    margin:70px 0 0 401px;"
+}
+
+#price_range:focus {
+    outline: none !important;
+}
+
+.product_title {
+    display: inline-block;
+    position: absolute;
+    font-size: 36px;
+    margin: 16px 0 0 401px;
 }
 
 /*********** SEARCH BAR ***********/

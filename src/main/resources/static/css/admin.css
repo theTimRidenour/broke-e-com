@@ -322,25 +322,6 @@ a .admin_menu_button:hover {
 
 #sel_subcat {}
 
-#style_title, #color_title, #size_title {
-    display: flex;
-    position: absolute;
-    margin-top: 32px;
-    font-weight: bold;
-    font-size: 20px;
-    width: 778px;
-    justify-content: space-around;
-}
-
-#sel_style, #sel_color, #sel_size {
-    width: 780px;
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    margin-top: 60px;
-    justify-content: space-around;
-}
-
 #sel_style div, #sel_style div input, #sel_style div div {
     display: inline-block;
 }
@@ -405,49 +386,6 @@ a .admin_menu_button:hover {
     margin-top: 60px;
 }
 
-#sel_color input, #sel_size input {
-    margin:0;
-    padding: 0;
-    -webkit-appearance:none;
-       -moz-appearance:none;
-            appearance:none;
-}
-
-#sel_color label, #sel_size label {
-    cursor:pointer;
-}
-
-#sel_color input:checked + .radio_color, #sel_size input:checked + .radio_size {
-    border: 2px solid #ffcc00;
-}
-
-.radio_color, .radio_size {
-    border: 1px solid black;
-    width: 27px;
-    height: 27px;
-    border-radius: 50%;
-    position: absolute;
-    background-position: center;
-}
-
-#size_title {
-    margin-top: 90px;
-}
-
-#sel_size {
-    margin-top: 120px;
-}
-
-.radio_size {
-    height: 18px;
-    display: block;
-    font-weight: bold;
-    font-size: 9px;
-    font-family: sans-serif;
-    padding-top: 10px;
-    text-align: center;
-}
-
 .sel_image2 {
     margin-top: 165px;
     border: 0;
@@ -496,6 +434,8 @@ a .admin_menu_button:hover {
     margin-left: 720px;
     font-size: 12px;
 }
+
+/********** MODIFY HEADER **********/
 
 #header #title, #header form {
     display: none;
