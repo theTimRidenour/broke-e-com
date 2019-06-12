@@ -1,0 +1,21 @@
+<c:set var="contextPath" value="${pageContext.request.contextPath}"
+       xmlns:c="http://www.springframework.org/schema/util"/>
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+</head>
+<body>
+    <div th:replace="fragments :: header"></div>
+    <div class="section_full">
+        <form class="login_form" method="post" th:action="@{/registration}" th:object="${userForm}">
+            <h2>Create your account</h2>
+            <input type="text" th:field="*{username}" placeholder="Username" autofocus="true" />
+            <input type="password" th:field="*{password}" placeholder="Password" />
+            <input type="password" th:field="*{passwordConfirm}" placeholder="Confirm Password" />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div th:replace="fragments :: footer"></div>
+</body>
+</html>

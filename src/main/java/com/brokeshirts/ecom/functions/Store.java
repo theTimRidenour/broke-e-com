@@ -3,7 +3,12 @@ package com.brokeshirts.ecom.functions;
 import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
 
-import java.util.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Store {
 
@@ -729,5 +734,112 @@ public class Store {
         }
 
         return returnProd;
+    }
+
+//// COOKIES
+
+    // CART INVENTORY COUNT
+    public static int cartItemCnt(String cartItems) {
+        int cartCnt = 0;
+
+        if (!cartItems.equals("empty")) {
+            cartCnt++;
+            for (char c : cartItems.toCharArray()) {
+                if (c == '.') {
+                    cartCnt++;
+                }
+            }
+        }
+        return cartCnt;
+    }
+
+    // ADD INVENTORY ITEM TO CART
+    public static void addItemToCart(Integer itemId, String cartItems, HttpServletResponse response) {
+        String cart = "";
+        if (cartItems.equals("empty")) {
+            cart = itemId.toString() + "/1";
+        } else {
+            cart = cartItems + "." + itemId.toString() + "/1";
+        }
+
+        Cookie cookie = new Cookie("cartItems", cart);
+        response.addCookie(cookie);
+    }
+
+    // UPDATE CART ITEM QUANTITY
+    public static void updateItemInCart(Integer itemId, Integer quant, String cartItems, HttpServletResponse response) {
+        String cart = "";
+        int cnt = 0;
+        String makesString = "";
+        String product = "";
+        String quantity = "";
+        int tracker = 0; // 0 = product, 1 = quantity
+
+        if (cartItems.equals("empty")) {
+            cart = "empty";
+        } else {
+            for (char c : cartItems.toCharArray()) {
+                if (c == '.') {
+                    tracker = 0;
+                    for (char h : makesString.toCharArray()) {
+                        if (h == '/') {
+                            tracker = 1;
+                        } else if (tracker == 0) {
+                            product += h;
+                        } else {
+                            quantity += h;
+                        }
+                    }
+                    if (itemId.toString().equals(product)) {
+                        if (quant != 0) {
+                            if (cnt == 0) {
+                                cart += product + "/" + quant.toString();
+                                cnt++;
+                            } else {
+                                cart += "." + product + "/" + quant.toString();
+                            }
+                        }
+                    } else {
+                        if (cnt == 0) {
+                            cart += product + "/" + quantity;
+                            cnt++;
+                        } else {
+                            cart += "." + product + "/" + quantity;
+                        }
+                    }
+                    makesString = "";
+                } else {
+                    makesString += c;
+                }
+            }
+            tracker = 0;
+            for (char h : makesString.toCharArray()) {
+                if (h == '/') {
+                    tracker = 1;
+                } else if (tracker == 0) {
+                    product += h;
+                } else {
+                    quantity += h;
+                }
+            }
+            if (itemId.toString().equals(product)) {
+                if (cnt == 0) {
+                    cart += product + "/" + quant.toString();
+                    cnt++;
+                } else {
+                    cart += "." + product + "/" + quant.toString();
+                }
+            } else {
+                if (cnt == 0) {
+                    cart += product + "/" + quantity;
+                    cnt++;
+                } else {
+                    cart += "." + product + "/" + quantity;
+                }
+            }
+        }
+
+        Cookie cookie = new Cookie("cartItems", cart);
+        response.addCookie(cookie);
     }
 }

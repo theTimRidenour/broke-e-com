@@ -2,12 +2,16 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Admin;
 import com.brokeshirts.ecom.functions.Menus;
+import com.brokeshirts.ecom.functions.Store;
 import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value="admin")
@@ -51,7 +55,7 @@ public class AdminController {
 
     // ARCHIVE
     @RequestMapping(value="archive")
-    public String adminArchive(Model model) {
+    public String adminArchive(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
@@ -62,13 +66,14 @@ public class AdminController {
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("colors", colorsDao.findAll());
         model.addAttribute("products", productsDao.findAll());
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/archive";
     }
 
     // CATEGORIES
     @RequestMapping(value="categories")
-    public String adminCategories(Model model) {
+    public String adminCategories(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
@@ -79,38 +84,41 @@ public class AdminController {
         model.addAttribute("styles", Menus.sortStylesAdmin(categoriesDao, stylesDao));
         model.addAttribute("stylesCnt", Menus.catStyleCnt(categoriesDao, stylesDao));
         model.addAttribute("adminMenu", "categories");
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/categories";
     }
 
     // COLORS
     @RequestMapping(value="colors")
-    public String adminColors(Model model) {
+    public String adminColors(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("adminMenu", "colors");
         model.addAttribute("colors", Menus.sortColorsAdmin(colorsDao));
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/colors";
     }
 
     // ORDERS
     @RequestMapping(value="")
-    public String adminOrders(Model model) {
+    public String adminOrders(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("title","ADMIN");
         model.addAttribute("adminMenu", "orders");
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/index";
     }
 
     // PRODUCTS
     @RequestMapping(value="products")
-    public String adminProducts(Model model) {
+    public String adminProducts(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
@@ -124,19 +132,21 @@ public class AdminController {
         model.addAttribute("styles", Menus.sortStylesAdmin(categoriesDao, stylesDao));
         model.addAttribute("colors", Menus.sortColorsAdmin(colorsDao));
         model.addAttribute("sizes", Menus.sortSizes(sizesDao));
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/products";
     }
 
     // SIZES
     @RequestMapping(value="sizes")
-    public String adminSizes(Model model) {
+    public String adminSizes(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("sizes", Menus.sortSizes(sizesDao));
         model.addAttribute("adminMenu", "sizes");
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
 
         return "admin/sizes";
     }

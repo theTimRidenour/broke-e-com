@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(@Valid User userForm, BindingResult bindingResult) {
 
         userValidator.validate(userForm, bindingResult);
 
@@ -55,6 +56,8 @@ public class UserController {
 
         if (logout != null)
             model.addAttribute("message", "You have been logged out successfully!");
+
+        model.addAttribute("title", "LOGIN");
 
         return "user/login";
     }

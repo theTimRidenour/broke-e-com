@@ -456,3 +456,34 @@
   color: #f7f6f6;
   display: inline-block;
 }
+
+/********** LOGIN / REGISTRATION **********/
+
+.login_form {
+    width: 400px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.login_form input {
+    width: 400px;
+    padding-left: 5px;
+    border: 0;
+    border-bottom: 1px solid #949494;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.login_form input:focus {
+    outline: none;
+    border-bottom: 2px solid #000000;
+}
+
+.login_form button {
+    width: 400px;
+    font-size: 22px;
+    font-weight: bold;
+    border: 2px solid #606060;
+    border-radius: 4px;
+}

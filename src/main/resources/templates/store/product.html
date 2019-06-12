@@ -28,7 +28,7 @@
     <a th:href="@{'/'}">STORE</a> > <a th:href="@{'/store/' + ${prodInfo.categoryName}}" th:text="${#strings.toUpperCase(prodInfo.categoryName)}">CATEGORY</a> > <a th:href="@{'/store/' + ${prodInfo.categoryName} + '/' + ${prodInfo.typeName}}" th:text="${#strings.toUpperCase(prodInfo.typeName)}">SUB-CATEGORY</a>
 </div>
 
-<form class="section_full" id="addToCart" style="text-align: left; min-height: 400px; margin-top: -10px;" action="" method="get">
+<form class="section_full" id="addToCart" style="text-align: left; min-height: 400px; margin-top: -10px;" th:action="@{/data/cart/}" method="post">
     <div class="product_title" th:text="${#strings.capitalizeWords(prodInfo.productName)}"></div>
     <div id="image_block">
         <img th:each="colorImg, iStat: ${prodColors}" th:src="${colorImg.value}" id="color_image" th:if="${iStat.last}" style="height: 400px; margin: 0 auto;" />
@@ -48,7 +48,7 @@
             <label class="radio_size" th:for="${'size-' + size.id}" th:text="${size.shortName}" style="position: relative; margin-right: 5px; margin-left: 5px;" />
         </div>
     </div>
-    <input hidden name="productId" th:value="${productId}" style="display: none;" />
+    <input hidden name="productId" th:value="${prodInfo.productId}" style="display: none;" />
     <input type="submit" style="display: block; position: absolute; margin: 190px 0 0 410px; font-size: 22px; border: 0; background: none;" value="Add to Cart" />
     <ul style="display: inline-block; position: absolute; margin: 250px 0 0 402px; width: 620px;">
         <li th:each="desc : ${prodInfo.descriptions}" th:text="${'&bull; ' + desc}"></li>
@@ -72,7 +72,7 @@
         });
     });
 </script>
-
+<div th:text="${cartCnt}"></div>
 
 <div th:replace="fragments :: footer"></div>
 

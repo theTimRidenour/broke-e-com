@@ -2,16 +2,16 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Data;
 import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.Inventory;
 import com.brokeshirts.ecom.models.Products;
 import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value="data")
@@ -88,6 +88,15 @@ public class DataController {
         Data.addProduct(categoryId, typeId, styleIds, stylesDao, name, file, photosDao, productsDao, typesDao);
 
         return "redirect:/admin/products";
+    }
+
+    // ADD PRODUCT TO CART
+    @RequestMapping(value="cart", method = RequestMethod.POST)
+    public String addToCart(@RequestParam int productId, @RequestParam int colorId, @RequestParam int sizeId, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+        Inventory item = Data.findItem(productId, colorId, sizeId, productsDao);
+        Store.addItemToCart(item.getId(), cartItems, response);
+
+        return "redirect:/store/product/" + productId;
     }
 
     // DISPLAY ADD PRODUCT DESCRIPTIONS FORM
