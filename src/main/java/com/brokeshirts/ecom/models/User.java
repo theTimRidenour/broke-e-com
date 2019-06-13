@@ -1,7 +1,10 @@
 package com.brokeshirts.ecom.models;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
 
 @Entity
 public class User {
@@ -10,15 +13,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String username;
+    @Email
+    private String email;
 
-    private String password;
+    private String passwordHash;
 
-    @Transient
-    private String passwordConfirm;
-
-    @ManyToMany
-    private Set<Role> roles;
+    private String role;
 
     public User() {}
 
@@ -26,35 +26,15 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getEmail() { return email; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPasswordHash() { return passwordHash; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
+    public String getRole() { return role; }
 
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    public void setRole(String role) { this.role = role; }
 }
