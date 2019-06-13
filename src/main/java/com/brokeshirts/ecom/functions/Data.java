@@ -373,34 +373,17 @@ public class Data {
     }
 
     // FIND INVENTORY ITEM BY PRODUCT_ID, SIZE_ID, AND COLOR_ID
-    public static Inventory findItem(int productId, int sizeId, int colorId, ProductsDao productsDao) {
+    public static Inventory findItem(int productId, int sizeId, int colorId, ProductsDao productsDao, InventoryDao inventoryDao) {
+        Inventory theItem = new Inventory();
+        Products theProduct = productsDao.findById(productId).orElse(new Products());
 
-        System.out.println("---- FIND ITEM ----");
-
-        Inventory item = new Inventory();
-        Products prod = productsDao.findById(productId).orElse(new Products());
-
-        System.out.println("product: " + prod.getName());
-        System.out.println("sizeId: " + sizeId);
-        System.out.println("colorId: " + colorId);
-
-        for (Inventory oneItem : prod.getInventory()) {
-            if (oneItem.getSizeId() == sizeId) {
-
-                System.out.println("SIZE MATCH");
-                System.out.println(oneItem.getColorId());
-
-                if (oneItem.getColorId() == colorId) {
-
-                    System.out.println("COLOR MATCH");
-
-                    item = oneItem;
+        for (Inventory item : theProduct.getInventory()) {
+            if (item.getColorId() == colorId) {
+                if (item.getSizeId() == sizeId) {
+                    return item;
                 }
             }
         }
-
-        System.out.println("inventoryId: " + item.getId());
-
-        return item;
+        return theItem;
     }
 }

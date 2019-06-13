@@ -93,7 +93,8 @@ public class DataController {
     // ADD PRODUCT TO CART
     @RequestMapping(value="cart", method = RequestMethod.POST)
     public String addToCart(@RequestParam int productId, @RequestParam int colorId, @RequestParam int sizeId, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
-        Inventory item = Data.findItem(productId, colorId, sizeId, productsDao);
+
+        Inventory item = Data.findItem(productId, sizeId, colorId, productsDao, inventoryDao);
         Store.addItemToCart(item.getId(), cartItems, response);
 
         return "redirect:/store/product/" + productId;

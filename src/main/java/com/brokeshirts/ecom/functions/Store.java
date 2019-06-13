@@ -754,16 +754,77 @@ public class Store {
     }
 
     // ADD INVENTORY ITEM TO CART
-    public static void addItemToCart(Integer itemId, String cartItems, HttpServletResponse response) {
-        String cart = "";
-        if (cartItems.equals("empty")) {
-            cart = itemId.toString() + "/1";
-        } else {
-            cart = cartItems + "." + itemId.toString() + "/1";
-        }
+    public static boolean addItemToCart(Integer itemId, String cartItems, HttpServletResponse response) {
+        if (itemId != 0) {
+            String cart = "";
 
-        Cookie cookie = new Cookie("cartItems", cart);
-        response.addCookie(cookie);
+            if (cartItems.equals("empty")) {
+                cart = itemId.toString() + "/1";
+                Cookie cookie = new Cookie("cartItems", cart);
+                cookie.setMaxAge(3 * 24 * 60 * 60);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                return true;
+            }
+
+            HashMap<Integer, Integer> cookies = new HashMap<>();
+            String keyString = "";
+            String valueString = "";
+            Integer keyInt = 0;
+            Integer valueInt = 0;
+            int tracker = 0;
+
+            for (char c : cartItems.toCharArray()) {
+                if (tracker == 0) {
+                    if (c == '/') {
+                        tracker = 1;
+                    } else {
+                        keyString += c;
+                    }
+                } else {
+                    if (c == '.') {
+                        keyInt = Integer.parseInt(keyString);
+                        valueInt = Integer.parseInt(valueString);
+                        cookies.put(keyInt, valueInt);
+                        tracker = 0;
+                        keyString = "";
+                        valueString = "";
+                        keyInt = 0;
+                        valueInt = 0;
+                    } else {
+                        valueString += c;
+                    }
+                }
+            }
+            keyInt = Integer.parseInt(keyString);
+            valueInt = Integer.parseInt(valueString);
+            cookies.put(keyInt, valueInt);
+
+            if (cookies.containsKey(itemId)) {
+                int quant = cookies.get(itemId);
+                quant++;
+                cookies.replace(itemId, quant);
+
+                tracker = 0;
+                for (Map.Entry updateList : cookies.entrySet()) {
+                    if (tracker == 0) {
+                        cart = "" + updateList.getKey() + "/" + updateList.getValue();
+                        tracker++;
+                    } else {
+                        cart += "." + updateList.getKey() + "/" + updateList.getValue();
+                    }
+                }
+            } else {
+                cart = cartItems + "." + itemId.toString() + "/1";
+            }
+
+            Cookie cookie = new Cookie("cartItems", cart);
+            cookie.setMaxAge(3 * 24 * 60 * 60);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            return true;
+        }
+        return false;
     }
 
     // UPDATE CART ITEM QUANTITY
