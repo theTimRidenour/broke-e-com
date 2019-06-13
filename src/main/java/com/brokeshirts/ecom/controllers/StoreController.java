@@ -72,7 +72,7 @@ public class StoreController {
     @RequestMapping(value = "product/{productId}", method = RequestMethod.GET)
     public String showProduct(@PathVariable int productId, Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
-        System.out.println(cartItems.);
+        System.out.println(cartItems);
 
         Products product = productsDao.findById(productId).orElse(new Products());
 
