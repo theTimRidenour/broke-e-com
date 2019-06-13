@@ -77,6 +77,16 @@
             return true;
         }
 
+        var login = function() {
+            $(".onOff").show();
+            return true;
+        }
+
+        var closeLogin = function() {
+            $(".onOff").hide();
+            return true;
+        }
+
         $.ajaxSetup({
             beforeSend : function(xhr, settings) {
                 if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
@@ -101,9 +111,7 @@
             <div class="divide txt_white">|</div>
             <div class="link txt_white">Contact</div>
             <div class="divide txt_white">|</div>
-            <div class="link txt_white container unauthenticated">
-                <a href="/login">Login</a>
-            </div>
+            <div class="link txt_white" onclick="login()">Login</div>
             <div class="link txt_white container authenticated" style="display: none;">
                 <div style="color: #ffffff;" id="user"></div>
                 <div>
@@ -130,6 +138,22 @@
                     </span>
                 </div>
             </span>
+        </div>
+    </div>
+    <div class="onOff">
+        <div class="dim"></div>
+        <div class="login_container">
+            <i class="far fa-times-circle closeLogin" onclick="closeLogin()"></i>
+            <div class="title">Login</div>
+            <form>
+                <input type="text" name="email" />
+                <input type="password" name="password" />
+                <button type="submit">Login</button>
+            </form>
+            <i class="fab fa-google google"></i>
+            <i class="fab fa-facebook-f facebook"></i>
+            <i class="fab fa-twitter twitter"></i>
+            <i class="fab fa-github-alt github"></i>
         </div>
     </div>
 </div>
