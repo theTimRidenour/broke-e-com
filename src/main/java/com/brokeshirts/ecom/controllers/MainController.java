@@ -57,6 +57,7 @@ public class MainController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/");
 
         return "index";
     }
@@ -69,6 +70,7 @@ public class MainController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/terms");
 
         return "terms";
     }

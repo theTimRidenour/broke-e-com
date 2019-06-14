@@ -50,6 +50,7 @@ public class StoreController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/store/" + categoryName);
 
         return "store/category";
     }
@@ -58,12 +59,15 @@ public class StoreController {
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
     public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
+        String returnPath = "/store/" + categoryName + "/" + typeName;
+
         model.addAttribute("title", replaceUnderscore(categoryName) + " : " + replaceUnderscore(typeName));
         model.addAttribute("type", Store.oneTypeByName(replaceUnderscore(typeName), typesDao));
         model.addAttribute("products", Store.oneCatProducts(replaceUnderscore(typeName), productsDao, typesDao, photosDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", returnPath);
 
         return "store/type";
     }
@@ -83,6 +87,7 @@ public class StoreController {
         model.addAttribute("prodPriceRange", Store.maxMinPrice(product));
         model.addAttribute("prodInfo", Store.productInfo(product));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/store/product/" + productId);
 
         return "store/product";
     }

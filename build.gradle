@@ -28,11 +28,13 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'mysql:mysql-connector-java'
     compile 'org.springframework.boot:spring-boot-devtools'
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     runtime 'org.springframework.boot:spring-boot-devtools'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 bootRun {

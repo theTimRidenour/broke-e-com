@@ -6,6 +6,8 @@ import com.brokeshirts.ecom.storage.StorageProperties;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.brokeshirts.ecom.controllers.FileUploadController.internalFileUpload;
 
@@ -20,6 +22,52 @@ public class Data {
     }
 
 //// ADD ITEM
+
+    // ADD CART LIST
+    public static HashMap<Integer, Integer> addCartList(HashMap<Integer, Integer> cartList, String addCart) {
+        String findNext = "key";
+        String key = "";
+        String value = "";
+        Integer keyInt = 0;
+        Integer valueInt = 0;
+
+        for (char c : addCart.toCharArray()) {
+            if (c == '/') {
+                findNext = "value";
+            } else if (c == '.') {
+                findNext = "key";
+                keyInt = Integer.parseInt(key);
+                key = "";
+                valueInt = Integer.parseInt(value);
+                value = "";
+                if (cartList.containsKey(keyInt)) {
+                    if (valueInt > cartList.get(keyInt)) {
+                        cartList.replace(keyInt, cartList.get(keyInt), valueInt);
+                    }
+                } else {
+                    cartList.put(keyInt, valueInt);
+                }
+            } else if (findNext.equals("key")) {
+                key += c;
+            } else {
+                value += c;
+            }
+        }
+        findNext = "key";
+        keyInt = Integer.parseInt(key);
+        key = "";
+        valueInt = Integer.parseInt(value);
+        value = "";
+        if (cartList.containsKey(keyInt)) {
+            if (valueInt > cartList.get(keyInt)) {
+                cartList.replace(keyInt, cartList.get(keyInt), valueInt);
+            }
+        } else {
+            cartList.put(keyInt, valueInt);
+        }
+
+        return cartList;
+    }
 
     // ADD CATEGORY
     public static void addCat(String categoryName, CategoriesDao categoriesDao) {
@@ -294,6 +342,23 @@ public class Data {
 
         item.setQuantity(quantity);
         inventoryDao.save(item);
+    }
+
+    // CONVERT CART HASH MAP TO CART STRING
+    public static String cartHashToString(HashMap<Integer, Integer>cart) {
+        String newCartItems = "";
+        int first = 1;
+
+        for (Map.Entry<Integer, Integer> singleItem : cart.entrySet()) {
+            if (first == 1) {
+                newCartItems = singleItem.getKey() + "/" + singleItem.getValue();
+                first++;
+            } else {
+                newCartItems += "." + singleItem.getKey() + "/" + singleItem.getValue();
+            }
+        }
+
+        return newCartItems;
     }
 
 //// DELETE ITEM AND ASSOCIATED FILES

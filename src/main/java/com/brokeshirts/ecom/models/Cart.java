@@ -14,33 +14,20 @@ public class Cart {
     private int id;
 
     @NotNull
-    private int customerId;
+    private int userId;
 
     @NotNull
-    private int itemId;
-
-    public Cart(int customerId, int itemId) {
-        this.customerId = customerId;
-        this.itemId = itemId;
-    }
+    private String cartItems;
 
     public Cart() {}
 
     public int getId() { return id; }
 
-    public int getCustomerId() {
-        return customerId;
-    }
+    public int getUserId() { return userId; }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
+    public void setUserId(int userId) { this.userId = userId; }
 
-    public int getItemId() {
-        return itemId;
-    }
+    public String getCartItems() { return cartItems; }
 
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
+    public void setCartItems(String cartItems) { this.cartItems = cartItems; }
 }

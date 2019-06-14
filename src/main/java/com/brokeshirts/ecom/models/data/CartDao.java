@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface CartDao extends CrudRepository<Cart, Integer> {
+    Cart findByUserId(int userId);
 }

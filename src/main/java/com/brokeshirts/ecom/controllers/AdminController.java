@@ -30,9 +30,6 @@ public class AdminController {
     private ColorsDao colorsDao;
 
     @Autowired
-    private CustomersDao customersDao;
-
-    @Autowired
     private InventoryDao inventoryDao;
 
     @Autowired
@@ -57,6 +54,12 @@ public class AdminController {
     @RequestMapping(value="archive")
     public String adminArchive(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
+
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("categories", categoriesDao.findAll());
@@ -74,6 +77,12 @@ public class AdminController {
     // CATEGORIES
     @RequestMapping(value="categories")
     public String adminCategories(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
 
         model.addAttribute("categories", Menus.sortCatAdmin(categoriesDao));
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
@@ -93,6 +102,12 @@ public class AdminController {
     @RequestMapping(value="colors")
     public String adminColors(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
+
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
@@ -107,6 +122,12 @@ public class AdminController {
     @RequestMapping(value="")
     public String adminOrders(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
+
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("title","ADMIN");
         model.addAttribute("adminMenu", "orders");
@@ -119,6 +140,12 @@ public class AdminController {
     // PRODUCTS
     @RequestMapping(value="products")
     public String adminProducts(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
@@ -140,6 +167,12 @@ public class AdminController {
     // SIZES
     @RequestMapping(value="sizes")
     public String adminSizes(Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
 
         model.addAttribute("title", "ADMIN");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
