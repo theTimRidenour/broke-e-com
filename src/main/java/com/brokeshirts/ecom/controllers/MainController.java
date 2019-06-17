@@ -27,9 +27,6 @@ public class MainController {
     private ColorsDao colorsDao;
 
     @Autowired
-    private CustomersDao customersDao;
-
-    @Autowired
     private InventoryDao inventoryDao;
 
     @Autowired

@@ -293,7 +293,7 @@ public class DataController {
             if  (checkCart == null) {
                 Cart newCart = new Cart();
                 newCart.setUserId(findId.getId());
-                newCart.setCartItems("");
+                newCart.setCartItems("empty");
                 cartDao.save(newCart);
             } else {
                 checkCart.setCartItems("");
@@ -333,7 +333,7 @@ public class DataController {
             }
 
             Cart checkCart = cartDao.findByUserId(loginUser.getId());
-            if (!checkCart.getCartItems().equals("")) {
+            if (!checkCart.getCartItems().equals("empty")) {
                 cartTwo = checkCart.getCartItems();
             }
             if (cartOne.equals(cartTwo)) {
