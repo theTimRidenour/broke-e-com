@@ -451,4 +451,28 @@ public class Data {
         }
         return theItem;
     }
+
+    // CREATE USERNAME FOR HEADER
+    public static String userHeaderName(String user, UserDao userDao) {
+        String username = "guest";
+
+        if (!user.equals("guest")) {
+            User theUser = userDao.findByToken(user);
+            username = theUser.getEmail();
+            if (username.length() > 12) {
+                int charCnt = 0;
+                String usernameTwo = username;
+                username = "";
+                for (char c : usernameTwo.toCharArray()) {
+                    if (charCnt < 10) {
+                        username += c;
+                        charCnt++;
+                    }
+                }
+                username += "...";
+            }
+        }
+
+        return username;
+    }
 }

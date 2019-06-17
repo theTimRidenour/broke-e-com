@@ -389,7 +389,19 @@ public class Admin {
             color.setUrl("'" + color.getUrl() + "'");
             convertedImages.add(color);
         }
-
         return convertedImages;
+    }
+
+    // CHECK IF ADMIN
+    public static boolean adminCheck(String user, UserDao userDao) {
+
+        if (!user.equals("guest")) {
+            User theUser = userDao.findByToken(user);
+            if (theUser.getRole().equals("ADMIN")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
