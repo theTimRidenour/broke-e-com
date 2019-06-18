@@ -17,6 +17,10 @@ public class Store {
 
         private String imageUrl;
 
+        private int itemId;
+
+        private int totalQuant;
+
         private String maxPrice;
 
         private String minPrice;
@@ -27,7 +31,13 @@ public class Store {
 
         private int colorId;
 
+        private Colors color;
+
         private int sizeId;
+
+        private String sizeLongName;
+
+        private String sizeShortName;
 
         private boolean active;
 
@@ -132,6 +142,38 @@ public class Store {
         public void setDescriptions(ArrayList<String> descriptions) {
             this.descriptions = descriptions;
         }
+
+        public String getSizeLongName() {
+            return sizeLongName;
+        }
+
+        public void setSizeLongName(String sizeLongName) {
+            this.sizeLongName = sizeLongName;
+        }
+
+        public String getSizeShortName() {
+            return sizeShortName;
+        }
+
+        public void setSizeShortName(String sizeShortName) {
+            this.sizeShortName = sizeShortName;
+        }
+
+        public Colors getColor() {
+            return color;
+        }
+
+        public void setColor(Colors color) {
+            this.color = color;
+        }
+
+        public int getTotalQuant() { return totalQuant; }
+
+        public void setTotalQuant(int totalQuant) { this.totalQuant = totalQuant; }
+
+        public int getItemId() { return itemId; }
+
+        public void setItemId(int itemId) { this.itemId = itemId; }
     }
 
 //// FIND BY NAME
@@ -165,6 +207,69 @@ public class Store {
 
 
 //// CREATE LIST
+
+    // LIST OF ALL ITEMS IN CART
+    public static HashMap<listedProducts, Integer> loadCart(String cartItems, InventoryDao inventoryDao, SizesDao sizesDao, PhotosDao photosDao, ColorsDao colorsDao) {
+        HashMap<listedProducts, Integer> allItems = new HashMap<>();
+        Inventory item = new Inventory();
+        Sizes size = new Sizes();
+        Photos image = new Photos();
+        listedProducts toAdd = new listedProducts();
+        String itemId = "";
+        String quantity = "";
+        int tracker = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                size = sizesDao.findById(item.getSizeId()).orElse(new Sizes());
+                image = photosDao.findById(item.getImageId()).orElse(new Photos());
+
+                toAdd.setName(item.getProducts().getName());
+                toAdd.setSizeLongName(size.getLongName());
+                toAdd.setSizeShortName(size.getShortName());
+                toAdd.setColor(colorsDao.findById(item.getColorId()).orElse(new Colors()));
+                toAdd.setImageUrl(image.getUrl());
+                toAdd.setMaxPrice(String.format("$%.2f", item.getPrice()));
+                toAdd.setTotalQuant(item.getQuantity());
+                toAdd.setItemId(item.getId());
+
+                allItems.put(toAdd, Integer.valueOf(quantity));
+
+                image = new Photos();
+                size = new Sizes();
+                item = new Inventory();
+                toAdd = new listedProducts();
+                itemId = "";
+                quantity = "";
+            } else {
+                if (tracker == 0) {
+                    itemId += c;
+                } else {
+                    quantity += c;
+                }
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        size = sizesDao.findById(item.getSizeId()).orElse(new Sizes());
+        image = photosDao.findById(item.getImageId()).orElse(new Photos());
+
+        toAdd.setName(item.getProducts().getName());
+        toAdd.setSizeLongName(size.getLongName());
+        toAdd.setSizeShortName(size.getShortName());
+        toAdd.setColor(colorsDao.findById(item.getColorId()).orElse(new Colors()));
+        toAdd.setImageUrl(image.getUrl());
+        toAdd.setMaxPrice(String.format("$%.2f", item.getPrice()));
+        toAdd.setTotalQuant(item.getQuantity());
+        toAdd.setItemId(item.getId());
+
+        allItems.put(toAdd, Integer.valueOf(quantity));
+
+        return allItems;
+    }
 
     // LIST ALL PRODUCTS FROM SINGLE CATEGORY BY CATEGORY NAME
     public static ArrayList<listedProducts> oneCatProducts(String typeName, ProductsDao productsDao, TypesDao typesDao, PhotosDao photosDao) {

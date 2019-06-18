@@ -172,6 +172,13 @@ public class DataController {
         return "redirect:/admin/products";
     }
 
+    // UPDATE QUANTITY OF ITEM IN CART
+    @RequestMapping(value="cart/updateQuant", method = RequestMethod.POST)
+    public String cartQuantUpdate(@CookieValue(value = "cartItems", defaultValue = "empty")String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response, @RequestParam int itemId, @RequestParam int quantity) {
+        Store.updateItemInCart(itemId, quantity, cartItems, response);
+        return "redirect:/checkout/cart";
+    }
+
 
 //// DELETE DATA
 

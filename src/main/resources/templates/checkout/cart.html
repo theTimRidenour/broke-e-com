@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="section_full">
+    <div style="border-bottom: 1px solid black; padding-left: 5px; text-align: left;">Shopping Cart</div>
+    <div th:each="item : ${allCartItems}" style="text-align: left;">
+        <div>
+            <img th:src="${'/images/upload/' + item.key.imageUrl}" style="postion: absolute; border: 1.5px solid black; margin: 5px; width: 127px; height: 127px; border-radius: 5px;" />
+            <div th:text="${item.key.name + ' - ' + item.key.color.name}" style="display: block; position: absolute; margin: -130px 0 0 155px; font-size: 20px;"></div>
+            <div th:text="${item.key.sizeLongName}" style="display: block; position: absolute; margin: -85px 0 0 155px; font-size: 20px;"></div>
+            <div th:text="${item.key.maxPrice}" style="display: block; position: absolute; margin: -40px 0 0 155px; font-size: 14px;"></div>
+            <form action="/data/cart/updateQuant" method="post">
+                <input type="hidden" name="itemId" th:value="${item.key.itemId}"/>
+                <select onchange="this.form.submit()" name="quantity" style="display: block; position: absolute; margin: -80px 0 0 600px;">
+                    <option th:each="i: ${#numbers.sequence( 0, item.key.totalQuant, 1)}" th:value="${i}" th:text="${i}" th:selected="${i == item.value} ?: 'selected'" />
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>
