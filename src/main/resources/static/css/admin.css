@@ -1,9 +1,19 @@
+/*
+
+     13 - GENERAL
+    138 - ADD FORMS
+    192 - ADD INVENTORY ITEM
+    261 - ADD PRODUCT
+    381 - ADMIN CONTAINER
+    392 - ADMIN MENU
+    421 - FOOTER
+    427 - HEADER
+    442 - LIST ORDER (UP/DOWN)   */
+
+/********** GENERAL **********/
+
 * {
     text-decoration: none;
-}
-
-#footer {
-  margin-top: 0;
 }
 
 .section_full {
@@ -179,69 +189,73 @@
     border: 2px solid #add8e6;
 }
 
-/************ ADMIN  CONTAINER ************/
+/********** ADD INVENTORY ITEM **********/
 
-#admin_container {
-    text-align: left;
-    margin: 0;
-    padding: 60px 0 0;
-    display: inline-block;
-    width: 840px;
-    min-height: 400px;
+#add_item {
+    margin-top: 0;
 }
 
-/*************** ADMIN MENU ***************/
-
-.active {
-    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
-    color: #ffffff;
-    border: 2px solid #72bcd4;
+.add_ItemForm {
+    height: 300px;
 }
 
-#admin_menu {
-    margin: 0;
-    padding: 10px 0 0;
-    display: inline-block;
-    width: 175px;
+#sel_catSubcat {}
+
+#sel_product {}
+
+#color_title {}
+
+#sel_color {
+    margin-top: 60px;
 }
 
-.admin_menu_button {
-    height: 34px;
-    font-size: 20px;
-    padding-top: 7px;
-    border-top: 1px solid #606060;
-    border-bottom: 1px solid #606060;
+.sel_image2 {
+    margin-top: 165px;
+    border: 0;
 }
 
-a .admin_menu_button:hover {
-  background-color: #e8f4f8;
-  border-right: 2px solid #e8f4f8;
-  border-left: 2px solid #e8f4f8;
+.sel_name2, .sel_price {
+    margin-top: 205px;
+    margin-left: 60px;
+    width: 450px;
 }
 
-/********** LIST ORDER (UP/DOWN) **********/
+.sel_price {
+    width: 150px;
+    margin-left: 570px;
+}
 
-.moveDiv {
+.sel_submit2 {
+    margin-top: 255px;
+}
+
+.blockIt {
+    display: block;
+    margin: 0 30px;
+    padding-left: 20px;
+}
+
+.blockIt:hover {
+    border: 0.5px solid #606060;
+}
+
+.quant_input {
+    display: block;
     position: absolute;
-    font-size: 11px;
-    margin: 8px 36px;
-    z-index: 2;
+    width: 40px;
+    font-size: 12px;
+    text-align: right;
+    margin-top: -19px;
+    margin-left: 675px;
+    padding-top: 1px;
 }
 
-.moveDown {
+.quant_submit {
+    display: block;
     position: absolute;
-    height: 15px;
-    font-size: 10px;
-    margin: 15px 36px;
-    z-index: 3;
-}
-
-.moveUp {
-    position: absolute;
-    height: 15px;
-    font-size: 10px;
-    margin: 3px 36px;
-    z-index: 3;
+    margin-top: -19px;
+    margin-left: 720px;
+    font-size: 12px;
 }
 
 /************ ADD PRODUCT ************/
@@ -276,8 +290,6 @@ a .admin_menu_button:hover {
     font-weight: bold;
     margin-left: 70px;
 }
-
-/************* ADD  PRODUCT *************/
 
 #add_product, #add_item {
     border-bottom: 2px solid #606060;
@@ -366,78 +378,60 @@ a .admin_menu_button:hover {
     background-image: linear-gradient(to bottom right, #61abc3, #bee9f7);
 }
 
-/********** ADD INVENTORY ITEM **********/
+/************ ADMIN  CONTAINER ************/
 
-#add_item {
-    margin-top: 0;
+#admin_container {
+    text-align: left;
+    margin: 0;
+    padding: 60px 0 0;
+    display: inline-block;
+    width: 840px;
+    min-height: 400px;
 }
 
-.add_ItemForm {
-    height: 300px;
+/*************** ADMIN MENU ***************/
+
+.active {
+    background-image: linear-gradient(to bottom right, #72bcd4, #add8e6);
+    color: #ffffff;
+    border: 2px solid #72bcd4;
 }
 
-#sel_catSubcat {}
-
-#sel_product {}
-
-#color_title {}
-
-#sel_color {
-    margin-top: 60px;
+#admin_menu {
+    margin: 0;
+    padding: 10px 0 0;
+    display: inline-block;
+    width: 175px;
 }
 
-.sel_image2 {
-    margin-top: 165px;
-    border: 0;
+.admin_menu_button {
+    height: 34px;
+    font-size: 20px;
+    padding-top: 7px;
+    border-top: 1px solid #606060;
+    border-bottom: 1px solid #606060;
 }
 
-.sel_name2, .sel_price {
-    margin-top: 205px;
-    margin-left: 60px;
-    width: 450px;
+a .admin_menu_button:hover {
+  background-color: #e8f4f8;
+  border-right: 2px solid #e8f4f8;
+  border-left: 2px solid #e8f4f8;
 }
 
-.sel_price {
-    width: 150px;
-    margin-left: 570px;
+/********** FOOTER **********/
+
+#footer {
+  margin-top: 0;
 }
 
-.sel_submit2 {
-    margin-top: 255px;
+/********** HEADER **********/
+
+#header {
+    height: 140px;
+    background-position: bottom;
 }
 
-.blockIt {
-    display: block;
-    margin: 0 30px;
-    padding-left: 20px;
-}
-
-.blockIt:hover {
-    border: 0.5px solid #606060;
-}
-
-.quant_input {
-    display: block;
-    position: absolute;
-    width: 40px;
-    font-size: 12px;
-    text-align: right;
-    margin-top: -19px;
-    margin-left: 675px;
-    padding-top: 1px;
-}
-
-.quant_submit {
-    display: block;
-    position: absolute;
-    margin-top: -19px;
-    margin-left: 720px;
-    font-size: 12px;
-}
-
-/********** MODIFY HEADER **********/
-
-#header #title, #header form {
+#header form, #header #title {
     display: none;
 }
 
@@ -445,7 +439,27 @@ a .admin_menu_button:hover {
     top: 85px;
 }
 
-#header {
-    height: 140px;
-    background-position: bottom;
+/********** LIST ORDER (UP/DOWN) **********/
+
+.moveDiv {
+    position: absolute;
+    font-size: 11px;
+    margin: 8px 36px;
+    z-index: 2;
+}
+
+.moveDown {
+    position: absolute;
+    height: 15px;
+    font-size: 10px;
+    margin: 15px 36px;
+    z-index: 3;
+}
+
+.moveUp {
+    position: absolute;
+    height: 15px;
+    font-size: 10px;
+    margin: 3px 36px;
+    z-index: 3;
 }
