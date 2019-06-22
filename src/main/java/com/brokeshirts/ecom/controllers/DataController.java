@@ -2,6 +2,7 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Data;
 import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.Cart;
 import com.brokeshirts.ecom.models.Inventory;
 import com.brokeshirts.ecom.models.Products;
 import com.brokeshirts.ecom.models.User;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -174,8 +176,70 @@ public class DataController {
 
     // UPDATE QUANTITY OF ITEM IN CART
     @RequestMapping(value="cart/updateQuant", method = RequestMethod.POST)
-    public String cartQuantUpdate(@CookieValue(value = "cartItems", defaultValue = "empty")String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response, @RequestParam int itemId, @RequestParam int quantity) {
-        Store.updateItemInCart(itemId, quantity, cartItems, response);
+    public String cartQuantUpdate(@CookieValue(value = "cartItems", defaultValue = "empty")String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response, @RequestParam String itemId, @RequestParam String quantity) {
+
+        System.out.println("itemId: " + itemId);
+        System.out.println("quantity: " + quantity);
+        System.out.println("cartItems: " + cartItems);
+
+        String item = "";
+        String quant = "";
+        String newCart = "";
+        int tracker = 0;
+        int cnt = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                if (item.equals(itemId)) {
+                    if (Integer.valueOf(quantity) > 0) {
+                        if (cnt > 0) {
+                            newCart += ".";
+                        }
+                        newCart += item + "/" + quantity;
+                        cnt++;
+                    }
+                } else {
+                    if (cnt > 0) {
+                        newCart += ".";
+                    }
+                    newCart += item + "/" + quant;
+                    cnt++;
+                }
+                item = "";
+                quant = "";
+            } else if (tracker == 0) {
+                item += c;
+            } else {
+                quant += c;
+            }
+        }
+        if (item.equals(itemId)) {
+            if (Integer.valueOf(quantity) > 0) {
+                if (cnt > 0) {
+                    newCart += ".";
+                }
+                newCart += item + "/" + quantity;
+            }
+        } else {
+            if (cnt > 0) {
+                newCart += ".";
+            }
+            newCart += item + "/" + quant;
+        }
+
+        Cookie cookie = new Cookie("cartItems", newCart);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        User theUser = userDao.findByToken(user);
+        Cart theCart = cartDao.findByUserId(theUser.getId());
+
+        theCart.setCartItems(newCart);
+        cartDao.save(theCart);
+
         return "redirect:/checkout/cart";
     }
 
