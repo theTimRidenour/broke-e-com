@@ -91,16 +91,37 @@ public class CheckoutController {
         model.addAttribute("username", Data.userHeaderName(user, userDao));
         model.addAttribute("allCartItems", Store.loadCart(cartItems, inventoryDao, sizesDao, photosDao, colorsDao));
         model.addAttribute("checkout", "cart");
-        model.addAttribute("cartPrice", Store.cartPrices(cartItems, inventoryDao));
+        model.addAttribute("cartPrice", Store.cartPrices(cartItems, (float) 0, inventoryDao));
 
         return "checkout/cart";
     }
 
     // SHIPPING DETAILS
     @RequestMapping(value = "shipping")
-    public String shipping (Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
+    public String shipping (Model model,@CookieValue(value = "order", defaultValue = "no_order") String order, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
         if (user.equals("guest")) {
             return "redirect:/";
+        }
+
+        if (order.equals("no_order")) {
+            int userId = userDao.findByToken(user).getId();
+            for (Orders checkOrder : ordersDao.findAll()) {
+                if (checkOrder.getUserId() == userId) {
+                    if (checkOrder.getOrderPaid() == null) {
+                        Cookie cookie = new Cookie("order", checkOrder.getToken());
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                        order = checkOrder.getToken();
+                    }
+                }
+            }
+        }
+
+        if (!order.equals("no_order")) {
+            Orders checkOrder = ordersDao.findByToken(order);
+            if (checkOrder.getAddressId() > 0) {
+                return "redirect:/checkout/payment";
+            }
         }
 
         model.addAttribute("title", "CHECKOUT");
@@ -111,10 +132,47 @@ public class CheckoutController {
         model.addAttribute("username", Data.userHeaderName(user, userDao));
         model.addAttribute("allCartItems", Store.loadCart(cartItems, inventoryDao, sizesDao, photosDao, colorsDao));
         model.addAttribute("checkout", "shipping");
-        model.addAttribute("cartPrice", Store.cartPrices(cartItems, inventoryDao));
+        model.addAttribute("cartPrice", Store.cartPrices(cartItems, (float) 0, inventoryDao));
         model.addAttribute("freeShipping", Store.checkShipping(cartItems, inventoryDao));
 
         return "checkout/shipping";
+    }
+
+    // PAYMENT FORM
+    @RequestMapping(value = "payment")
+    public String payment (Model model,@CookieValue(value = "order", defaultValue = "no_order") String order, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
+        if (user.equals("guest")) {
+            return "redirect:/";
+        }
+
+        if (order.equals("no_order")) {
+            int userId = userDao.findByToken(user).getId();
+            for (Orders checkOrder : ordersDao.findAll()) {
+                if (checkOrder.getUserId() == userId) {
+                    if (checkOrder.getOrderPaid() == null) {
+                        Cookie cookie = new Cookie("order", checkOrder.getToken());
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                        order = checkOrder.getToken();
+                    }
+                }
+            }
+        }
+
+        Orders theOrder = ordersDao.findByToken(order);
+
+        model.addAttribute("title", "CHECKOUT");
+        model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
+        model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/");
+        model.addAttribute("username", Data.userHeaderName(user, userDao));
+        model.addAttribute("allCartItems", Store.loadCart(cartItems, inventoryDao, sizesDao, photosDao, colorsDao));
+        model.addAttribute("checkout", "payment");
+        model.addAttribute("cartPrice", Store.cartPrices(cartItems, theOrder.getShipping(), inventoryDao));
+        model.addAttribute("address", addressesDao.findById(theOrder.getAddressId()).orElse(new Addresses()));
+
+        return "checkout/payment";
     }
 
 //// VERIFY, CREATE, MODIFY ORDER
@@ -165,8 +223,8 @@ public class CheckoutController {
 
     // VERIFY ADDRESS
     @RequestMapping(value = "verify/address", method = RequestMethod.POST)
-    public String verifyAddress(@RequestParam String firstName, @RequestParam String middleInitial, @RequestParam String lastName, @RequestParam String addressOne, @RequestParam String addressTwo, @RequestParam String city, @RequestParam String state, @RequestParam int zipCode, @RequestParam Float shippingCharge, @CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "order", defaultValue = "no_order") String order) {
-        if (firstName.equals("") || lastName.equals("") || addressOne.equals("") || city.equals("") || state.equals("") || zipCode < 10000 || zipCode > 99999) {
+    public String verifyAddress(@RequestParam String firstName, @RequestParam String middleInitial, @RequestParam String lastName, @RequestParam String addressOne, @RequestParam String addressTwo, @RequestParam String city, @RequestParam String state, @RequestParam String zipCode, @RequestParam String shippingCharge, @CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "order", defaultValue = "no_order") String order) {
+        if (firstName.equals("") || lastName.equals("") || addressOne.equals("") || city.equals("") || state.equals("") || Integer.valueOf(zipCode) < 10000 || Integer.valueOf(zipCode) > 99999) {
             return "redirect:/checkout/shipping";
         }
 
@@ -181,7 +239,7 @@ public class CheckoutController {
         address.setAddressTwo(addressTwo);
         address.setCity(city);
         address.setState(state);
-        address.setZipCode(zipCode);
+        address.setZipCode(Integer.valueOf(zipCode));
         address.setUserId(theUser.getId());
         addressesDao.save(address);
 
@@ -190,7 +248,7 @@ public class CheckoutController {
             if (oneAddress.getFirstName().equals(firstName)) {
                 if (oneAddress.getLastName().equals(lastName)) {
                     if (oneAddress.getAddressOne().equals(addressOne)) {
-                        if (oneAddress.getZipCode() == zipCode) {
+                        if (oneAddress.getZipCode() == Integer.valueOf(zipCode)) {
                             checkAddresses = oneAddress;
                         }
                     }
@@ -199,7 +257,7 @@ public class CheckoutController {
         }
 
         theOrder.setAddressId(checkAddresses.getId());
-        theOrder.setShipping(shippingCharge);
+        theOrder.setShipping(Float.valueOf(shippingCharge));
         ordersDao.save(theOrder);
 
         return "redirect:/checkout/payment";

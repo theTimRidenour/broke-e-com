@@ -9,7 +9,7 @@
 <div class="section_full">
     <div class = "checkout_headerOne">Shipping Details</div>
     <div class= "checkout_bodyOne">
-        <form id="addressForm" method="get">
+        <form id="addressForm" th:action="@{/checkout/verify/address}" method="post">
             <input class="fn" type="text" name="firstName" placeholder="First Name" required="required" />
             <input class="mi" type="text" name="middleInitial" placeholder="M.I." />
             <input class="ln" type="text" name="lastName" placeholder="Last Name" required="required" />

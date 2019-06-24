@@ -1052,11 +1052,11 @@ public class Store {
 //// CHECKOUT
 
     // SUMMARY PRICES (SUB-TOTAL, SHIPPING, TAX, GRAND TOTAL)
-    public static listedProducts cartPrices(String cartItems, InventoryDao inventoryDao) {
+    public static listedProducts cartPrices(String cartItems, Float shippingCharge, InventoryDao inventoryDao) {
         listedProducts cartPrice = new listedProducts();
         Inventory item = new Inventory();
         Float subTotal = (float) 0;
-        Float shipping = (float) 0;
+        Float shipping = shippingCharge;
         Float tax = (float) 0;
         Float grandTotal = (float) 0;
         String itemId = "";
@@ -1094,7 +1094,7 @@ public class Store {
 
     // CHECK IF FREE SHIPPING
     public static boolean checkShipping(String cartItems, InventoryDao inventoryDao) {
-        listedProducts cart = cartPrices(cartItems, inventoryDao);
+        listedProducts cart = cartPrices(cartItems, (float) 0, inventoryDao);
         int tracker = 0;
         String subTotal = "";
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+<div th:replace="fragments :: checkout"></div>
+
+<div class="section_full">
+    <div class = "checkout_headerOne">Payment Options</div>
+    <div class= "checkout_bodyOne">
+
+    </div>
+    <div class="checkout_headerTwo">Summary</div>
+
+    <div class="checkout_bodyTwo">
+        <div th:each="item : ${allCartItems}" style="text-align: left;">
+            <div>
+                <img th:src="${'/images/upload/' + item.key.imageUrl}" style="border: 1px solid black; margin: 5px; width: 60px; height: 60px; border-radius: 3px;" />
+                <div th:text="${item.key.name + ' - ' + item.key.color.name + '(' + item.key.sizeShortName + ')'}" style="display: block; position: absolute; margin-top: -60px; width: 364px; font-size: 16px; text-align: right;"></div>
+                <div th:text="${'Quant. ' + item.value + ' - ' + item.key.maxPrice}" style="display: block; position: absolute; font-size: 16px; margin-top: -40px; width: 364px; text-align: right;"></div>
+                </select>
+                </form>
+            </div>
+        </div>
+
+        <hr style="margin: 5px 0;" />
+
+        <div style="text-align: left;" th:text="${address.firstName + ' ' + address.middleInitial + ' ' + address.lastName}"></div>
+        <div style="text-align: left;" th:text="${address.addressOne}"></div>
+        <div style="text-align: left;" th:text="${address.addressTwo}"></div>
+        <div style="text-align: left;" th:text="${address.city + ', ' + address.state + ' ' + address.zipCode}"></div>
+
+        <hr style="margin: 5px 0;" />
+
+        <div class="co_title">SUBTOTAL</div>
+        <div class="co_value" th:text="${cartPrice.subtotal}">$55.00</div>
+        <div class="co_title">SHIPPING</div>
+        <div class="co_value" th:text="${cartPrice.shipping}">-</div>
+        <div class="co_title">TAX</div>
+        <div class="co_value" th:text="${cartPrice.tax}">$5.00</div>
+        <hr style="margin: 5px 0;" />
+        <div class="co_title tot">TOTAL</div>
+        <div class="co_value tot" th:text="${cartPrice.total}">$60.00</div>
+        <div style="cursor: pointer;" onclick="document.getElementById('addressForm').submit();" class="co_title tot button one">Next</div>
+        <a th:href="@{'/checkout/cancel'}" class="co_value tot button two">Cancel</a>
+    </div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>
