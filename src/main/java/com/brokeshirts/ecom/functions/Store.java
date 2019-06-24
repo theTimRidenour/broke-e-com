@@ -53,6 +53,14 @@ public class Store {
 
         private ArrayList<String> descriptions;
 
+        private String subtotal;
+
+        private String tax;
+
+        private String shipping;
+
+        private String total;
+
         public listedProducts() {}
 
         public String getName() { return name; }
@@ -174,6 +182,38 @@ public class Store {
         public int getItemId() { return itemId; }
 
         public void setItemId(int itemId) { this.itemId = itemId; }
+
+        public String getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(String subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public String getTax() {
+            return tax;
+        }
+
+        public void setTax(String tax) {
+            this.tax = tax;
+        }
+
+        public String getShipping() {
+            return shipping;
+        }
+
+        public void setShipping(String shipping) {
+            this.shipping = shipping;
+        }
+
+        public String getTotal() {
+            return total;
+        }
+
+        public void setTotal(String total) {
+            this.total = total;
+        }
     }
 
 //// FIND BY NAME
@@ -1007,5 +1047,67 @@ public class Store {
 
         Cookie cookie = new Cookie("cartItems", cart);
         response.addCookie(cookie);
+    }
+
+//// CHECKOUT
+
+    // SUMMARY PRICES (SUB-TOTAL, SHIPPING, TAX, GRAND TOTAL)
+    public static listedProducts cartPrices(String cartItems, InventoryDao inventoryDao) {
+        listedProducts cartPrice = new listedProducts();
+        Inventory item = new Inventory();
+        Float subTotal = (float) 0;
+        Float shipping = (float) 0;
+        Float tax = (float) 0;
+        Float grandTotal = (float) 0;
+        String itemId = "";
+        String quantity = "";
+        int tracker = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                subTotal += (item.getPrice() * Integer.valueOf(quantity));
+                itemId = "";
+                quantity = "";
+                item = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        subTotal += (item.getPrice() * Integer.valueOf(quantity));
+        tax = (float) (subTotal * 0.081);
+        grandTotal = (float) (subTotal + shipping + tax);
+
+        cartPrice.setSubtotal(String.format("$%.2f", subTotal));
+        cartPrice.setTax(String.format("$%.2f", tax));
+        cartPrice.setShipping(String.format("$%.2f", shipping));
+        cartPrice.setTotal(String.format("$%.2f", grandTotal));
+
+        return cartPrice;
+    }
+
+    // CHECK IF FREE SHIPPING
+    public static boolean checkShipping(String cartItems, InventoryDao inventoryDao) {
+        listedProducts cart = cartPrices(cartItems, inventoryDao);
+        int tracker = 0;
+        String subTotal = "";
+
+        for (char c : cart.getSubtotal().toCharArray()) {
+            if (c != '$') {
+                subTotal += c;
+            }
+        }
+
+        if (Float.valueOf(subTotal) >= (float) 49) {
+            return true;
+        }
+
+        return false;
     }
 }

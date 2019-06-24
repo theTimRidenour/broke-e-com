@@ -113,6 +113,13 @@
     </script>
 </head>
 
+<!-- CHECKOUT -->
+
+<div id="checkout" th:fragment="checkout">
+    <div th:class="${checkout == 'cart' ? 'co_cart checkout active' : 'co_cart checkout'}">Shopping Cart</div>
+    <div th:class="${checkout == 'shipping' ? 'co_shipping checkout active' : 'co_shipping checkout'}">Shipping Details</div>
+    <div th:class="${checkout == 'payment' ? 'co_payment checkout active' : 'co_payment checkout'}">Payment Options</div>
+</div>
 
 <!-- HEADER -->
 
@@ -190,7 +197,7 @@
 <!-- FOOTER -->
 
 
-<div id="footer" th:fragment="footer">
+<div id="footer" th:style="${checkout == 'cart' ? 'margin-top: ' + ((allCartItems.size() * 140) + 100) + 'px;' : 'margin-top: ' + ((allCartItems.size() * 70) + 350) + 'px;'}" th:fragment="footer">
     <div class="nav flex-row">
         <div class="link txt_white"><a th:href="@{/}">Shop</a></div>
         <div class="divide txt_white">|</div>

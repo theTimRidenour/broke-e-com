@@ -429,6 +429,110 @@ public class Data {
         typesDao.deleteById(typeId);
     }
 
+//// CHECKOUT
+
+    // CHECK IF ITEMS STILL AVAILABLE
+    public static boolean checkCart(String cartItems, InventoryDao inventoryDao) {
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+        Inventory checkItem = new Inventory();
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                checkItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                if (Integer.valueOf(quantity) > checkItem.getQuantity()) {
+                    return false;
+                }
+                itemId = "";
+                quantity = "";
+                checkItem = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        checkItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        if (Integer.valueOf(quantity) > checkItem.getQuantity()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // CREATE INVENTORY STRING FOR ORDER
+    public static String createInventoryString(String cartItems, InventoryDao inventoryDao) {
+        String itemString = "";
+        Inventory item = new Inventory();
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                if (itemString.equals("")) {
+                    itemString += item.getPrice() + "/" + itemId + "/" + quantity;
+                } else {
+                    itemString += "." + item.getPrice() + "/" + itemId + "/" + quantity;
+                }
+                itemId = "";
+                quantity = "";
+                item = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        if (itemString.equals("")) {
+            itemString += item.getPrice() + "/" + itemId + "/" + quantity;
+        } else {
+            itemString += "." + item.getPrice() + "/" + itemId + "/" + quantity;
+        }
+
+        return itemString;
+    }
+
+    // UPDATE CART IF NOT AVAILABLE
+
+    // REMOVE CART ITEMS FROM INVENTORY
+    public static void removeCartFromInventory(String cartItems, InventoryDao inventoryDao) {
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+        Inventory updateItem = new Inventory();
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                updateItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                updateItem.setQuantity(updateItem.getQuantity() - Integer.valueOf(quantity));
+                inventoryDao.save(updateItem);
+                itemId = "";
+                quantity = "";
+                updateItem = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        updateItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        updateItem.setQuantity(updateItem.getQuantity() - Integer.valueOf(quantity));
+        inventoryDao.save(updateItem);
+    }
+
 //// EXTRA DATA FUNCTIONS
 
     // REPLACE "_" WITH " "

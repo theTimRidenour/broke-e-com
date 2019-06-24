@@ -4,22 +4,39 @@
 </head>
 <body>
 <div th:replace="fragments :: header"></div>
+<div th:replace="fragments :: checkout"></div>
 
 <div class="section_full">
-    <div style="border-bottom: 1px solid black; padding-left: 5px; text-align: left;">Shopping Cart</div>
-    <div th:each="item : ${allCartItems}" style="text-align: left;">
-        <div>
-            <img th:src="${'/images/upload/' + item.key.imageUrl}" style="postion: absolute; border: 1.5px solid black; margin: 5px; width: 127px; height: 127px; border-radius: 5px;" />
-            <div th:text="${item.key.name + ' - ' + item.key.color.name}" style="display: block; position: absolute; margin: -130px 0 0 155px; font-size: 20px;"></div>
-            <div th:text="${item.key.sizeLongName}" style="display: block; position: absolute; margin: -85px 0 0 155px; font-size: 20px;"></div>
-            <div th:text="${item.key.maxPrice}" style="display: block; position: absolute; margin: -40px 0 0 155px; font-size: 14px;"></div>
-            <form action="/data/cart/updateQuant" method="post">
-                <input type="hidden" name="itemId" th:value="${item.key.itemId}"/>
-                <select onchange="this.form.submit()" name="quantity" style="display: block; position: absolute; margin: -80px 0 0 600px; width: 40px;">
-                    <option th:each="i: ${#numbers.sequence( 0, item.key.totalQuant, 1)}" th:value="${i}" th:text="${i == 0} ? 'remove' : ${i}" th:selected="${i == item.value} ?: 'selected'" />
-                </select>
-            </form>
+    <div class = "checkout_headerOne">Shopping Cart</div>
+    <div class= "checkout_bodyOne">
+        <div th:each="item : ${allCartItems}" style="text-align: left;">
+            <div>
+                <img th:src="${'/images/upload/' + item.key.imageUrl}" style="postion: absolute; border: 1.5px solid black; margin: 5px; width: 127px; height: 127px; border-radius: 5px;" />
+                <div th:text="${item.key.name + ' - ' + item.key.color.name}" style="display: block; position: absolute; margin: -130px 0 0 155px; font-size: 20px;"></div>
+                <div th:text="${item.key.sizeLongName}" style="display: block; position: absolute; margin: -85px 0 0 155px; font-size: 20px;"></div>
+                <div th:text="${item.key.maxPrice}" style="display: block; position: absolute; margin: -40px 0 0 155px; font-size: 14px;"></div>
+                <form action="/data/cart/updateQuant" method="post">
+                    <input type="hidden" name="itemId" th:value="${item.key.itemId}"/>
+                    <select onchange="this.form.submit()" name="quantity" style="display: block; position: absolute; margin: -80px 0 0 600px; width: 40px;">
+                        <option th:each="i: ${#numbers.sequence( 0, item.key.totalQuant, 1)}" th:value="${i}" th:text="${i == 0} ? 'remove' : ${i}" th:selected="${i == item.value} ?: 'selected'" />
+                    </select>
+                </form>
+            </div>
         </div>
+    </div>
+    <div class="checkout_headerTwo">Summary</div>
+    <div class="checkout_bodyTwo">
+        <div class="co_title">SUBTOTAL</div>
+        <div class="co_value" th:text="${cartPrice.subtotal}">$55.00</div>
+        <div class="co_title">SHIPPING</div>
+        <div class="co_value">-</div>
+        <div class="co_title">TAX</div>
+        <div class="co_value" th:text="${cartPrice.tax}">$5.00</div>
+        <hr style="margin: 5px 0;" />
+        <div class="co_title tot">TOTAL</div>
+        <div class="co_value tot" th:text="${cartPrice.total}">$60.00</div>
+        <a th:href="@{'/checkout/verify/cart'}" class="co_title tot button one">Next</a>
+        <a th:href="@{'/'}" class="co_value tot button two">Cancel</a>
     </div>
 </div>
 <div th:replace="fragments :: footer"></div>
