@@ -29,6 +29,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-security'
+    compile group: 'com.squareup', name: 'connect', version: '2.20190612.0'
     compile 'mysql:mysql-connector-java'
     compile 'org.springframework.boot:spring-boot-devtools'
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'

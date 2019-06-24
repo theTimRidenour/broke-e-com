@@ -51,6 +51,9 @@ public class AdminController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private OrdersDao ordersDao;
+
 
 //// DISPLAY FORMS
 
@@ -130,6 +133,7 @@ public class AdminController {
             model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
             model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
             model.addAttribute("username", Data.userHeaderName(user, userDao));
+            model.addAttribute("orders", ordersDao.findAll());
 
             return "admin/index";
         }

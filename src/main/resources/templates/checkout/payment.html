@@ -10,6 +10,27 @@
     <div class = "checkout_headerOne">Payment Options</div>
     <div class= "checkout_bodyOne">
 
+        <div id="form-container">
+            <div id="sq-ccbox">
+                <form id="nonce-form" novalidate th:action="@{/checkout/verify/payment}" method="post">
+                    <fieldset>
+                        <div id="sq-card-number"></div>
+                        <div class="third">
+                            <div id="sq-expiration-date"></div>
+                        </div>
+                        <div class="third">
+                            <div id="sq-cvv"></div>
+                        </div>
+                        <div class="third">
+                            <div id="sq-postal-code"></div>
+                        </div>
+                    </fieldset>
+                    <button id="sq-creditcard" class="button-credit-card" onclick="onGetCardNonce(event)" th:text="${'PAY ' + cartPrice.total}">Pay $1.00</button>
+                    <input type="hidden" id="card-nonce" name="nonce">
+                </form>
+            </div>
+        </div>
+
     </div>
     <div class="checkout_headerTwo">Summary</div>
 
@@ -42,7 +63,7 @@
         <hr style="margin: 5px 0;" />
         <div class="co_title tot">TOTAL</div>
         <div class="co_value tot" th:text="${cartPrice.total}">$60.00</div>
-        <div style="cursor: pointer;" onclick="document.getElementById('addressForm').submit();" class="co_title tot button one">Next</div>
+        <!-- <div style="cursor: pointer;" onclick="document.getElementById('addressForm').submit();" class="co_title tot button one">Next</div> -->
         <a th:href="@{'/checkout/cancel'}" class="co_value tot button two">Cancel</a>
     </div>
 </div>

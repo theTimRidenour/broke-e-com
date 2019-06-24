@@ -9,6 +9,9 @@
     <link th:if="${title == 'CHECKOUT'}" rel="stylesheet" th:href="@{/css/checkout.css}" />
     <link th:if="${title == 'ADMIN'}" rel="stylesheet" th:href="@{/css/admin.css}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
+    <script style="display: none;" th:if="${title == 'CHECKOUT'}" type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+    <script style="display: none;" th:if="${title == 'CHECKOUT'}" type="text/javascript" th:src="@{/js/mysqpaymentform.js}"></script>
+    <link style="display: none;" th:if="${title == 'CHECKOUT'}" rel="stylesheet" type="text/css" th:href="@{/css/mysqpaymentform.css}" />
     <script style="display: none;" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script style="display: none;" src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <style style="display: none;" th:each="menuItem : ${menuItems}" th:text="${'

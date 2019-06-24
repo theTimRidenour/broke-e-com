@@ -56,7 +56,7 @@ public class CheckoutController {
     // CART
     @RequestMapping(value = "cart")
     public String cart (Model model,@CookieValue(value = "order", defaultValue = "no_order") String order, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
-        if (user.equals("guest")) {
+        if (user.equals("guest") || cartItems.equals("empty")) {
             return "redirect:/";
         }
 
@@ -291,5 +291,24 @@ public class CheckoutController {
         }
 
         return "redirect:/checkout/shipping";
+    }
+
+    // VERIFY PAYMENT
+    @RequestMapping(value = "verify/payment", method = RequestMethod.POST)
+    public String verifyPayment(@RequestParam String nonce, @CookieValue(value = "order", defaultValue = "no_order") String order, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
+        Orders theOrder = ordersDao.findByToken(order);
+        theOrder.setOrderPaid(nonce);
+        ordersDao.save(theOrder);
+
+        Cookie orderCookie = new Cookie("order", "no_order");
+        orderCookie.setPath("/");
+        response.addCookie(orderCookie);
+
+        Cookie cartCookie = new Cookie("cartItems", "empty");
+        cartCookie.setPath("/");
+        cartCookie.setMaxAge(24 * 60 * 60);
+        response.addCookie(cartCookie);
+
+        return "redirect:/";
     }
 }
