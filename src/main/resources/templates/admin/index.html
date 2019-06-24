@@ -8,6 +8,24 @@
 <div class="section_full">
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
+        <div style="font-weight: bold;">Order Paid</div>
+        <div th:each="order : ${orders}" th:unless="${order.orderItemsShipped}">
+            <div th:text="${order.id + ' - ' + order.inventory}" th:if="${order.orderPaid}"></div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <div style="font-weight: bold;">Order Shipped</div>
+        <div th:each="order : ${orders}">
+            <div th:text="${order.id + ' - ' + order.inventory}" th:if="${order.orderItemsShipped}"></div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <div style="font-weight: bold;">Pending Orders</div>
+        <div th:each="order : ${orders}">
+            <div th:text="${order.id + ' - ' + order.inventory}" th:unless="${order.orderPaid}"></div>
+        </div>
     </div>
 </div>
 

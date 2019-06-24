@@ -9,12 +9,12 @@
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <form method="post" th:action="@{/data/add/size}">
-            <div class="admin_text_box">
+            <div class="admin_text_box" style="top: 140px;">
                 <div>Size:</div>
                 <input type="text" required="required" name="longName" placeholder="eg. extra large" style="width: 400px; margin-left: 90px;" />
                 <input type="text" required="required" name="shortName" placeholder="eg. xl" style="width: 75px; margin-left: 510px;" />
             </div>
-            <div class="admin_submit_button">
+            <div class="admin_submit_button" style="top: 140px;">
                 <input type="submit" value="add" />
             </div>
         </form>
