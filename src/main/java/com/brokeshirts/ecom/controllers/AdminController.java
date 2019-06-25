@@ -135,6 +135,9 @@ public class AdminController {
             model.addAttribute("username", Data.userHeaderName(user, userDao));
             model.addAttribute("orders", ordersDao.findAll());
 
+            model.addAttribute("paidNotShipped", Admin.paidNotShipped(ordersDao, inventoryDao));
+            model.addAttribute("pendingOrders", Admin.pendingOrders(ordersDao, inventoryDao));
+
             return "admin/index";
         }
 

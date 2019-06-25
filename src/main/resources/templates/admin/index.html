@@ -9,8 +9,13 @@
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <div style="font-weight: bold;">Order Paid</div>
-        <div th:each="order : ${orders}" th:unless="${order.orderItemsShipped}">
-            <div th:text="${order.id + ' - ' + order.inventory}" th:if="${order.orderPaid}"></div>
+
+        <br />
+        <div th:each="testList : ${paidNotShipped}">
+            <div style="font-weight: bold;" th:text="${'order id: ' + testList.key}"></div>
+            <br />
+            <div th:each="testListTwo : ${testList.value}" style="display: block;" th:text="${'item id: ' + testListTwo.key + ' (Quant. ' + testListTwo.value + ')'}"></div>
+            <br />
         </div>
         <br />
         <hr />
@@ -23,9 +28,16 @@
         <hr />
         <br />
         <div style="font-weight: bold;">Pending Orders</div>
-        <div th:each="order : ${orders}">
-            <div th:text="${order.id + ' - ' + order.inventory}" th:unless="${order.orderPaid}"></div>
+
+        <br />
+        <div th:each="testList : ${pendingOrders}">
+            <div style="font-weight: bold;" th:text="${'order id: ' + testList.key}"></div>
+            <br />
+            <div th:each="testListTwo : ${testList.value}" style="display: block;" th:text="${'item id: ' + testListTwo.key + ' (Quant. ' + testListTwo.value + ')'}"></div>
+            <br />
         </div>
+        <br />
+
     </div>
 </div>
 
