@@ -1,3 +1,175 @@
-* {
-    border: 1px solid green;
+
+
+/************ ADDRESS *************/
+
+input, select {
+    border: 0;
+    border-bottom: 1.5px solid #000000;
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-left: 5px;
+}
+
+.fn, .ln {
+    width: 295px;
+}
+
+.mi {
+    width: 25px;
+}
+
+.ad {
+    width: 631px;
+}
+
+.ct {
+    width: 275px;
+}
+
+.rd {
+    margin-top: 5px;
+}
+
+.st {
+    margin-top: -2px;
+    width: 200px;
+}
+
+.zp {
+    width: 145px;
+}
+
+/******** CHECKOUT  HEADER ********/
+
+#checkout {
+    align-items: center;
+    background-color: #e7e6e6;
+    display: flex;
+    flex-direction: row;
+    height: 105px;
+    justify-content: center;
+    min-width: 1034px;
+    width: 100%;
+}
+
+.checkout {
+    align-items: center;
+    border-bottom: 1px solid #000000;
+    display: flex;
+    font-size: 18px;
+    height: 50px;
+    justify-content: center;
+    width: 341px;
+}
+
+.active {
+    border-bottom: 2px solid #000000;
+    font-weight: bold;
+}
+
+.checkout_headerOne, .checkout_headerTwo {
+    display: block;
+    position: absolute;
+    border-bottom: 1px solid black;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.checkout_headerOne, .checkout_bodyOne {
+    width: 650px;
+}
+
+.checkout_headerTwo, .checkout_bodyTwo {
+    width: 364px;
+    margin-left: 660px;
+}
+
+.checkout_bodyOne, .checkout_bodyTwo {
+    display: block;
+    position: absolute;
+    margin-top: 40px;
+}
+
+/************* HEADER *************/
+
+#header_box {
+    height: 135px;
+}
+
+#menu {
+    top: 83px;
+}
+
+#title {
+  display: none;
+}
+
+/*********** SEARCH BAR ***********/
+
+#search_area {
+  height: 37px;
+  margin: 20px 0 0 115px;
+  width: 224px;
+}
+
+#search_area i {
+  font-size: 18px;
+  height: 25px;
+  width: 25px;
+}
+
+#search_area input {
+  font-size: 18px;
+  height: 27px;
+  margin-top: 7px;
+  width: 184px;
+}
+
+#search_button {
+  font-size: 16px;
+  height: 37px;
+  margin: 20px 0 0 351px;
+  width: 108px;
+}
+
+/********** SUMMARY **********/
+
+.co_title, .co_value {
+    display: inline-block;
+    font-size: 22px;
+    padding: 10px 0;
+    width: 49%;
+}
+
+.co_title {
+    text-align: left;
+}
+
+.co_value {
+    text-align: right;
+}
+
+.tot {
+    font-weight: bold;
+}
+
+.button {
+    border: 1.5px solid #606060;
+    border-radius: 7px;
+    text-align: center;
+    text-decoration: none;
+    width: 48%;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.one {
+    background-color: #6d6d6d;
+    color: #ffffff;
+}
+
+.two {
+    background-color: #dddddd;
+    color: #6d6d6d;
 }

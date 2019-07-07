@@ -1,5 +1,6 @@
 package com.brokeshirts.ecom.controllers;
 
+import com.brokeshirts.ecom.functions.Data;
 import com.brokeshirts.ecom.functions.Menus;
 import com.brokeshirts.ecom.functions.Store;
 import com.brokeshirts.ecom.models.Products;
@@ -38,11 +39,14 @@ public class StoreController {
     @Autowired
     SizesDao sizesDao;
 
+    @Autowired
+    UserDao userDao;
+
 //// DISPLAY FORMS
 
     // DISPLAY PRODUCTS IN SINGLE CATEGORY
     @RequestMapping(value="{categoryName}", method = RequestMethod.GET)
-    public String showCat(@PathVariable String categoryName, Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+    public String showCat(@PathVariable String categoryName, Model model, @CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         model.addAttribute("title", categoryName);
         model.addAttribute("types", Store.allCatTypes(replaceUnderscore(categoryName), typesDao, categoriesDao));
@@ -50,13 +54,17 @@ public class StoreController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/store/" + categoryName);
+        model.addAttribute("username", Data.userHeaderName(user, userDao));
 
         return "store/category";
     }
 
     // DISPLAY PRODUCTS IN SINGLE SUB-CATEGORY
     @RequestMapping(value="{categoryName}/{typeName}", method = RequestMethod.GET)
-    public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+    public String showType(@PathVariable String categoryName,@PathVariable String typeName, Model model, @CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+
+        String returnPath = "/store/" + categoryName + "/" + typeName;
 
         model.addAttribute("title", replaceUnderscore(categoryName) + " : " + replaceUnderscore(typeName));
         model.addAttribute("type", Store.oneTypeByName(replaceUnderscore(typeName), typesDao));
@@ -64,20 +72,19 @@ public class StoreController {
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", returnPath);
+        model.addAttribute("username", Data.userHeaderName(user, userDao));
 
         return "store/type";
     }
 
     // DISPLAY A PRODUCT
     @RequestMapping(value = "product/{productId}", method = RequestMethod.GET)
-    public String showProduct(@PathVariable int productId, Model model, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
-
-        System.out.println(cartItems.);
+    public String showProduct(@PathVariable int productId, Model model,@CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
 
         Products product = productsDao.findById(productId).orElse(new Products());
 
         model.addAttribute("title", product.getName());
-        model.addAttribute("activate", "PRODUCT_PAGE");
         model.addAttribute("menuItems", Menus.sortCat(categoriesDao));
         model.addAttribute("subMenuItems", Menus.sortTypes(categoriesDao, typesDao));
         model.addAttribute("prodColors", Store.prodColorsImages(product, colorsDao, photosDao));
@@ -85,7 +92,9 @@ public class StoreController {
         model.addAttribute("prodPrices", Store.priceList(product));
         model.addAttribute("prodPriceRange", Store.maxMinPrice(product));
         model.addAttribute("prodInfo", Store.productInfo(product));
-        model.addAttribute("cartCnt", cartItems);
+        model.addAttribute("cartCnt", Store.cartItemCnt(cartItems));
+        model.addAttribute("returnPath", "/store/product/" + productId);
+        model.addAttribute("username", Data.userHeaderName(user, userDao));
 
         return "store/product";
     }

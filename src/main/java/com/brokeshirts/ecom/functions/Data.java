@@ -6,6 +6,8 @@ import com.brokeshirts.ecom.storage.StorageProperties;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.brokeshirts.ecom.controllers.FileUploadController.internalFileUpload;
 
@@ -20,6 +22,52 @@ public class Data {
     }
 
 //// ADD ITEM
+
+    // ADD CART LIST
+    public static HashMap<Integer, Integer> addCartList(HashMap<Integer, Integer> cartList, String addCart) {
+        String findNext = "key";
+        String key = "";
+        String value = "";
+        Integer keyInt = 0;
+        Integer valueInt = 0;
+
+        for (char c : addCart.toCharArray()) {
+            if (c == '/') {
+                findNext = "value";
+            } else if (c == '.') {
+                findNext = "key";
+                keyInt = Integer.parseInt(key);
+                key = "";
+                valueInt = Integer.parseInt(value);
+                value = "";
+                if (cartList.containsKey(keyInt)) {
+                    if (valueInt > cartList.get(keyInt)) {
+                        cartList.replace(keyInt, cartList.get(keyInt), valueInt);
+                    }
+                } else {
+                    cartList.put(keyInt, valueInt);
+                }
+            } else if (findNext.equals("key")) {
+                key += c;
+            } else {
+                value += c;
+            }
+        }
+        findNext = "key";
+        keyInt = Integer.parseInt(key);
+        key = "";
+        valueInt = Integer.parseInt(value);
+        value = "";
+        if (cartList.containsKey(keyInt)) {
+            if (valueInt > cartList.get(keyInt)) {
+                cartList.replace(keyInt, cartList.get(keyInt), valueInt);
+            }
+        } else {
+            cartList.put(keyInt, valueInt);
+        }
+
+        return cartList;
+    }
 
     // ADD CATEGORY
     public static void addCat(String categoryName, CategoriesDao categoriesDao) {
@@ -296,6 +344,23 @@ public class Data {
         inventoryDao.save(item);
     }
 
+    // CONVERT CART HASH MAP TO CART STRING
+    public static String cartHashToString(HashMap<Integer, Integer>cart) {
+        String newCartItems = "";
+        int first = 1;
+
+        for (Map.Entry<Integer, Integer> singleItem : cart.entrySet()) {
+            if (first == 1) {
+                newCartItems = singleItem.getKey() + "/" + singleItem.getValue();
+                first++;
+            } else {
+                newCartItems += "." + singleItem.getKey() + "/" + singleItem.getValue();
+            }
+        }
+
+        return newCartItems;
+    }
+
 //// DELETE ITEM AND ASSOCIATED FILES
 
     // DELETE CATEGORY
@@ -364,6 +429,110 @@ public class Data {
         typesDao.deleteById(typeId);
     }
 
+//// CHECKOUT
+
+    // CHECK IF ITEMS STILL AVAILABLE
+    public static boolean checkCart(String cartItems, InventoryDao inventoryDao) {
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+        Inventory checkItem = new Inventory();
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                checkItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                if (Integer.valueOf(quantity) > checkItem.getQuantity()) {
+                    return false;
+                }
+                itemId = "";
+                quantity = "";
+                checkItem = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        checkItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        if (Integer.valueOf(quantity) > checkItem.getQuantity()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // CREATE INVENTORY STRING FOR ORDER
+    public static String createInventoryString(String cartItems, InventoryDao inventoryDao) {
+        String itemString = "";
+        Inventory item = new Inventory();
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                if (itemString.equals("")) {
+                    itemString += item.getPrice() + "/" + itemId + "/" + quantity;
+                } else {
+                    itemString += "." + item.getPrice() + "/" + itemId + "/" + quantity;
+                }
+                itemId = "";
+                quantity = "";
+                item = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        if (itemString.equals("")) {
+            itemString += item.getPrice() + "/" + itemId + "/" + quantity;
+        } else {
+            itemString += "." + item.getPrice() + "/" + itemId + "/" + quantity;
+        }
+
+        return itemString;
+    }
+
+    // UPDATE CART IF NOT AVAILABLE
+
+    // REMOVE CART ITEMS FROM INVENTORY
+    public static void removeCartFromInventory(String cartItems, InventoryDao inventoryDao) {
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+        Inventory updateItem = new Inventory();
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                updateItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                updateItem.setQuantity(updateItem.getQuantity() - Integer.valueOf(quantity));
+                inventoryDao.save(updateItem);
+                itemId = "";
+                quantity = "";
+                updateItem = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        updateItem = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        updateItem.setQuantity(updateItem.getQuantity() - Integer.valueOf(quantity));
+        inventoryDao.save(updateItem);
+    }
+
 //// EXTRA DATA FUNCTIONS
 
     // REPLACE "_" WITH " "
@@ -373,34 +542,41 @@ public class Data {
     }
 
     // FIND INVENTORY ITEM BY PRODUCT_ID, SIZE_ID, AND COLOR_ID
-    public static Inventory findItem(int productId, int sizeId, int colorId, ProductsDao productsDao) {
+    public static Inventory findItem(int productId, int sizeId, int colorId, ProductsDao productsDao, InventoryDao inventoryDao) {
+        Inventory theItem = new Inventory();
+        Products theProduct = productsDao.findById(productId).orElse(new Products());
 
-        System.out.println("---- FIND ITEM ----");
-
-        Inventory item = new Inventory();
-        Products prod = productsDao.findById(productId).orElse(new Products());
-
-        System.out.println("product: " + prod.getName());
-        System.out.println("sizeId: " + sizeId);
-        System.out.println("colorId: " + colorId);
-
-        for (Inventory oneItem : prod.getInventory()) {
-            if (oneItem.getSizeId() == sizeId) {
-
-                System.out.println("SIZE MATCH");
-                System.out.println(oneItem.getColorId());
-
-                if (oneItem.getColorId() == colorId) {
-
-                    System.out.println("COLOR MATCH");
-
-                    item = oneItem;
+        for (Inventory item : theProduct.getInventory()) {
+            if (item.getColorId() == colorId) {
+                if (item.getSizeId() == sizeId) {
+                    return item;
                 }
             }
         }
+        return theItem;
+    }
 
-        System.out.println("inventoryId: " + item.getId());
+    // CREATE USERNAME FOR HEADER
+    public static String userHeaderName(String user, UserDao userDao) {
+        String username = "guest";
 
-        return item;
+        if (!user.equals("guest")) {
+            User theUser = userDao.findByToken(user);
+            username = theUser.getEmail();
+            if (username.length() > 12) {
+                int charCnt = 0;
+                String usernameTwo = username;
+                username = "";
+                for (char c : usernameTwo.toCharArray()) {
+                    if (charCnt < 10) {
+                        username += c;
+                        charCnt++;
+                    }
+                }
+                username += "...";
+            }
+        }
+
+        return username;
     }
 }

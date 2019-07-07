@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments :: head">
 </head>
 <body>
@@ -8,6 +8,36 @@
 <div class="section_full">
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
+        <div style="font-weight: bold;">Order Paid</div>
+
+        <br />
+        <div th:each="testList : ${paidNotShipped}">
+            <div style="font-weight: bold;" th:text="${'order id: ' + testList.key}"></div>
+            <br />
+            <div th:each="testListTwo : ${testList.value}" style="display: block;" th:text="${'item id: ' + testListTwo.key + ' (Quant. ' + testListTwo.value + ')'}"></div>
+            <br />
+        </div>
+        <br />
+        <hr />
+        <br />
+        <div style="font-weight: bold;">Order Shipped</div>
+        <div th:each="order : ${orders}">
+            <div th:text="${order.id + ' - ' + order.inventory}" th:if="${order.orderItemsShipped}"></div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <div style="font-weight: bold;">Pending Orders</div>
+
+        <br />
+        <div th:each="testList : ${pendingOrders}">
+            <div style="font-weight: bold;" th:text="${'order id: ' + testList.key}"></div>
+            <br />
+            <div th:each="testListTwo : ${testList.value}" style="display: block;" th:text="${'item id: ' + testListTwo.key + ' (Quant. ' + testListTwo.value + ')'}"></div>
+            <br />
+        </div>
+        <br />
+
     </div>
 </div>
 

@@ -18,7 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.brokeshirts'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '1.11'
 
 repositories {
     mavenCentral()
@@ -29,12 +29,13 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-security'
-    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.0.0.RELEASE'
+    compile group: 'com.squareup', name: 'connect', version: '2.20190612.0'
     compile 'mysql:mysql-connector-java'
     compile 'org.springframework.boot:spring-boot-devtools'
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     runtime 'org.springframework.boot:spring-boot-devtools'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 bootRun {

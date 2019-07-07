@@ -9,13 +9,13 @@
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <form method="post" enctype="multipart/form-data" th:action="@{/data/add/color}">
-            <div class="admin_text_box">
+            <div class="admin_text_box" style="position: absolute; top: 140px;">
                 <div style="margin-top: 5px;">Color:</div>
                 <input type="file" name="file" accept="image/*" style="width: 220px; margin-left: 90px; font-size: 16px; border: 0; margin-top: 10px;" />
                 <input type="color" name="hex" style="width: 30px; margin-left: 317px;" />
                 <input type="text" required="required" name="name" placeholder="name" style="width: 245px; margin-left: 347px;" />
             </div>
-            <div class="admin_submit_button">
+            <div class="admin_submit_button" style="position: absolute; top: 140px;">
                 <input type="submit" value="add" />
             </div>
         </form>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments :: head">
 </head>
 <body>
@@ -35,7 +35,7 @@
             </form>
         </div>
 
-        <div id="add_item">ADD ITEM TO INVENTORY <i class="far fa-caret-square-down"></i></div>
+        <div id="add_item" style="margin-top: 30px;">ADD ITEM TO INVENTORY <i class="far fa-caret-square-down"></i></div>
         <div class="add_ItemForm">
             <form th:action="@{'/data/add/item'}" method="post" enctype="multipart/form-data">
                 <select class="selection" id="sel_catSubcat" name="typeId" required="required">
@@ -48,11 +48,11 @@
                     <option value="">-- Choose Product --</option>
                     <option th:each="product : ${products}" th:name="${product.type.id}" th:value="${product.id}" th:text="${product.name}"></option>
                 </select>
-                <div id="color_title">Choice Color</div>
+                <div id="color_title" style="margin-top: 90px;">Choice Color</div>
                 <div id="sel_color">
-                    <div th:each="color : ${colors}">
+                    <div style="margin-top: 60px;" th:each="color : ${colors}">
                         <input required="required" type="radio" name="colorId" th:id="${'color-' + color.id}" th:value="${color.id}" />
-                        <label class="radio_color" th:for="${'color-' + color.id}" th:style="|background-color: ${color.hex}; background-image: url(/upload/image/${color.url});|" />
+                        <label class="radio_color" th:for="${'color-' + color.id}" th:style="|background-color: ${color.hex}; background-image: url(/upload/image/${color.url}); width: 27px; height: 27px; border-radius: 50%;|" />
                     </div>
                 </div>
                 <div id="size_title">Choice Size</div>
@@ -62,10 +62,10 @@
                         <label class="radio_size" th:for="${'size-' + size.id}" th:text="${size.shortName}" />
                     </div>
                 </div>
-                <input class="sel_image2" type="file" accept="image/*" name="file" />
-                <input class="sel_name2" required="required" type="text" name="sku" placeholder="SKU (prefix)" />
-                <input class="sel_price" required="required" type="number" name="price" value="0.00" step="0.01" placeholder="price ($)" />
-                <input class="sel_submit2" type="submit" value="Add Product" />
+                <input class="sel_image2" style="width: 500px; margin-top: 160px; margin-left: 160px;" type="file" accept="image/*" name="file" />
+                <input class="sel_name2" style="margin-top: 160px; width: 150px;" required="required" type="text" name="sku" placeholder="SKU (prefix)" />
+                <input class="sel_price" style="margin-top: 160px; width: 100px; margin-left: 672px;" required="required" type="number" name="price" value="0.00" step="0.01" placeholder="price ($)" />
+                <input class="sel_submit2" style="margin-top: 205px;" type="submit" value="Add Product" />
             </form>
         </div>
 

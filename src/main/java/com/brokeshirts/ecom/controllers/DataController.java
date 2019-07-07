@@ -2,8 +2,10 @@ package com.brokeshirts.ecom.controllers;
 
 import com.brokeshirts.ecom.functions.Data;
 import com.brokeshirts.ecom.functions.Store;
+import com.brokeshirts.ecom.models.Cart;
 import com.brokeshirts.ecom.models.Inventory;
 import com.brokeshirts.ecom.models.Products;
+import com.brokeshirts.ecom.models.User;
 import com.brokeshirts.ecom.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -30,9 +33,6 @@ public class DataController {
     private ColorsDao colorsDao;
 
     @Autowired
-    private CustomersDao customersDao;
-
-    @Autowired
     private InventoryDao inventoryDao;
 
     @Autowired
@@ -49,6 +49,9 @@ public class DataController {
 
     @Autowired
     private StylesDao stylesDao;
+
+    @Autowired
+    private UserDao userDao;
 
 //// ADD DATA
 
@@ -93,7 +96,8 @@ public class DataController {
     // ADD PRODUCT TO CART
     @RequestMapping(value="cart", method = RequestMethod.POST)
     public String addToCart(@RequestParam int productId, @RequestParam int colorId, @RequestParam int sizeId, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
-        Inventory item = Data.findItem(productId, colorId, sizeId, productsDao);
+
+        Inventory item = Data.findItem(productId, sizeId, colorId, productsDao, inventoryDao);
         Store.addItemToCart(item.getId(), cartItems, response);
 
         return "redirect:/store/product/" + productId;
@@ -101,10 +105,18 @@ public class DataController {
 
     // DISPLAY ADD PRODUCT DESCRIPTIONS FORM
     @RequestMapping(value="add/descriptions/{productId}", method = RequestMethod.GET)
-    public String addDescriptionForm(@PathVariable int productId, Model model) {
+    public String addDescriptionForm(@PathVariable int productId, Model model, @CookieValue(value = "user", defaultValue = "guest") String user, @CookieValue(value = "cartItems", defaultValue = "empty") String cartItems, HttpServletResponse response) {
+
+        String userRole = "USER";
+
+        if (!userRole.equals("ADMIN")) {
+            return "redirect:/";
+        }
+
         model.addAttribute("title", "ADMIN");
         model.addAttribute("product", productsDao.findById(productId).orElse(new Products()));
         model.addAttribute("colors", Store.prodColorsImages(productsDao.findById(productId).orElse(new Products()), colorsDao, photosDao));
+        model.addAttribute("username", Data.userHeaderName(user, userDao));
 
         return "admin/description";
     }
@@ -162,6 +174,75 @@ public class DataController {
         return "redirect:/admin/products";
     }
 
+    // UPDATE QUANTITY OF ITEM IN CART
+    @RequestMapping(value="cart/updateQuant", method = RequestMethod.POST)
+    public String cartQuantUpdate(@CookieValue(value = "cartItems", defaultValue = "empty")String cartItems, @CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response, @RequestParam String itemId, @RequestParam String quantity) {
+
+        System.out.println("itemId: " + itemId);
+        System.out.println("quantity: " + quantity);
+        System.out.println("cartItems: " + cartItems);
+
+        String item = "";
+        String quant = "";
+        String newCart = "";
+        int tracker = 0;
+        int cnt = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                if (item.equals(itemId)) {
+                    if (Integer.valueOf(quantity) > 0) {
+                        if (cnt > 0) {
+                            newCart += ".";
+                        }
+                        newCart += item + "/" + quantity;
+                        cnt++;
+                    }
+                } else {
+                    if (cnt > 0) {
+                        newCart += ".";
+                    }
+                    newCart += item + "/" + quant;
+                    cnt++;
+                }
+                item = "";
+                quant = "";
+            } else if (tracker == 0) {
+                item += c;
+            } else {
+                quant += c;
+            }
+        }
+        if (item.equals(itemId)) {
+            if (Integer.valueOf(quantity) > 0) {
+                if (cnt > 0) {
+                    newCart += ".";
+                }
+                newCart += item + "/" + quantity;
+            }
+        } else {
+            if (cnt > 0) {
+                newCart += ".";
+            }
+            newCart += item + "/" + quant;
+        }
+
+        Cookie cookie = new Cookie("cartItems", newCart);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        User theUser = userDao.findByToken(user);
+        Cart theCart = cartDao.findByUserId(theUser.getId());
+
+        theCart.setCartItems(newCart);
+        cartDao.save(theCart);
+
+        return "redirect:/checkout/cart";
+    }
+
 
 //// DELETE DATA
 
@@ -211,5 +292,27 @@ public class DataController {
 
         Data.delType(id, typesDao);
         return "redirect:/admin/archive";
+    }
+
+//// CREATE ADMIN (ONE TIME)
+
+    // ONE TIME MAKE ADMIN USER
+    @RequestMapping(value = "create-admin")
+    public String makeAdmin(@CookieValue(value = "user", defaultValue = "guest") String user, HttpServletResponse response) {
+        boolean adminCheck = false;
+
+        for (User checkAdmin : userDao.findAll()) {
+            if (checkAdmin.getRole().equals("ADMIN")) {
+                adminCheck = true;
+            }
+        }
+
+        if (!adminCheck) {
+            User makeAdmin = userDao.findByToken(user);
+            makeAdmin.setRole("ADMIN");
+            userDao.save(makeAdmin);
+        }
+
+        return "redirect:/";
     }
 }

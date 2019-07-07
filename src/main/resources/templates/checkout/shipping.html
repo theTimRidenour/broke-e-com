@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments :: head">
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+<div th:replace="fragments :: checkout"></div>
+
+<div class="section_full">
+    <div class = "checkout_headerOne">Shipping Details</div>
+    <div class= "checkout_bodyOne">
+        <form id="addressForm" th:action="@{/checkout/verify/address}" method="post">
+            <input class="fn" type="text" name="firstName" placeholder="First Name" required="required" />
+            <input class="mi" type="text" name="middleInitial" placeholder="M.I." />
+            <input class="ln" type="text" name="lastName" placeholder="Last Name" required="required" />
+            <input class="ad" type="text" name="addressOne" placeholder="Address One" required="required" />
+            <input class="ad" type="text" name="addressTwo" placeholder="Address Two (Optional)" />
+            <input class="ct" type="text" name="city" placeholder="City" required="required" />
+            <select class="st" name="state">
+                <option value="AL" label="Alabama" />
+                <option value="AK" label="Alaska" />
+                <option value="AZ" label="Arizona" />
+                <option value="AR" label="Arkansas" />
+                <option value="CA" label="California" />
+                <option value="CO" label="Colorado" />
+                <option value="CT" label="Connecticut" />
+                <option value="DE" label="Delaware" />
+                <option value="DC" label="District of Columbia" />
+                <option value="FL" label="Florida" />
+                <option value="GA" label="Georgia" />
+                <option value="HI" label="Hawaii" />
+                <option value="ID" label="Idaho" />
+                <option value="IL" label="Illinois" />
+                <option value="IN" label="Indiana" />
+                <option value="IA" label="Iowa" />
+                <option value="KS" label="Kansas" />
+                <option value="KY" label="Kentucky" />
+                <option value="LA" label="Louisiana" />
+                <option value="ME" label="Maine" />
+                <option value="MD" label="Maryland" />
+                <option value="MA" label="Massachusetts" />
+                <option value="MI" label="Michigan" />
+                <option value="MN" label="Minnesota" />
+                <option value="MS" label="Mississippi" />
+                <option value="MO" label="Missouri" />
+                <option value="MT" label="Montana" />
+                <option value="NE" label="Nebraska" />
+                <option value="NV" label="Nevada" />
+                <option value="NH" label="New Hampshire" />
+                <option value="NJ" label="New Jersey" />
+                <option value="NM" label="New Mexico" />
+                <option value="NY" label="New York" />
+                <option value="NC" label="North Carolina" />
+                <option value="ND" label="North Dakota" />
+                <option value="OH" label="Ohio" />
+                <option value="OK" label="Oklahoma" />
+                <option value="OR" label="Oregon" />
+                <option value="PA" label="Pennsylvania" />
+                <option value="RI" label="Rhode Island" />
+                <option value="SC" label="South Carolina" />
+                <option value="SD" label="South Dakota" />
+                <option value="TN" label="Tennessee" />
+                <option value="TX" label="Texas" />
+                <option value="UT" label="Utah" />
+                <option value="VT" label="Vermont" />
+                <option value="VA" label="Virginia" />
+                <option value="WA" label="Washington" />
+                <option value="WV" label="West Virginia" />
+                <option value="WI" label="Wisconsin" />
+                <option value="WY" label="Wyoming" />
+            </select>
+            <input class="zp" name="zipCode" type="number" placeholder="Zip Code" required="required" />
+            <div>
+                <input class="rd" type="radio" name="shippingCharge" value="7.99" checked="checked" />$7.99 Standard Shipping
+            </div>
+            <div th:if="${freeShipping}">
+                <input class="rd" type="radio" name="shippingCharge" value="0" checked="checked" />Free Shipping (over $49)
+            </div>
+        </form>
+    </div>
+    <div class="checkout_headerTwo">Summary</div>
+
+    <div class="checkout_bodyTwo">
+        <div th:each="item : ${allCartItems}" style="text-align: left;">
+            <div>
+                <img th:src="${'/images/upload/' + item.key.imageUrl}" style="border: 1px solid black; margin: 5px; width: 60px; height: 60px; border-radius: 3px;" />
+                <div th:text="${item.key.name + ' - ' + item.key.color.name + '(' + item.key.sizeShortName + ')'}" style="display: block; position: absolute; margin-top: -60px; width: 364px; font-size: 16px; text-align: right;"></div>
+                <div th:text="${'Quant. ' + item.value + ' - ' + item.key.maxPrice}" style="display: block; position: absolute; font-size: 16px; margin-top: -40px; width: 364px; text-align: right;"></div>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <hr style="margin: 5px 0;" />
+
+        <div class="co_title">SUBTOTAL</div>
+        <div class="co_value" th:text="${cartPrice.subtotal}">$55.00</div>
+        <div class="co_title">SHIPPING</div>
+        <div class="co_value">-</div>
+        <div class="co_title">TAX</div>
+        <div class="co_value" th:text="${cartPrice.tax}">$5.00</div>
+        <hr style="margin: 5px 0;" />
+        <div class="co_title tot">TOTAL</div>
+        <div class="co_value tot" th:text="${cartPrice.total}">$60.00</div>
+        <div style="cursor: pointer;" onclick="document.getElementById('addressForm').submit();" class="co_title tot button one">Next</div>
+        <a th:href="@{'/checkout/cancel'}" class="co_value tot button two">Cancel</a>
+    </div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

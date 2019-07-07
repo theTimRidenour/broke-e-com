@@ -9,10 +9,10 @@
     <div th:replace="fragments :: admin_menu"></div>
     <div id="admin_container">
         <form method="post" th:action="@{/data/add/category}">
-            <div class="admin_text_box">
+            <div class="admin_text_box" style="top: 140px;">
                 <input type="text" required="required" name="categoryName" placeholder="new category" />
             </div>
-            <div class="admin_submit_button">
+            <div class="admin_submit_button" style="top: 140px;">
                 <input type="submit" value="create" />
             </div>
         </form>

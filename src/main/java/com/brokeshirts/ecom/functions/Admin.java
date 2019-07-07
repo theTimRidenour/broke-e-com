@@ -4,6 +4,7 @@ import com.brokeshirts.ecom.models.*;
 import com.brokeshirts.ecom.models.data.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Admin {
 
@@ -375,7 +376,109 @@ public class Admin {
         reactivate.setHidden("yes");
         reactivate.setSortId(maxSortId + 1);
         sizesDao.save(reactivate);
+    }
 
+//// FUNCTIONS FOR ORDERS
+
+    // LIST PENDING ORDERS
+    public static HashMap<Integer, HashMap<Integer, Integer>> pendingOrders(OrdersDao ordersDao, InventoryDao inventoryDao) {
+        // HashMap < orderId, < itemId, quantity > >
+        HashMap<Integer, HashMap<Integer, Integer>> returnList = new HashMap<>();
+        HashMap<Integer, Integer> internalHash = new HashMap<>();
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+
+        for (Orders singleOrder : ordersDao.findAll()) {
+            if (singleOrder.getOrderItemsMade() == null) {
+                if (singleOrder.getOrderPaid() == null) {
+                    if (singleOrder.getInventory() != null) {
+                        for (char c : singleOrder.getInventory().toCharArray()) {
+                            if (c == '/') {
+                                if (tracker == 0) {
+                                    tracker = 1;
+                                } else {
+                                    tracker = 2;
+                                }
+                            } else if (c == '.') {
+                                if (tracker == 2) {
+                                    tracker = 0;
+                                    internalHash.put(Integer.valueOf(itemId), Integer.valueOf(quantity));
+                                    itemId = "";
+                                    quantity = "";
+                                }
+                            } else if (tracker == 1) {
+                                itemId += c;
+                            } else if (tracker == 2) {
+                                quantity += c;
+                            }
+                        }
+
+                        internalHash.put(Integer.valueOf(itemId), Integer.valueOf(quantity));
+                        returnList.put(singleOrder.getId(), internalHash);
+                        internalHash = new HashMap<>();
+                        tracker = 0;
+                        itemId = "";
+                        quantity = "";
+                    }
+                }
+            }
+        }
+
+        return returnList;
+    }
+
+    // LIST COMPLETED ORDERS
+
+    // LIST SHIPPED ORDERS
+
+    // LIST ORDERS PAID WAITING SHIPPING
+    public static HashMap<Integer, HashMap<Integer, Integer>> paidNotShipped(OrdersDao ordersDao, InventoryDao inventoryDao) {
+        // HashMap < orderId, < itemId, quantity > >
+        HashMap<Integer, HashMap<Integer, Integer>> returnList = new HashMap<>();
+        HashMap<Integer, Integer> internalHash = new HashMap<>();
+        int tracker = 0;
+        String itemId = "";
+        String quantity = "";
+
+        for (Orders singleOrder : ordersDao.findAll()) {
+            if (singleOrder.getOrderItemsMade() == null) {
+                if (singleOrder.getOrderPaid() != null) {
+                    if (singleOrder.getInventory() != null) {
+                        for (char c : singleOrder.getInventory().toCharArray()) {
+                            if (c == '/') {
+                                if (tracker == 0) {
+                                    tracker = 1;
+                                } else {
+                                    tracker = 2;
+                                }
+                            } else if (c == '.') {
+                                if (tracker == 2) {
+                                    tracker = 0;
+                                    internalHash.put(Integer.valueOf(itemId), Integer.valueOf(quantity));
+                                    itemId = "";
+                                    quantity = "";
+                                }
+                            } else if (tracker == 1) {
+                                itemId += c;
+                            } else if (tracker == 2) {
+                                quantity += c;
+                            }
+                        }
+
+
+                        internalHash.put(Integer.valueOf(itemId), Integer.valueOf(quantity));
+                        returnList.put(singleOrder.getId(), internalHash);
+                        internalHash = new HashMap<>();
+                        tracker = 0;
+                        itemId = "";
+                        quantity = "";
+                    }
+                }
+            }
+        }
+
+        return returnList;
     }
 
 //// EXTRA FUNCTIONS
@@ -389,7 +492,19 @@ public class Admin {
             color.setUrl("'" + color.getUrl() + "'");
             convertedImages.add(color);
         }
-
         return convertedImages;
+    }
+
+    // CHECK IF ADMIN
+    public static boolean adminCheck(String user, UserDao userDao) {
+
+        if (!user.equals("guest")) {
+            User theUser = userDao.findByToken(user);
+            if (theUser.getRole().equals("ADMIN")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

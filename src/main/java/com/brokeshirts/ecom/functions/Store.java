@@ -17,6 +17,10 @@ public class Store {
 
         private String imageUrl;
 
+        private int itemId;
+
+        private int totalQuant;
+
         private String maxPrice;
 
         private String minPrice;
@@ -27,7 +31,13 @@ public class Store {
 
         private int colorId;
 
+        private Colors color;
+
         private int sizeId;
+
+        private String sizeLongName;
+
+        private String sizeShortName;
 
         private boolean active;
 
@@ -42,6 +52,14 @@ public class Store {
         private String productName;
 
         private ArrayList<String> descriptions;
+
+        private String subtotal;
+
+        private String tax;
+
+        private String shipping;
+
+        private String total;
 
         public listedProducts() {}
 
@@ -132,6 +150,70 @@ public class Store {
         public void setDescriptions(ArrayList<String> descriptions) {
             this.descriptions = descriptions;
         }
+
+        public String getSizeLongName() {
+            return sizeLongName;
+        }
+
+        public void setSizeLongName(String sizeLongName) {
+            this.sizeLongName = sizeLongName;
+        }
+
+        public String getSizeShortName() {
+            return sizeShortName;
+        }
+
+        public void setSizeShortName(String sizeShortName) {
+            this.sizeShortName = sizeShortName;
+        }
+
+        public Colors getColor() {
+            return color;
+        }
+
+        public void setColor(Colors color) {
+            this.color = color;
+        }
+
+        public int getTotalQuant() { return totalQuant; }
+
+        public void setTotalQuant(int totalQuant) { this.totalQuant = totalQuant; }
+
+        public int getItemId() { return itemId; }
+
+        public void setItemId(int itemId) { this.itemId = itemId; }
+
+        public String getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(String subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public String getTax() {
+            return tax;
+        }
+
+        public void setTax(String tax) {
+            this.tax = tax;
+        }
+
+        public String getShipping() {
+            return shipping;
+        }
+
+        public void setShipping(String shipping) {
+            this.shipping = shipping;
+        }
+
+        public String getTotal() {
+            return total;
+        }
+
+        public void setTotal(String total) {
+            this.total = total;
+        }
     }
 
 //// FIND BY NAME
@@ -165,6 +247,69 @@ public class Store {
 
 
 //// CREATE LIST
+
+    // LIST OF ALL ITEMS IN CART
+    public static HashMap<listedProducts, Integer> loadCart(String cartItems, InventoryDao inventoryDao, SizesDao sizesDao, PhotosDao photosDao, ColorsDao colorsDao) {
+        HashMap<listedProducts, Integer> allItems = new HashMap<>();
+        Inventory item = new Inventory();
+        Sizes size = new Sizes();
+        Photos image = new Photos();
+        listedProducts toAdd = new listedProducts();
+        String itemId = "";
+        String quantity = "";
+        int tracker = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                size = sizesDao.findById(item.getSizeId()).orElse(new Sizes());
+                image = photosDao.findById(item.getImageId()).orElse(new Photos());
+
+                toAdd.setName(item.getProducts().getName());
+                toAdd.setSizeLongName(size.getLongName());
+                toAdd.setSizeShortName(size.getShortName());
+                toAdd.setColor(colorsDao.findById(item.getColorId()).orElse(new Colors()));
+                toAdd.setImageUrl(image.getUrl());
+                toAdd.setMaxPrice(String.format("$%.2f", item.getPrice()));
+                toAdd.setTotalQuant(item.getQuantity());
+                toAdd.setItemId(item.getId());
+
+                allItems.put(toAdd, Integer.valueOf(quantity));
+
+                image = new Photos();
+                size = new Sizes();
+                item = new Inventory();
+                toAdd = new listedProducts();
+                itemId = "";
+                quantity = "";
+            } else {
+                if (tracker == 0) {
+                    itemId += c;
+                } else {
+                    quantity += c;
+                }
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        size = sizesDao.findById(item.getSizeId()).orElse(new Sizes());
+        image = photosDao.findById(item.getImageId()).orElse(new Photos());
+
+        toAdd.setName(item.getProducts().getName());
+        toAdd.setSizeLongName(size.getLongName());
+        toAdd.setSizeShortName(size.getShortName());
+        toAdd.setColor(colorsDao.findById(item.getColorId()).orElse(new Colors()));
+        toAdd.setImageUrl(image.getUrl());
+        toAdd.setMaxPrice(String.format("$%.2f", item.getPrice()));
+        toAdd.setTotalQuant(item.getQuantity());
+        toAdd.setItemId(item.getId());
+
+        allItems.put(toAdd, Integer.valueOf(quantity));
+
+        return allItems;
+    }
 
     // LIST ALL PRODUCTS FROM SINGLE CATEGORY BY CATEGORY NAME
     public static ArrayList<listedProducts> oneCatProducts(String typeName, ProductsDao productsDao, TypesDao typesDao, PhotosDao photosDao) {
@@ -754,16 +899,77 @@ public class Store {
     }
 
     // ADD INVENTORY ITEM TO CART
-    public static void addItemToCart(Integer itemId, String cartItems, HttpServletResponse response) {
-        String cart = "";
-        if (cartItems.equals("empty")) {
-            cart = itemId.toString() + "/1";
-        } else {
-            cart = cartItems + "." + itemId.toString() + "/1";
-        }
+    public static boolean addItemToCart(Integer itemId, String cartItems, HttpServletResponse response) {
+        if (itemId != 0) {
+            String cart = "";
 
-        Cookie cookie = new Cookie("cartItems", cart);
-        response.addCookie(cookie);
+            if (cartItems.equals("empty")) {
+                cart = itemId.toString() + "/1";
+                Cookie cookie = new Cookie("cartItems", cart);
+                cookie.setMaxAge(3 * 24 * 60 * 60);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                return true;
+            }
+
+            HashMap<Integer, Integer> cookies = new HashMap<>();
+            String keyString = "";
+            String valueString = "";
+            Integer keyInt = 0;
+            Integer valueInt = 0;
+            int tracker = 0;
+
+            for (char c : cartItems.toCharArray()) {
+                if (tracker == 0) {
+                    if (c == '/') {
+                        tracker = 1;
+                    } else {
+                        keyString += c;
+                    }
+                } else {
+                    if (c == '.') {
+                        keyInt = Integer.parseInt(keyString);
+                        valueInt = Integer.parseInt(valueString);
+                        cookies.put(keyInt, valueInt);
+                        tracker = 0;
+                        keyString = "";
+                        valueString = "";
+                        keyInt = 0;
+                        valueInt = 0;
+                    } else {
+                        valueString += c;
+                    }
+                }
+            }
+            keyInt = Integer.parseInt(keyString);
+            valueInt = Integer.parseInt(valueString);
+            cookies.put(keyInt, valueInt);
+
+            if (cookies.containsKey(itemId)) {
+                int quant = cookies.get(itemId);
+                quant++;
+                cookies.replace(itemId, quant);
+
+                tracker = 0;
+                for (Map.Entry updateList : cookies.entrySet()) {
+                    if (tracker == 0) {
+                        cart = "" + updateList.getKey() + "/" + updateList.getValue();
+                        tracker++;
+                    } else {
+                        cart += "." + updateList.getKey() + "/" + updateList.getValue();
+                    }
+                }
+            } else {
+                cart = cartItems + "." + itemId.toString() + "/1";
+            }
+
+            Cookie cookie = new Cookie("cartItems", cart);
+            cookie.setMaxAge(3 * 24 * 60 * 60);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            return true;
+        }
+        return false;
     }
 
     // UPDATE CART ITEM QUANTITY
@@ -841,5 +1047,67 @@ public class Store {
 
         Cookie cookie = new Cookie("cartItems", cart);
         response.addCookie(cookie);
+    }
+
+//// CHECKOUT
+
+    // SUMMARY PRICES (SUB-TOTAL, SHIPPING, TAX, GRAND TOTAL)
+    public static listedProducts cartPrices(String cartItems, Float shippingCharge, InventoryDao inventoryDao) {
+        listedProducts cartPrice = new listedProducts();
+        Inventory item = new Inventory();
+        Float subTotal = (float) 0;
+        Float shipping = shippingCharge;
+        Float tax = (float) 0;
+        Float grandTotal = (float) 0;
+        String itemId = "";
+        String quantity = "";
+        int tracker = 0;
+
+        for (char c : cartItems.toCharArray()) {
+            if (c == '/') {
+                tracker = 1;
+            } else if (c == '.') {
+                tracker = 0;
+                item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+                subTotal += (item.getPrice() * Integer.valueOf(quantity));
+                itemId = "";
+                quantity = "";
+                item = new Inventory();
+            } else if (tracker == 0) {
+                itemId += c;
+            } else {
+                quantity += c;
+            }
+        }
+        item = inventoryDao.findById(Integer.valueOf(itemId)).orElse(new Inventory());
+        subTotal += (item.getPrice() * Integer.valueOf(quantity));
+        tax = (float) (subTotal * 0.081);
+        grandTotal = (float) (subTotal + shipping + tax);
+
+        cartPrice.setSubtotal(String.format("$%.2f", subTotal));
+        cartPrice.setTax(String.format("$%.2f", tax));
+        cartPrice.setShipping(String.format("$%.2f", shipping));
+        cartPrice.setTotal(String.format("$%.2f", grandTotal));
+
+        return cartPrice;
+    }
+
+    // CHECK IF FREE SHIPPING
+    public static boolean checkShipping(String cartItems, InventoryDao inventoryDao) {
+        listedProducts cart = cartPrices(cartItems, (float) 0, inventoryDao);
+        int tracker = 0;
+        String subTotal = "";
+
+        for (char c : cart.getSubtotal().toCharArray()) {
+            if (c != '$') {
+                subTotal += c;
+            }
+        }
+
+        if (Float.valueOf(subTotal) >= (float) 49) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -13,6 +13,12 @@ public class Addresses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String firstName;
+
+    private String middleInitial;
+
+    private String lastName;
+
     @NotNull
     private String addressOne;
 
@@ -28,17 +34,9 @@ public class Addresses {
     private int zipCode;
 
     @NotNull
-    private int customerId;
+    private int userId;
 
     private String archive;
-
-    public Addresses(String addressOne, String city, String state, int zipCode, int customerId) {
-        this.addressOne = addressOne;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.customerId = customerId;
-    }
 
     public Addresses() {}
 
@@ -86,15 +84,39 @@ public class Addresses {
         this.zipCode = zipCode;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getArchive() { return archive; }
 
     public void setArchive(String archive) { this.archive = archive; }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleInitial() {
+        return middleInitial;
+    }
+
+    public void setMiddleInitial(String middleInitial) {
+        this.middleInitial = middleInitial;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }
